@@ -70,7 +70,7 @@ class DBService {
   }
 
   Future<int> createCommute(Stop stop1, Stop stop2) async {
-    Commute commute = new Commute(1, stop1, stop2);
+    Commute commute = new Commute(stop1, stop2);
     var result = await db.insert("SavedStops", commute.toJson());
     return result;
   }
