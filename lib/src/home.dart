@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mbta_companion/src/app.dart';
 import 'package:mbta_companion/src/screens/states/commute/commute_state.dart';
+import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
+import 'package:circular_bottom_navigation/tab_item.dart';
+import 'package:mbta_companion/src/utils/mbta_colors.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -10,11 +12,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final List<BottomNavigationBarItem> items = [
     BottomNavigationBarItem(
-      icon: Icon(Icons.home),
+      icon: Icon(Icons.train),
       title: Text('Commute'),
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.save),
+      icon: Icon(Icons.star),
       title: Text('Saved'),
     ),
     BottomNavigationBarItem(
@@ -58,10 +60,16 @@ class _HomeState extends State<Home> {
         onTap: onTabTapped,
         currentIndex: _currentIndex,
         items: items,
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.black,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+        showUnselectedLabels: true,
       ),
+      floatingActionButton: _currentIndex == 0
+          ? FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {},
+            )
+          : null,
     );
   }
 }

@@ -21,6 +21,7 @@ class LocationService {
     var gcd = new GreatCircleDistance.fromDegrees(
         latitude1: lat1, longitude1: long1, latitude2: lat2, longitude2: long2);
 
-    return gcd.haversineDistance() * 0.000621371; // to miles
+    return num.parse(
+        (gcd.haversineDistance() * 0.000621371).toStringAsFixed(2)); // to miles
   }
 }
