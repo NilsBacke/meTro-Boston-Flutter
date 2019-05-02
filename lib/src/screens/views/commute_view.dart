@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import '../../states/commute/commute_state.dart';
-import '../../../widgets/stop_details_tile.dart';
+import 'package:mbta_companion/src/utils/mbta_colors.dart';
+import '../states/commute_state.dart';
+import '../../widgets/stop_details_tile.dart';
 
 class CommuteView extends CommuteScreenState {
   @override
@@ -34,14 +35,20 @@ class CommuteView extends CommuteScreenState {
     return threePartCard(
       'Nearest Stop',
       ThreePartTile(
-          title: stops[0].name,
-          subtitle1: "Orange Line",
-          subtitle2: "North towards Oak Grove"),
+        title: stops[0].name,
+        subtitle1: stops[0].lineName,
+        subtitle2: stops[0].directionDescription,
+        lineInitials: stops[0].lineInitials,
+        lineColor: stops[0].lineColor,
+      ),
       ThreePartTile(
-          title: "Ruggles",
-          subtitle1: "Orange Line",
-          subtitle2: "South towards Forest Hills"),
-      distanceText: '0.07 mi',
+        title: stops[1].name,
+        subtitle1: stops[1].lineName,
+        subtitle2: stops[1].directionDescription,
+        lineInitials: stops[1].lineInitials,
+        lineColor: stops[1].lineColor,
+      ),
+      distanceText: '$dist mi',
     );
   }
 
@@ -52,10 +59,14 @@ class CommuteView extends CommuteScreenState {
           title: "Roxbury Crossing",
           subtitle1: "Orange Line",
           subtitle2: "North towards Oak Grove",
+          lineInitials: "OL",
+          lineColor: MBTAColors.orange,
         ),
         TwoPartTile(
           title: "North Station",
           subtitle1: "Orange Line",
+          lineInitials: "OL",
+          lineColor: MBTAColors.orange,
         ));
   }
 

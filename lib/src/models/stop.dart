@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import '../utils/mbta_colors.dart';
+
 class Stop {
   String id;
   String name;
@@ -5,9 +8,30 @@ class Stop {
   double longitude;
   String directionDestination;
   String directionName;
+  String lineName;
 
   String get directionDescription =>
       this.directionName + "bound towards " + this.directionDestination;
+  String get lineInitials => this.lineName == "Mattapan"
+      ? "M"
+      : this.lineName[0].toUpperCase() +
+          this.lineName[this.lineName.indexOf(" ") + 1].toUpperCase();
+  Color get lineColor {
+    switch (this.lineName) {
+      case "Orange Line":
+        return MBTAColors.orange;
+      case "Red Line":
+        return MBTAColors.red;
+      case "Green Line":
+        return MBTAColors.green;
+      case "Blue Line":
+        return MBTAColors.blue;
+      case "Mattapan":
+        return MBTAColors.red;
+      default:
+        throw Exception('Cannot find a color for line: ' + this.lineName);
+    }
+  }
 
   static const idKey = "id";
   static const nameKey = "name";
@@ -15,6 +39,7 @@ class Stop {
   static const longitudeKey = "longitude";
   static const directionKey = "platform_name";
   static const attributesKey = "attributes";
+  static const descriptionKey = "description";
   static const directionNameKey = "direction_name";
 
   static const List<String> northList = ["Alewife", "Oak Grove"];
@@ -53,6 +78,10 @@ class Stop {
     this.directionDestination = attributes[directionKey];
     this.directionName =
         _convertDirectionToName(this.directionDestination, this.id);
+    final String desc = attributes[descriptionKey];
+    this.lineName =
+        desc.substring(desc.indexOf("- ") + 2, desc.lastIndexOf(" -"));
+    print(lineName);
   }
 
   Map<String, dynamic> toJson() => {
@@ -61,10 +90,15 @@ class Stop {
         longitudeKey: longitude.toString(),
         latitudeKey: latitude.toString(),
         directionKey: directionDestination,
-        directionNameKey: directionName
+        directionNameKey: directionName,
+        descriptionKey: lineName,
       };
 
   String _convertDirectionToName(String direction, String id) {
+    if (direction == "Park Street & North") {
+      return "East";
+    }
+
     if (northList.contains(direction) ||
         direction.toLowerCase().contains("north") ||
         direction.toLowerCase().contains(

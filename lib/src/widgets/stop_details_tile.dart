@@ -6,8 +6,15 @@ class TwoPartTile extends StatelessWidget {
   final String title;
   final String subtitle1;
   final List<Widget> extraWidgets;
+  final String lineInitials;
+  final Color lineColor;
 
-  TwoPartTile({this.title, this.subtitle1, this.extraWidgets = const []});
+  TwoPartTile(
+      {@required this.title,
+      @required this.subtitle1,
+      this.extraWidgets = const [],
+      @required this.lineInitials,
+      @required this.lineColor});
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +43,12 @@ class TwoPartTile extends StatelessWidget {
               padding: EdgeInsets.only(right: 8.0),
               child: CircleAvatar(
                 child: Text(
-                  "OL",
+                  lineInitials,
                   style: TextStyle(
                     color: Colors.white,
                   ),
                 ),
-                backgroundColor: MBTAColors.orange,
+                backgroundColor: lineColor,
               ),
             ),
             Expanded(
@@ -65,8 +72,15 @@ class ThreePartTile extends StatelessWidget {
   final String title;
   final String subtitle1;
   final String subtitle2;
+  final String lineInitials;
+  final Color lineColor;
 
-  ThreePartTile({this.title, this.subtitle1, this.subtitle2});
+  ThreePartTile(
+      {@required this.title,
+      @required this.subtitle1,
+      @required this.subtitle2,
+      @required this.lineInitials,
+      @required this.lineColor});
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +94,8 @@ class ThreePartTile extends StatelessWidget {
           style: Theme.of(context).textTheme.body2,
         ),
       ],
+      lineInitials: lineInitials,
+      lineColor: lineColor,
     );
   }
 }

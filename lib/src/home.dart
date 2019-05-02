@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mbta_companion/src/screens/states/commute/commute_state.dart';
+import 'package:mbta_companion/src/screens/states/commute_state.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:mbta_companion/src/utils/mbta_colors.dart';
