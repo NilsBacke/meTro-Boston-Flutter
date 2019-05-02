@@ -52,7 +52,8 @@ class DBService {
       "latitude",
       "longitude",
       "platform_name",
-      "direction_name"
+      "direction_name",
+      "description"
     ]);
 
     return result.map((e) {
@@ -84,12 +85,14 @@ class DBService {
       "longitude_one",
       "platform_name_one",
       "direction_name_one",
+      "description_one",
       "id_two",
       "name_two",
       "latitude_two",
       "longitude_two",
       "platform_name_two",
       "direction_name_two",
+      "description_two",
     ]);
 
     return result.map((e) {

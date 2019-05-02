@@ -16,14 +16,16 @@ class Commute {
         parsedJson['latitude_one'],
         parsedJson['longitude_one'],
         parsedJson['platform_name_one'],
-        parsedJson['direction_name_one']);
+        parsedJson['direction_name_one'],
+        parsedJson['description_one']);
     this.stop2 = Stop(
         parsedJson['id_two'],
         parsedJson['name_two'],
         parsedJson['latitude_two'],
         parsedJson['longitude_two'],
         parsedJson['platform_name_two'],
-        parsedJson['direction_name_two']);
+        parsedJson['direction_name_two'],
+        parsedJson['description_two']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -34,11 +36,13 @@ class Commute {
         "longitude_one": this.stop1.longitude,
         "platform_name_one": this.stop1.directionDestination,
         "direction_name_one": this.stop1.directionName,
+        "description_one": this.stop1.lineName,
         "id_two": this.stop2.id,
         "name_two": this.stop2.name,
         "latitude_two": this.stop2.latitude,
         "longitude_two": this.stop2.longitude,
         "platform_name_two": this.stop2.directionDestination,
         "direction_name_two": this.stop2.directionName,
+        "description_two": this.stop2.lineName,
       };
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../utils/mbta_colors.dart';
 
 class Stop {
@@ -20,14 +21,31 @@ class Stop {
     switch (this.lineName) {
       case "Orange Line":
         return MBTAColors.orange;
-      case "Red Line":
-        return MBTAColors.red;
       case "Green Line":
         return MBTAColors.green;
       case "Blue Line":
         return MBTAColors.blue;
+      case "Red Line":
       case "Mattapan":
+      case "Mattapan Trolley":
         return MBTAColors.red;
+      default:
+        throw Exception('Cannot find a color for line: ' + this.lineName);
+    }
+  }
+
+  BitmapDescriptor get marker {
+    switch (this.lineName) {
+      case "Orange Line":
+        return BitmapDescriptor.defaultMarkerWithHue(35.0);
+      case "Green Line":
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+      case "Blue Line":
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+      case "Red Line":
+      case "Mattapan":
+      case "Mattapan Trolley":
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
       default:
         throw Exception('Cannot find a color for line: ' + this.lineName);
     }
@@ -39,7 +57,7 @@ class Stop {
   static const longitudeKey = "longitude";
   static const directionKey = "platform_name";
   static const attributesKey = "attributes";
-  static const descriptionKey = "description";
+  static const lineNameKey = "description";
   static const directionNameKey = "direction_name";
 
   static const List<String> northList = ["Alewife", "Oak Grove"];
@@ -67,7 +85,7 @@ class Stop {
   ];
 
   Stop(this.id, this.name, this.latitude, this.longitude,
-      this.directionDestination, this.directionName);
+      this.directionDestination, this.directionName, this.lineName);
 
   Stop.fromJson(Map<String, dynamic> parsedJson) {
     final attributes = parsedJson[attributesKey];
@@ -78,9 +96,20 @@ class Stop {
     this.directionDestination = attributes[directionKey];
     this.directionName =
         _convertDirectionToName(this.directionDestination, this.id);
-    final String desc = attributes[descriptionKey];
-    this.lineName =
-        desc.substring(desc.indexOf("- ") + 2, desc.lastIndexOf(" -"));
+    final String desc = attributes[lineNameKey];
+
+    // formulate line name
+    try {
+      this.lineName =
+          desc.substring(desc.indexOf("- ") + 2, desc.lastIndexOf(" -"));
+    } on Error catch (e) {
+      try {
+        this.lineName = desc.substring(desc.indexOf("- ") + 2);
+      } on Error catch (e) {
+        throw Exception('Could not formulate line name from: $desc. Error: $e');
+      }
+    }
+
     print(lineName);
   }
 
@@ -91,7 +120,7 @@ class Stop {
         latitudeKey: latitude.toString(),
         directionKey: directionDestination,
         directionNameKey: directionName,
-        descriptionKey: lineName,
+        lineNameKey: lineName,
       };
 
   String _convertDirectionToName(String direction, String id) {

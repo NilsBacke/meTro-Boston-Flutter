@@ -31,15 +31,16 @@ class MBTAService {
     return _jsonToList(response);
   }
 
-  static Future<List<Stop>> getAllStops() async {
-    final response = await http.get(
-        "$baseURL/stops?api_key=$apiKey&filter[route_type]=0,1&sort=distance");
-    return _jsonToList(response);
+  static Future<List<Stop>> getAllStops(LocationData locationData) async {
+    return getNearbyStops(locationData, range: 2000);
   }
 
   static List<Stop> _jsonToList(http.Response response) {
     List<Stop> list = List<Stop>();
     final jsonData = json.decode(response.body)['data'];
+    if (jsonData == null) {
+      throw Exception('Json data is null. Body: ${response.body}');
+    }
     for (final obj in jsonData) {
       list.add(Stop.fromJson(obj));
     }

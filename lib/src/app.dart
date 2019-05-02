@@ -15,6 +15,8 @@ class App extends StatelessWidget {
           body1: TextStyle(fontSize: 21.0, fontFamily: 'Hind'),
           body2: TextStyle(
               fontSize: 15.0, fontFamily: 'Hind', color: Colors.white70),
+          caption: TextStyle(
+              fontSize: 14.0, fontFamily: 'Hind', color: Colors.white54),
         ),
       ),
       home: Home(),

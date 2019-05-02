@@ -23,9 +23,12 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
     final stop = stops[0];
     final distVal = LocationService.getDistance(
         loc.latitude, loc.longitude, stop.latitude, stop.longitude);
-    setState(() {
-      this.dist = distVal;
-    });
+    if (this.mounted) {
+      setState(() {
+        this.dist = distVal;
+      });
+    }
+
     return stops;
   }
 }

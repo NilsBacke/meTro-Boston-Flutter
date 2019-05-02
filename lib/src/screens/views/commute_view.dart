@@ -34,45 +34,62 @@ class CommuteView extends CommuteScreenState {
   Widget nearbyStopCard(List<Stop> stops) {
     return threePartCard(
       'Nearest Stop',
-      ThreePartTile(
+      VariablePartTile(
         title: stops[0].name,
         subtitle1: stops[0].lineName,
-        subtitle2: stops[0].directionDescription,
+        otherInfo: [stops[0].directionDescription],
         lineInitials: stops[0].lineInitials,
         lineColor: stops[0].lineColor,
       ),
-      ThreePartTile(
+      VariablePartTile(
         title: stops[1].name,
         subtitle1: stops[1].lineName,
-        subtitle2: stops[1].directionDescription,
+        otherInfo: [stops[1].directionDescription],
         lineInitials: stops[1].lineInitials,
         lineColor: stops[1].lineColor,
       ),
-      distanceText: '$dist mi',
+      trailing: Text(
+        '$dist mi',
+        style: Theme.of(context).textTheme.body2,
+      ),
     );
   }
 
   Widget commuteCard() {
     return threePartCard(
-        'Work Commute',
-        ThreePartTile(
-          title: "Roxbury Crossing",
-          subtitle1: "Orange Line",
-          subtitle2: "North towards Oak Grove",
-          lineInitials: "OL",
-          lineColor: MBTAColors.orange,
-        ),
-        TwoPartTile(
-          title: "North Station",
-          subtitle1: "Orange Line",
-          lineInitials: "OL",
-          lineColor: MBTAColors.orange,
-        ));
+      'Work Commute',
+      VariablePartTile(
+        title: "Roxbury Crossing",
+        subtitle1: "Orange Line",
+        otherInfo: ["North towards Oak Grove"],
+        lineInitials: "OL",
+        lineColor: MBTAColors.orange,
+      ),
+      VariablePartTile(
+        title: "North Station",
+        subtitle1: "Orange Line",
+        lineInitials: "OL",
+        lineColor: MBTAColors.orange,
+      ),
+      trailing: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
   }
 
   Widget threePartCard(
       String cardTitleText, Widget stopWidget1, Widget stopWidget2,
-      {String distanceText = ''}) {
+      {Widget trailing}) {
     return Card(
       child: Container(
         padding: EdgeInsets.all(12.0),
@@ -87,10 +104,7 @@ class CommuteView extends CommuteScreenState {
                   cardTitleText,
                   style: Theme.of(context).textTheme.title,
                 ),
-                Text(
-                  distanceText,
-                  style: Theme.of(context).textTheme.body2,
-                ),
+                trailing,
               ],
             ),
             Divider(),
