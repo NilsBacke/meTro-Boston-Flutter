@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
+import 'package:mbta_companion/src/screens/states/stop_detail_state.dart';
 import 'package:mbta_companion/src/widgets/stop_details_tile.dart';
 
 class StopCard extends StatelessWidget {
   final Stop stop;
+  final TextOverflow overflow;
   final bool includeDistance;
 
   /// required if [includeDistance] is true
@@ -11,6 +13,7 @@ class StopCard extends StatelessWidget {
 
   StopCard(
       {@required this.stop,
+      this.overflow,
       this.includeDistance = false,
       this.distanceFuture}) {
     if (this.includeDistance) {
@@ -20,36 +23,48 @@ class StopCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        padding: EdgeInsets.all(12.0),
-        child: this.includeDistance
-            ? FutureBuilder(
-                future: distanceFuture,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Container();
-                  }
-                  return VariablePartTile(
-                    title: stop.name,
-                    subtitle1: stop.lineName,
-                    otherInfo: [
-                      stop.directionDescription,
-                      '${snapshot.data} mi'
-                    ],
-                    lineInitials: stop.lineInitials,
-                    lineColor: stop.lineColor,
-                  );
-                },
-              )
-            : VariablePartTile(
-                title: stop.name,
-                subtitle1: stop.lineName,
-                otherInfo: [stop.directionDescription],
-                lineInitials: stop.lineInitials,
-                lineColor: stop.lineColor,
-              ),
+    return GestureDetector(
+      onTap: () {
+        showDetail(context);
+      },
+      child: Card(
+        child: Container(
+          padding: EdgeInsets.all(12.0),
+          child: this.includeDistance
+              ? FutureBuilder(
+                  future: distanceFuture,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    }
+                    return VariablePartTile(
+                      title: stop.name,
+                      subtitle1: stop.lineName,
+                      otherInfo: [
+                        stop.directionDescription,
+                        '${snapshot.data} mi'
+                      ],
+                      lineInitials: stop.lineInitials,
+                      lineColor: stop.lineColor,
+                      overflow: this.overflow,
+                    );
+                  },
+                )
+              : VariablePartTile(
+                  title: stop.name,
+                  subtitle1: stop.lineName,
+                  otherInfo: [stop.directionDescription],
+                  lineInitials: stop.lineInitials,
+                  lineColor: stop.lineColor,
+                  overflow: this.overflow,
+                ),
+        ),
       ),
     );
+  }
+
+  void showDetail(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => StopDetailScreen(this.stop)));
   }
 }

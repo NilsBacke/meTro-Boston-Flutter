@@ -6,13 +6,13 @@ void main() {
   test("Test getNearestStop", () async {
     LocationData loc =
         LocationData.fromMap({'latitude': 42.34067, 'longitude': -71.0911});
-    final stop = await MBTAService.getNearestStop(loc);
+    final stop = await MBTAService.fetchNearestStop(loc);
     expect(stop[0].id, '70243');
     expect(stop[1].id, '70244');
 
     LocationData loc2 =
         LocationData.fromMap({'latitude': 42.3605, 'longitude': -71.0596});
-    final stop2 = await MBTAService.getNearestStop(loc2);
+    final stop2 = await MBTAService.fetchNearestStop(loc2);
     expect(stop2[0].id, '70039');
     expect(stop2[1].id, '70040');
   });
@@ -20,7 +20,7 @@ void main() {
   test("Test get nearby stops", () async {
     LocationData loc =
         LocationData.fromMap({'latitude': 42.34067, 'longitude': -71.0911});
-    final stops = await MBTAService.getNearbyStops(loc);
+    final stops = await MBTAService.fetchNearbyStops(loc);
     expect(stops[0].id, '70243');
     expect(stops[1].id, '70244');
     expect(stops[2].id, '70246');

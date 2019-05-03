@@ -12,23 +12,36 @@ class ExploreScreen extends StatefulWidget {
 abstract class ExploreScreenState extends State<ExploreScreen> {
   TextEditingController searchBarController = TextEditingController();
   List<Stop> stops = List();
+  List<Stop> filteredStops = List();
 
-  Future<List<Stop>> getAllStops() async {
+  @override
+  void initState() {
+    super.initState();
+    getAllStops();
+  }
+
+  Future<void> getAllStops() async {
     final loc = await LocationService.currentLocation;
-    final stopList = await MBTAService.getAllStops(loc);
+    final stopList = await MBTAService.fetchAllStops(loc);
     this.stops = stopList;
-
-    return stopList;
+    setState(() {
+      this.filteredStops = stopList;
+    });
   }
 
   void filterSearchResults(String searchText) {
+    this.filteredStops = this.stops;
     if (searchText.isNotEmpty) {
       setState(() {
-        this.stops = stops
+        this.filteredStops = stops
             .where((stop) =>
-                stop.name.contains(searchText) ||
-                stop.lineName.contains(searchText) ||
-                stop.directionDescription.contains(searchText))
+                stop.name.toLowerCase().contains(searchText.toLowerCase()) ||
+                stop.lineName
+                    .toLowerCase()
+                    .contains(searchText.toLowerCase()) ||
+                stop.directionDescription
+                    .toLowerCase()
+                    .contains(searchText.toLowerCase()))
             .toList();
       });
     }

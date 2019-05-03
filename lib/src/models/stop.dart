@@ -34,6 +34,23 @@ class Stop {
     }
   }
 
+  Color get textColor {
+    switch (this.lineName) {
+      case "Orange Line":
+        return Colors.orange;
+      case "Green Line":
+        return Colors.green;
+      case "Blue Line":
+        return Colors.blue;
+      case "Red Line":
+      case "Mattapan":
+      case "Mattapan Trolley":
+        return Colors.red;
+      default:
+        throw Exception('Cannot find a color for line: ' + this.lineName);
+    }
+  }
+
   BitmapDescriptor get marker {
     switch (this.lineName) {
       case "Orange Line":

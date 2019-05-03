@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/screens/states/explore_state.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
+import 'package:mbta_companion/src/widgets/stops_list_view.dart';
 
 class ExploreScreenView extends ExploreScreenState {
   @override
@@ -26,36 +27,12 @@ class ExploreScreenView extends ExploreScreenState {
             ),
           ),
           Expanded(
-            child: FutureBuilder(
-                future: getAllStops(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return loadingList();
-                  }
-                  return stopsListView();
-                }),
+            child: filteredStops.length == 0
+                ? StopsLoadingIndicator()
+                : StopsListView(filteredStops),
           ),
         ],
       ),
-    );
-  }
-
-  ListView stopsListView() {
-    return ListView.builder(
-      itemCount: stops.length,
-      itemBuilder: (context, int index) {
-        return StopCard(
-          stop: stops[index],
-          includeDistance: true,
-          distanceFuture: LocationService.getDistanceFromStop(stops[index]),
-        );
-      },
-    );
-  }
-
-  Center loadingList() {
-    return Center(
-      child: CircularProgressIndicator(),
     );
   }
 }

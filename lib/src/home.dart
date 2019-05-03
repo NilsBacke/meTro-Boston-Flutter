@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mbta_companion/src/screens/states/add_saved_state.dart';
 import 'package:mbta_companion/src/screens/states/commute_state.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:mbta_companion/src/screens/states/explore_state.dart';
 import 'package:mbta_companion/src/screens/states/nearby_state.dart';
+import 'package:mbta_companion/src/screens/states/saved_state.dart';
 import 'package:mbta_companion/src/utils/mbta_colors.dart';
 
 class Home extends StatefulWidget {
@@ -37,7 +39,7 @@ class _HomeState extends State<Home> {
 
   final List<Widget> _children = [
     CommuteScreen(),
-    CommuteScreen(),
+    SavedScreen(),
     ExploreScreen(),
     NearbyScreen(),
     CommuteScreen()
@@ -69,7 +71,10 @@ class _HomeState extends State<Home> {
       floatingActionButton: _currentIndex == 1
           ? FloatingActionButton(
               child: Icon(Icons.add),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => AddSavedScreen()));
+              },
             )
           : null,
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
+import 'package:mbta_companion/src/widgets/stops_list_view.dart';
 import '../states/nearby_state.dart';
 import '../../widgets/stop_details_tile.dart';
 
@@ -18,7 +19,7 @@ class NearbyScreenView extends NearbyScreenState {
           future: getAllStops(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return loadingList();
+              return StopsLoadingIndicator();
             }
             return Column(
               children: <Widget>[
@@ -55,14 +56,9 @@ class NearbyScreenView extends NearbyScreenState {
         return StopCard(
           distanceFuture: LocationService.getDistanceFromStop(stop),
           stop: stop,
+          includeDistance: true,
         );
       },
-    );
-  }
-
-  Widget loadingList() {
-    return Center(
-      child: CircularProgressIndicator(),
     );
   }
 }

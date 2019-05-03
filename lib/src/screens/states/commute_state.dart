@@ -19,7 +19,7 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
 
   Future<List<Stop>> getNearestStop() async {
     final loc = await LocationService.currentLocation;
-    final stops = await MBTAService.getNearestStop(loc);
+    final stops = await MBTAService.fetchNearestStop(loc);
     final stop = stops[0];
     final distVal = LocationService.getDistance(
         loc.latitude, loc.longitude, stop.latitude, stop.longitude);

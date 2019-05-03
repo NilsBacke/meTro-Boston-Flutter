@@ -20,7 +20,7 @@ abstract class NearbyScreenState extends State<NearbyScreen> {
   // also sets markers
   Future<List<Stop>> getAllStops() async {
     final loc = await LocationService.currentLocation;
-    final stopList = await MBTAService.getAllStops(loc);
+    final stopList = await MBTAService.fetchAllStops(loc);
     this.stops = stopList;
 
     final List<String> alreadyAddedStopNames = List();

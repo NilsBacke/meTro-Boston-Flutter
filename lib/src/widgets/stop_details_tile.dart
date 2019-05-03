@@ -25,7 +25,7 @@ class VariablePartTile extends StatelessWidget {
     List<Widget> widgets = [
       Text(
         title,
-        overflow: this.overflow,
+        overflow: TextOverflow.ellipsis,
         style: Theme.of(context).textTheme.body1,
       ),
       Text(
