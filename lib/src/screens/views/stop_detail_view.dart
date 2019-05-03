@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mbta_companion/src/models/alert.dart';
+import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/states/stop_detail_state.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/widgets/time_circle.dart';
@@ -36,14 +37,15 @@ class StopDetailScreenView extends StopDetailScreenState {
           target: coords,
           zoom: 14.4746,
         ),
-        myLocationEnabled: false,
+        myLocationEnabled: true,
         markers: [
           Marker(
             markerId: MarkerId(widget.stop.id),
             icon: widget.stop.marker,
             position: coords,
             infoWindow: InfoWindow(
-                title: widget.stop.name, snippet: '${widget.stop.lineName}'),
+              title: widget.stop.name,
+            ),
           )
         ].toSet(),
       ),
@@ -53,17 +55,38 @@ class StopDetailScreenView extends StopDetailScreenState {
   Widget bottomHalf() {
     return Container(
       padding: EdgeInsets.all(12.0),
-      child: ListView.builder(
-        itemCount: alerts.length + 2,
-        itemBuilder: (context, int i) {
-          if (i == 0) {
-            return detailsWidget();
-          }
-          if (alerts.length == 0) {
-            return noAlertsWidget();
-          }
-          return alertCard(alerts[i - 2]);
-        },
+      child: ListView(
+        children: <Widget>[
+          detailsWidget(),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: stopsAtLocation.length,
+            itemBuilder: (context, int i) {
+              if (i % 2 == 0) {
+                return twoLinesTimerRow(
+                    stopsAtLocation[i], stopsAtLocation[i + 1]);
+              }
+              return Container();
+            },
+          ),
+          Container(
+            child: Text(
+              'Alerts:',
+              style: Theme.of(context).textTheme.title,
+            ),
+          ),
+          alerts.length == 0
+              ? noAlertsWidget()
+              : ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: alerts.length,
+                  itemBuilder: (context, int i) {
+                    return alertCard(alerts[i]);
+                  },
+                ),
+        ],
       ),
     );
   }
@@ -80,6 +103,18 @@ class StopDetailScreenView extends StopDetailScreenState {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    alerts.length == 0
+                        ? Container()
+                        : Container(
+                            padding: EdgeInsets.only(right: 6.0),
+                            child: Tooltip(
+                              message: '${alerts.length} Alert(s)',
+                              child: Icon(
+                                Icons.warning,
+                                color: Colors.yellow,
+                              ),
+                            ),
+                          ),
                     Expanded(
                       child: Text(
                         widget.stop.name,
@@ -89,7 +124,7 @@ class StopDetailScreenView extends StopDetailScreenState {
                     ),
                     IconButton(
                       icon: Icon(Icons.directions),
-                      onPressed: () {},
+                      onPressed: launchMapsUrl,
                     )
                   ],
                 ),
@@ -109,21 +144,6 @@ class StopDetailScreenView extends StopDetailScreenState {
                   },
                 ),
               ),
-              Container(
-                child: Center(
-                  child: Text(
-                    widget.stop.lineName,
-                    style: TextStyle(color: widget.stop.textColor),
-                  ),
-                ),
-              ),
-              twoLinesTimerRow(),
-              Container(
-                child: Text(
-                  'Alerts',
-                  style: Theme.of(context).textTheme.title,
-                ),
-              ),
             ],
           ),
         ),
@@ -131,43 +151,68 @@ class StopDetailScreenView extends StopDetailScreenState {
     );
   }
 
-  Widget twoLinesTimerRow() {
-    return Container(
-      padding: EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          directionAndTimerColumn(),
-          Container(
-            margin: EdgeInsets.only(left: 8.0, right: 8.0),
-            width: 1.5,
-            height: 80.0,
-            color: Colors.white30,
+  Widget twoLinesTimerRow(Stop stop1, Stop stop2) {
+    assert(stop1.lineName == stop2.lineName);
+
+    final Stop firstStop =
+        stop1.directionName == "North" || stop1.directionName == "West"
+            ? stop1
+            : stop2;
+    final Stop secondStop =
+        stop1.directionName == "North" || stop1.directionName == "West"
+            ? stop2
+            : stop1;
+
+    return Column(
+      children: <Widget>[
+        Container(
+          child: Center(
+            child: Text(
+              stop1.lineName,
+              style: TextStyle(color: stop1.textColor),
+            ),
           ),
-          directionAndTimerColumn(),
-        ],
-      ),
+        ),
+        Container(
+          padding: EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              directionAndTimerColumn(firstStop),
+              Container(
+                margin: EdgeInsets.only(left: 8.0, right: 8.0),
+                width: 1.5,
+                height: 80.0,
+                color: Colors.white30,
+              ),
+              directionAndTimerColumn(secondStop),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
-  Widget directionAndTimerColumn() {
-    return Container(
+  Widget directionAndTimerColumn(Stop stop) {
+    return Expanded(
       child: Column(
         children: <Widget>[
           Container(
             child: Text(
-              'Northbound',
+              '${stop.directionName}bound',
               style: Theme.of(context).textTheme.body1,
             ),
           ),
           Container(
             padding: EdgeInsets.only(top: 4.0, bottom: 8.0),
             child: Text(
-              'Oak Grove',
+              stop.directionDestination,
               style: Theme.of(context).textTheme.body2,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-          TimeCircleCombo(),
+          TimeCircleCombo(widget.stop.id),
         ],
       ),
     );
@@ -215,12 +260,16 @@ class StopDetailScreenView extends StopDetailScreenState {
       child: Center(
         child: Column(
           children: <Widget>[
-            Icon(
-              Icons.tag_faces,
-              size: 76.0,
+            IconButton(
+              icon: Image.asset(
+                "assets/smile.png",
+                color: Colors.white,
+              ),
+              iconSize: 50.0,
+              onPressed: null,
             ),
             Container(
-              child: Text('No Alerts'),
+              child: Text('No alerts at this time'),
             )
           ],
         ),

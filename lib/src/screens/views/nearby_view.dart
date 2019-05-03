@@ -16,7 +16,7 @@ class NearbyScreenView extends NearbyScreenState {
   Widget build(BuildContext context) {
     return SafeArea(
       child: FutureBuilder(
-          future: getAllStops(),
+          future: getNearbyStops(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return StopsLoadingIndicator();

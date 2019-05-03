@@ -18,9 +18,9 @@ abstract class NearbyScreenState extends State<NearbyScreen> {
   List<Marker> markers = List();
 
   // also sets markers
-  Future<List<Stop>> getAllStops() async {
+  Future<List<Stop>> getNearbyStops() async {
     final loc = await LocationService.currentLocation;
-    final stopList = await MBTAService.fetchAllStops(loc);
+    final stopList = await MBTAService.fetchNearbyStops(loc);
     this.stops = stopList;
 
     final List<String> alreadyAddedStopNames = List();
@@ -48,6 +48,8 @@ abstract class NearbyScreenState extends State<NearbyScreen> {
 
     return stopList;
   }
+
+  Future<void> refreshNearbyStops() {}
 
   Future<void> moveCameraTo(Stop stop) async {
     final GoogleMapController c = await controller.future;

@@ -1,14 +1,15 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbta_companion/src/models/alert.dart';
 import '../models/stop.dart';
 import 'dart:convert';
 
-const apiKey = "dc44b30101114e88b45041a4a9b65e06";
-const baseURL = "https://api-v3.mbta.com";
-
 class MBTAService {
+  static const apiKey = "dc44b30101114e88b45041a4a9b65e06";
+  static const baseURL = "https://api-v3.mbta.com";
+
   // returns a list of the 2 stops that is closest to the given location data
   // will be the same stop, but both directions
   static Future<List<Stop>> fetchNearestStop(LocationData locationData) async {
@@ -36,7 +37,27 @@ class MBTAService {
     return fetchNearbyStops(locationData, range: 2000);
   }
 
-  static Future<List<Alert>> fetchAlertsForStop({String stopId}) async {
+  static Future<List<Stop>> fetchAllStopsAtSameLocation(Stop stop) async {
+    final response = await http.get(
+        "$baseURL/stops?api_key=$apiKey&filter[latitude]=${stop.latitude}&filter[longitude]=${stop.longitude}&filter[radius]=0.01&filter[route_type]=0,1&sort=distance");
+    List<Stop> stops = List();
+    final jsonData = json.decode(response.body)['data'];
+    if (jsonData == null) {
+      throw Exception('Json data is null. Body: ${response.body}');
+    }
+    for (final obj in jsonData) {
+      if (obj['attributes']['name'] == stop.name) {
+        stops.add(Stop.fromJson(obj));
+      }
+    }
+    stops.sort((stop1, stop2) => stop1.lineName.compareTo(stop2.lineName));
+    print('stops: ${stops.toString()}');
+    assert(stops.length == 2 || stops.length == 4);
+    return stops;
+  }
+
+  static Future<List<Alert>> fetchAlertsForStop(
+      {@required String stopId}) async {
     final response =
         await http.get("$baseURL/alerts?api_key=$apiKey&filter[stop]=$stopId");
     List<Alert> alerts = List();

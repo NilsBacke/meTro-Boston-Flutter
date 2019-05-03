@@ -3,6 +3,7 @@ import 'package:mbta_companion/src/utils/mbta_colors.dart';
 import 'time_circle.dart';
 
 class VariablePartTile extends StatelessWidget {
+  final String stopId;
   final String title;
   final String subtitle1;
   final String lineInitials;
@@ -11,7 +12,7 @@ class VariablePartTile extends StatelessWidget {
   final List<Widget> otherWidgets;
   final TextOverflow overflow;
 
-  VariablePartTile(
+  VariablePartTile(this.stopId,
       {@required this.title,
       @required this.subtitle1,
       @required this.lineInitials,
@@ -88,7 +89,7 @@ class VariablePartTile extends StatelessWidget {
                 ),
               ),
             ),
-            TimeCircleCombo(),
+            TimeCircleCombo(this.stopId),
           ],
         ),
       ),

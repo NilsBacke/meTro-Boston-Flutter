@@ -38,6 +38,7 @@ class StopCard extends StatelessWidget {
                       return Container();
                     }
                     return VariablePartTile(
+                      stop.id,
                       title: stop.name,
                       subtitle1: stop.lineName,
                       otherInfo: [
@@ -51,6 +52,7 @@ class StopCard extends StatelessWidget {
                   },
                 )
               : VariablePartTile(
+                  stop.id,
                   title: stop.name,
                   subtitle1: stop.lineName,
                   otherInfo: [stop.directionDescription],

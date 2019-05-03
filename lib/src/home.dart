@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/screens/states/add_saved_state.dart';
 import 'package:mbta_companion/src/screens/states/commute_state.dart';
-import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
-import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:mbta_companion/src/screens/states/explore_state.dart';
 import 'package:mbta_companion/src/screens/states/nearby_state.dart';
 import 'package:mbta_companion/src/screens/states/saved_state.dart';

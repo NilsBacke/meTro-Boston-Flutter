@@ -35,6 +35,7 @@ class CommuteView extends CommuteScreenState {
     return threePartCard(
       'Nearest Stop',
       VariablePartTile(
+        stops[0].id,
         title: stops[0].name,
         subtitle1: stops[0].lineName,
         otherInfo: [stops[0].directionDescription],
@@ -42,6 +43,7 @@ class CommuteView extends CommuteScreenState {
         lineColor: stops[0].lineColor,
       ),
       VariablePartTile(
+        stops[1].id,
         title: stops[1].name,
         subtitle1: stops[1].lineName,
         otherInfo: [stops[1].directionDescription],
@@ -59,6 +61,7 @@ class CommuteView extends CommuteScreenState {
     return threePartCard(
       'Work Commute',
       VariablePartTile(
+        "70009",
         title: "Roxbury Crossing",
         subtitle1: "Orange Line",
         otherInfo: ["North towards Oak Grove"],
@@ -66,6 +69,7 @@ class CommuteView extends CommuteScreenState {
         lineColor: MBTAColors.orange,
       ),
       VariablePartTile(
+        "70009",
         title: "North Station",
         subtitle1: "Orange Line",
         lineInitials: "OL",
