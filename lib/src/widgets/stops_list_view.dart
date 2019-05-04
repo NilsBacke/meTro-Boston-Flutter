@@ -5,8 +5,9 @@ import 'package:mbta_companion/src/widgets/stop_card.dart';
 
 class StopsListView extends StatelessWidget {
   final List<Stop> stops;
+  final Function(Stop) onTap;
 
-  StopsListView(this.stops);
+  StopsListView(this.stops, {this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,7 @@ class StopsListView extends StatelessWidget {
           stop: stops[index],
           includeDistance: true,
           distanceFuture: LocationService.getDistanceFromStop(stops[index]),
+          onTap: onTap,
         );
       },
     );

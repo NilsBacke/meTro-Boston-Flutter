@@ -1,17 +1,30 @@
+import 'dart:io';
+
 import '../models/commute.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/stop.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DBService {
-  Database db;
+  DBService._();
+  static final DBService db = DBService._();
 
-  createDatabase() async {
-    String databasesPath = await getDatabasesPath();
-    String dbPath = join(databasesPath, 'mbta.db');
+  static Database _database;
 
-    var database = await openDatabase(dbPath, version: 1, onCreate: populateDb);
-    return database;
+  Future<Database> get database async {
+    if (_database != null) return _database;
+
+    // if _database is null we instantiate it
+    _database = await initDB();
+    return _database;
+  }
+
+  initDB() async {
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, "mbta.db");
+    return await openDatabase(path,
+        version: 1, onOpen: (db) {}, onCreate: populateDb);
   }
 
   void populateDb(Database database, int version) async {
@@ -21,7 +34,8 @@ class DBService {
         "latitude TEXT,"
         "longitude TEXT,"
         "platform_name TEXT,"
-        "direction_name TEXT"
+        "direction_name TEXT,"
+        "description TEXT"
         ")");
     await database.execute("CREATE TABLE Commute ("
         "id INTEGER PRIMARY KEY,"
@@ -31,21 +45,25 @@ class DBService {
         "longitude_one TEXT,"
         "platform_name_one TEXT,"
         "direction_name_one TEXT,"
+        "description_one TEXT,"
         "id_two INTEGER,"
         "name_two TEXT,"
         "latitude_two TEXT,"
         "longitude_two TEXT,"
         "platform_name_two TEXT,"
-        "direction_name_two TEXT"
+        "direction_name_two TEXT,"
+        "description_two TEXT"
         ")");
   }
 
   Future<int> saveStop(Stop stop) async {
+    final db = await database;
     var result = await db.insert("SavedStops", stop.toJson());
     return result;
   }
 
   Future<List<Stop>> getAllSavedStops() async {
+    final db = await database;
     var result = await db.query("SavedStops", columns: [
       "id",
       "name",
@@ -57,26 +75,30 @@ class DBService {
     ]);
 
     return result.map((e) {
-      return Stop.fromJson(e);
+      return Stop.fromDb(e);
     }).toList();
   }
 
   Future<int> updateSavedStop(Stop stop) async {
+    final db = await database;
     return await db.update("SavedStops", stop.toJson(),
         where: "id = ?", whereArgs: [stop.id]);
   }
 
   Future<int> removeSavedStop(int id) async {
+    final db = await database;
     return await db.delete("SavedStops", where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> createCommute(Stop stop1, Stop stop2) async {
+    final db = await database;
     Commute commute = new Commute(stop1, stop2);
     var result = await db.insert("SavedStops", commute.toJson());
     return result;
   }
 
   Future<Commute> getCommute() async {
+    final db = await database;
     var result = await db.query("Commute", columns: [
       "id",
       "id_one",
@@ -101,11 +123,13 @@ class DBService {
   }
 
   Future<int> updateCommute(Commute commute) async {
+    final db = await database;
     return await db.update("Commute", commute.toJson(),
         where: "id = ?", whereArgs: [commute.id]);
   }
 
   Future<int> removeCommute(int id) async {
+    final db = await database;
     return await db.delete("Commute", where: 'id = ?', whereArgs: [id]);
   }
 }

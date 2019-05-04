@@ -5,6 +5,10 @@ import 'package:mbta_companion/src/services/mbta_service.dart';
 import '../views/explore_view.dart';
 
 class ExploreScreen extends StatefulWidget {
+  final Function(Stop) onTap;
+
+  ExploreScreen({this.onTap});
+
   @override
   ExploreScreenView createState() => ExploreScreenView();
 }

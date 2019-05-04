@@ -126,8 +126,16 @@ class Stop {
         throw Exception('Could not formulate line name from: $desc. Error: $e');
       }
     }
+  }
 
-    print(lineName);
+  Stop.fromDb(Map<String, dynamic> parsedJson) {
+    this.id = parsedJson[idKey].toString();
+    this.name = parsedJson[nameKey];
+    this.latitude = double.parse(parsedJson[latitudeKey]);
+    this.longitude = double.parse(parsedJson[longitudeKey]);
+    this.directionDestination = parsedJson[directionKey];
+    this.directionName = parsedJson[directionNameKey];
+    this.lineName = parsedJson[lineNameKey];
   }
 
   Map<String, dynamic> toJson() => {

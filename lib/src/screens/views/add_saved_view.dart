@@ -9,7 +9,7 @@ class AddSavedScreenView extends AddSavedScreenState {
       appBar: AppBar(
         title: Text('Add New Stop'),
       ),
-      body: ExploreScreen(),
+      body: ExploreScreen(onTap: onStopTapped),
     );
   }
 }

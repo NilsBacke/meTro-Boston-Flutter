@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:mbta_companion/src/screens/states/add_saved_state.dart';
 import 'package:mbta_companion/src/screens/states/saved_state.dart';
 import 'package:mbta_companion/src/widgets/stops_list_view.dart';
 
 class SavedScreenView extends SavedScreenState {
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: bodyWidget(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => AddSavedScreen()))
+              .then((val) {
+            getAllSavedStops();
+          });
+        },
+      ),
+    );
+  }
+
+  Widget bodyWidget() {
     if (isLoading) {
       return StopsLoadingIndicator();
     } else if (savedStops.length == 0) {

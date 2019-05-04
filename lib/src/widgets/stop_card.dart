@@ -7,6 +7,7 @@ class StopCard extends StatelessWidget {
   final Stop stop;
   final TextOverflow overflow;
   final bool includeDistance;
+  final Function(Stop) onTap;
 
   /// required if [includeDistance] is true
   final Future<dynamic> distanceFuture;
@@ -15,7 +16,8 @@ class StopCard extends StatelessWidget {
       {@required this.stop,
       this.overflow,
       this.includeDistance = false,
-      this.distanceFuture}) {
+      this.distanceFuture,
+      this.onTap}) {
     if (this.includeDistance) {
       assert(this.distanceFuture != null);
     }
@@ -25,7 +27,7 @@ class StopCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showDetail(context);
+        onTap != null ? onTap(this.stop) : showDetail(context);
       },
       child: Card(
         child: Container(

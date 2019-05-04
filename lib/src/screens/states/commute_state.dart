@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/views/commute_view.dart';
@@ -10,6 +11,7 @@ class CommuteScreen extends StatefulWidget {
 }
 
 abstract class CommuteScreenState extends State<CommuteScreen> {
+  final AsyncMemoizer _memoizer = AsyncMemoizer();
   double dist;
 
   @override
@@ -17,18 +19,19 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
     super.initState();
   }
 
-  Future<List<Stop>> getNearestStop() async {
-    final loc = await LocationService.currentLocation;
-    final stops = await MBTAService.fetchNearestStop(loc);
-    final stop = stops[0];
-    final distVal = LocationService.getDistance(
-        loc.latitude, loc.longitude, stop.latitude, stop.longitude);
-    if (this.mounted) {
-      setState(() {
-        this.dist = distVal;
-      });
-    }
-
-    return stops;
+  getNearestStop() {
+    return this._memoizer.runOnce(() async {
+      final loc = await LocationService.currentLocation;
+      final stops = await MBTAService.fetchNearestStop(loc);
+      final stop = stops[0];
+      final distVal = LocationService.getDistance(
+          loc.latitude, loc.longitude, stop.latitude, stop.longitude);
+      if (this.mounted) {
+        setState(() {
+          this.dist = distVal;
+        });
+      }
+      return stops;
+    });
   }
 }

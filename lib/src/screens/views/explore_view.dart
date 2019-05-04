@@ -29,7 +29,7 @@ class ExploreScreenView extends ExploreScreenState {
           Expanded(
             child: filteredStops.length == 0
                 ? StopsLoadingIndicator()
-                : StopsListView(filteredStops),
+                : StopsListView(filteredStops, onTap: widget.onTap),
           ),
         ],
       ),

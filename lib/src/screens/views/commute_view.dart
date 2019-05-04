@@ -12,7 +12,7 @@ class CommuteView extends CommuteScreenState {
         children: <Widget>[
           FutureBuilder(
             future: getNearestStop(),
-            builder: (context, AsyncSnapshot<List<Stop>> snapshot) {
+            builder: (context, snapshot) {
               return snapshot.hasData
                   ? nearbyStopCard(snapshot.data)
                   : Container(

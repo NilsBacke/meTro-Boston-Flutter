@@ -11,15 +11,16 @@ class SavedScreen extends StatefulWidget {
 abstract class SavedScreenState extends State<SavedScreen> {
   bool isLoading = true;
   List<Stop> savedStops = List();
-  final DBService db = DBService();
 
   @override
   void initState() {
+    super.initState();
     isLoading = false;
+    getAllSavedStops();
   }
 
   Future<void> getAllSavedStops() async {
-    final savedStops = await db.getAllSavedStops();
+    final savedStops = await DBService.db.getAllSavedStops();
     setState(() {
       this.savedStops = savedStops;
     });

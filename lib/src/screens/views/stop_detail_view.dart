@@ -118,7 +118,7 @@ class StopDetailScreenView extends StopDetailScreenState {
                     Expanded(
                       child: Text(
                         widget.stop.name,
-                        overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.clip,
                         style: Theme.of(context).textTheme.title,
                       ),
                     ),
@@ -238,7 +238,7 @@ class StopDetailScreenView extends StopDetailScreenState {
                   ),
                   Flexible(
                     child: Text(
-                      alert.subtitle,
+                      alert.subtitle ?? '',
                       style: TextStyle(fontSize: 18.0, fontFamily: 'Hind'),
                     ),
                   ),
@@ -246,7 +246,7 @@ class StopDetailScreenView extends StopDetailScreenState {
               ),
             ),
             Container(
-              child: Text(alert.description,
+              child: Text(alert.description ?? '',
                   style: Theme.of(context).textTheme.caption),
             ),
           ],

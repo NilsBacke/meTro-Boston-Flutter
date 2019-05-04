@@ -66,15 +66,6 @@ class _HomeState extends State<Home> {
         unselectedItemColor: Colors.white70,
         showUnselectedLabels: true,
       ),
-      floatingActionButton: _currentIndex == 1
-          ? FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => AddSavedScreen()));
-              },
-            )
-          : null,
     );
   }
 }
