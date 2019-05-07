@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
+
 import 'stop.dart';
 
 class Commute {
   int id;
   Stop stop1, stop2;
+  TimeOfDay arrivalTime, departureTime;
 
-  Commute(this.stop1, this.stop2) {
+  Commute(this.stop1, this.stop2, this.arrivalTime, this.departureTime) {
     this.id = 1;
   }
 
@@ -26,6 +29,10 @@ class Commute {
         parsedJson['platform_name_two'],
         parsedJson['direction_name_two'],
         parsedJson['description_two']);
+    this.arrivalTime =
+        TimeOfDay.fromDateTime(DateTime.parse(parsedJson['arrival_time']));
+    this.departureTime =
+        TimeOfDay.fromDateTime(DateTime.parse(parsedJson['departure_time']));
   }
 
   Map<String, dynamic> toJson() => {
@@ -44,5 +51,7 @@ class Commute {
         "platform_name_two": this.stop2.directionDestination,
         "direction_name_two": this.stop2.directionName,
         "description_two": this.stop2.lineName,
+        "arrival_time": this.arrivalTime.toString(),
+        "departure_time": this.departureTime..toString(),
       };
 }

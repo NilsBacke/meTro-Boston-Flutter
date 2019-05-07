@@ -1,7 +1,9 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/views/commute_view.dart';
+import 'package:mbta_companion/src/services/db_service.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 
@@ -13,6 +15,7 @@ class CommuteScreen extends StatefulWidget {
 abstract class CommuteScreenState extends State<CommuteScreen> {
   final AsyncMemoizer _memoizer = AsyncMemoizer();
   double dist;
+  Commute commute;
 
   @override
   void initState() {
@@ -33,5 +36,10 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
       }
       return stops;
     });
+  }
+
+  Future<void> deleteCommute() async {
+    this.commute = null;
+    await DBService.db.removeCommute();
   }
 }

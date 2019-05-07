@@ -8,6 +8,7 @@ class StopCard extends StatelessWidget {
   final TextOverflow overflow;
   final bool includeDistance;
   final Function(Stop) onTap;
+  final bool timeCircles;
 
   /// required if [includeDistance] is true
   final Future<dynamic> distanceFuture;
@@ -17,7 +18,8 @@ class StopCard extends StatelessWidget {
       this.overflow,
       this.includeDistance = false,
       this.distanceFuture,
-      this.onTap}) {
+      this.onTap,
+      this.timeCircles = true}) {
     if (this.includeDistance) {
       assert(this.distanceFuture != null);
     }
@@ -61,6 +63,7 @@ class StopCard extends StatelessWidget {
                   lineInitials: stop.lineInitials,
                   lineColor: stop.lineColor,
                   overflow: this.overflow,
+                  timeCircles: this.timeCircles,
                 ),
         ),
       ),

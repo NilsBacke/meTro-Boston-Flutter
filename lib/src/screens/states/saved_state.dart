@@ -15,14 +15,24 @@ abstract class SavedScreenState extends State<SavedScreen> {
   @override
   void initState() {
     super.initState();
-    isLoading = false;
     getAllSavedStops();
   }
 
   Future<void> getAllSavedStops() async {
     final savedStops = await DBService.db.getAllSavedStops();
     setState(() {
+      this.isLoading = false;
       this.savedStops = savedStops;
     });
+  }
+
+  Future<void> removeStop(Stop stop) async {
+    setState(() {
+      this.savedStops.remove(stop);
+    });
+    final res = await DBService.db.removeSavedStop(int.parse(stop.id));
+    if (res == 0) {
+      throw 'Stop not removed from db, stop does not exist';
+    }
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mbta_companion/src/utils/mbta_colors.dart';
 import 'time_circle.dart';
 
 class VariablePartTile extends StatelessWidget {
@@ -11,6 +10,7 @@ class VariablePartTile extends StatelessWidget {
   final List<String> otherInfo;
   final List<Widget> otherWidgets;
   final TextOverflow overflow;
+  final bool timeCircles;
 
   VariablePartTile(this.stopId,
       {@required this.title,
@@ -19,7 +19,8 @@ class VariablePartTile extends StatelessWidget {
       @required this.lineColor,
       this.otherInfo = const [],
       this.overflow = TextOverflow.ellipsis,
-      this.otherWidgets = const []});
+      this.otherWidgets = const [],
+      this.timeCircles = true});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +90,7 @@ class VariablePartTile extends StatelessWidget {
                 ),
               ),
             ),
-            TimeCircleCombo(this.stopId),
+            this.timeCircles ? TimeCircleCombo(this.stopId) : Container(),
           ],
         ),
       ),

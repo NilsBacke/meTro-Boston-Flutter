@@ -52,7 +52,9 @@ class DBService {
         "longitude_two TEXT,"
         "platform_name_two TEXT,"
         "direction_name_two TEXT,"
-        "description_two TEXT"
+        "description_two TEXT,"
+        "arrival_time TEXT,"
+        "departure_time TEXT"
         ")");
   }
 
@@ -90,10 +92,9 @@ class DBService {
     return await db.delete("SavedStops", where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<int> createCommute(Stop stop1, Stop stop2) async {
+  Future<int> saveCommute(Commute commute) async {
     final db = await database;
-    Commute commute = new Commute(stop1, stop2);
-    var result = await db.insert("SavedStops", commute.toJson());
+    var result = await db.insert("Commute", commute.toJson());
     return result;
   }
 
@@ -115,6 +116,8 @@ class DBService {
       "platform_name_two",
       "direction_name_two",
       "description_two",
+      "arrival_time",
+      "departure_time",
     ]);
 
     return result.map((e) {
@@ -128,8 +131,8 @@ class DBService {
         where: "id = ?", whereArgs: [commute.id]);
   }
 
-  Future<int> removeCommute(int id) async {
+  Future<int> removeCommute() async {
     final db = await database;
-    return await db.delete("Commute", where: 'id = ?', whereArgs: [id]);
+    return await db.delete("Commute", where: 'id = ?', whereArgs: [1]);
   }
 }

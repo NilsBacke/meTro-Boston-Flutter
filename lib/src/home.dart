@@ -4,6 +4,7 @@ import 'package:mbta_companion/src/screens/states/commute_state.dart';
 import 'package:mbta_companion/src/screens/states/explore_state.dart';
 import 'package:mbta_companion/src/screens/states/nearby_state.dart';
 import 'package:mbta_companion/src/screens/states/saved_state.dart';
+import 'package:mbta_companion/src/screens/states/settings_state.dart';
 import 'package:mbta_companion/src/utils/mbta_colors.dart';
 
 class Home extends StatefulWidget {
@@ -40,7 +41,7 @@ class _HomeState extends State<Home> {
     SavedScreen(),
     ExploreScreen(),
     NearbyScreen(),
-    CommuteScreen()
+    SettingsScreen()
   ];
 
   var _currentIndex = 0;

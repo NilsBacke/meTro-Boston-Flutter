@@ -27,7 +27,11 @@ class SavedScreenView extends SavedScreenState {
     } else if (savedStops.length == 0) {
       return emptyList();
     } else {
-      return StopsListView(savedStops);
+      return StopsListView(
+        savedStops,
+        dismissable: true,
+        onDismiss: removeStop,
+      );
     }
   }
 

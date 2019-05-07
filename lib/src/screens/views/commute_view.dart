@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
+import 'package:mbta_companion/src/screens/states/create_commute_state.dart';
 import 'package:mbta_companion/src/utils/mbta_colors.dart';
 import '../states/commute_state.dart';
 import '../../widgets/stop_details_tile.dart';
@@ -26,6 +27,13 @@ class CommuteView extends CommuteScreenState {
             },
           ),
           commuteCard(),
+          RaisedButton(
+            child: Text("Make commute"),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CreateCommuteScreen()));
+            },
+          )
         ],
       ),
     );
@@ -84,7 +92,7 @@ class CommuteView extends CommuteScreenState {
           ),
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: () {},
+            onPressed: showDeleteDialog,
           ),
         ],
       ),
@@ -119,5 +127,30 @@ class CommuteView extends CommuteScreenState {
         ),
       ),
     );
+  }
+
+  void showDeleteDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Are you sure to want to delete this commute?"),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: Text("Delete"),
+                onPressed: () async {
+                  await deleteCommute();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 }
