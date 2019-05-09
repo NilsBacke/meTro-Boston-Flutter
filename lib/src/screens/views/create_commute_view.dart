@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/states/create_commute_state.dart';
 import 'package:mbta_companion/src/screens/states/explore_state.dart';
+import 'package:mbta_companion/src/screens/states/stop_detail_state.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
 
 class CreateCommuteScreenView extends CreateCommuteScreenState {
@@ -9,7 +10,7 @@ class CreateCommuteScreenView extends CreateCommuteScreenState {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Commute'),
+        title: Text(appBarText),
       ),
       body: Container(
         child: Column(
@@ -54,6 +55,9 @@ class CreateCommuteScreenView extends CreateCommuteScreenState {
               : StopCard(
                   stop: stop,
                   timeCircles: false,
+                  onTap: (_) {
+                    chooseStop(homeStop);
+                  },
                 ),
         ],
       ),
@@ -148,8 +152,8 @@ class CreateCommuteScreenView extends CreateCommuteScreenState {
     return Container(
       padding: EdgeInsets.all(12.0),
       child: RaisedButton(
-        child: Text("Create Commute"),
-        onPressed: () {},
+        child: Text(appBarText),
+        onPressed: createCommute,
       ),
     );
   }

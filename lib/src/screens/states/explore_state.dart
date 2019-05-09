@@ -6,8 +6,9 @@ import '../views/explore_view.dart';
 
 class ExploreScreen extends StatefulWidget {
   final Function(Stop) onTap;
+  final String topMessage;
 
-  ExploreScreen({this.onTap});
+  ExploreScreen({this.onTap, this.topMessage});
 
   @override
   ExploreScreenView createState() => ExploreScreenView();

@@ -7,6 +7,8 @@ import 'package:mbta_companion/src/services/db_service.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 
+import 'create_commute_state.dart';
+
 class CommuteScreen extends StatefulWidget {
   @override
   CommuteView createState() => CommuteView();
@@ -19,6 +21,7 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
 
   @override
   void initState() {
+    getCommute();
     super.initState();
   }
 
@@ -38,8 +41,29 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
     });
   }
 
+  Future<void> getCommute() async {
+    final commute = await DBService.db.getCommute();
+    setState(() {
+      this.commute = commute;
+    });
+  }
+
   Future<void> deleteCommute() async {
-    this.commute = null;
     await DBService.db.removeCommute();
+    setState(() {
+      this.commute = null;
+    });
+  }
+
+  Future<void> editCommute() async {
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute(
+            builder: (context) => CreateCommuteScreen(
+                  commute: this.commute,
+                ),
+          ),
+        )
+        .then((val) => getCommute());
   }
 }

@@ -16,6 +16,9 @@ class SetStopView extends StatelessWidget {
       ),
       body: ExploreScreen(
         onTap: onTap,
+        topMessage: homeStop
+            ? 'Please select the line and direction that you use when getting on the train from home.'
+            : 'Please select the line and direction that you use when getting on the train from work.',
       ),
     );
   }

@@ -120,9 +120,13 @@ class DBService {
       "departure_time",
     ]);
 
-    return result.map((e) {
+    final listOfOne = result.map((e) {
       return Commute.fromJson(e);
-    }).toList()[0];
+    }).toList();
+    if (listOfOne == null || listOfOne.length == 0) {
+      return null;
+    }
+    return listOfOne[0];
   }
 
   Future<int> updateCommute(Commute commute) async {

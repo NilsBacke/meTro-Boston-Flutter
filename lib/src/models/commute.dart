@@ -1,38 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:mbta_companion/src/utils/timeofday_helper.dart';
 
 import 'stop.dart';
 
 class Commute {
-  int id;
+  String id;
   Stop stop1, stop2;
   TimeOfDay arrivalTime, departureTime;
 
   Commute(this.stop1, this.stop2, this.arrivalTime, this.departureTime) {
-    this.id = 1;
+    this.id = "1";
   }
 
   Commute.fromJson(Map<String, dynamic> parsedJson) {
-    this.id = 1;
+    this.id = "1";
     this.stop1 = Stop(
-        parsedJson['id_one'],
+        parsedJson['id_one'].toString(),
         parsedJson['name_one'],
-        parsedJson['latitude_one'],
-        parsedJson['longitude_one'],
+        double.parse(parsedJson['latitude_one']),
+        double.parse(parsedJson['longitude_one']),
         parsedJson['platform_name_one'],
         parsedJson['direction_name_one'],
         parsedJson['description_one']);
     this.stop2 = Stop(
-        parsedJson['id_two'],
+        parsedJson['id_two'].toString(),
         parsedJson['name_two'],
-        parsedJson['latitude_two'],
-        parsedJson['longitude_two'],
+        double.parse(parsedJson['latitude_two']),
+        double.parse(parsedJson['longitude_two']),
         parsedJson['platform_name_two'],
         parsedJson['direction_name_two'],
         parsedJson['description_two']);
-    this.arrivalTime =
-        TimeOfDay.fromDateTime(DateTime.parse(parsedJson['arrival_time']));
-    this.departureTime =
-        TimeOfDay.fromDateTime(DateTime.parse(parsedJson['departure_time']));
+    this.arrivalTime = _stringToTimeOfDay(parsedJson['arrival_time']);
+    this.departureTime = _stringToTimeOfDay(parsedJson['departure_time']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -51,7 +50,19 @@ class Commute {
         "platform_name_two": this.stop2.directionDestination,
         "direction_name_two": this.stop2.directionName,
         "description_two": this.stop2.lineName,
-        "arrival_time": this.arrivalTime.toString(),
-        "departure_time": this.departureTime..toString(),
+        "arrival_time": TimeOfDayHelper.convertToString(this.arrivalTime),
+        "departure_time": TimeOfDayHelper.convertToString(this.departureTime),
       };
+
+  TimeOfDay _stringToTimeOfDay(String time) {
+    String hour = time.substring(0, time.indexOf(":"));
+    if (hour[0] == "0") {
+      hour = hour[1];
+    }
+    String minute = time.substring(time.indexOf(":") + 1);
+    if (minute[0] == "0") {
+      minute = minute[1];
+    }
+    return TimeOfDay(hour: int.parse(hour), minute: int.parse(minute));
+  }
 }
