@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/screens/states/explore_state.dart';
-import 'package:mbta_companion/src/services/location_service.dart';
-import 'package:mbta_companion/src/widgets/stop_card.dart';
 import 'package:mbta_companion/src/widgets/stops_list_view.dart';
 
 class ExploreScreenView extends ExploreScreenState {
@@ -37,10 +35,23 @@ class ExploreScreenView extends ExploreScreenState {
         ),
         Expanded(
           child: filteredStops.length == 0
-              ? StopsLoadingIndicator()
-              : StopsListView(filteredStops, onTap: widget.onTap),
+              ? noStopsFound()
+              : StopsListView(filteredStops,
+                  onTap: widget.onTap, timeCircles: widget.timeCircles),
         ),
       ],
+    );
+  }
+
+  Widget noStopsFound() {
+    return Container(
+      child: Center(
+        child: Text(
+          "No stops found\nTry searching something else",
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.body2,
+        ),
+      ),
     );
   }
 }

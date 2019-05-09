@@ -52,6 +52,7 @@ class StopCard extends StatelessWidget {
                       lineInitials: stop.lineInitials,
                       lineColor: stop.lineColor,
                       overflow: this.overflow,
+                      timeCircles: this.timeCircles,
                     );
                   },
                 )

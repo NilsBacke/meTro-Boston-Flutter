@@ -56,8 +56,8 @@ abstract class CreateCommuteScreenState extends State<CreateCommuteScreen> {
     });
   }
 
-  Future<void> chooseStop(bool homeStop) async {
-    final stop = await Navigator.of(context).push(
+  Future<void> chooseStop(bool homeStop, {Stop currentStop}) async {
+    Stop stop = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => SetStopView(
               homeStop,
@@ -70,6 +70,11 @@ abstract class CreateCommuteScreenState extends State<CreateCommuteScreen> {
 
     if (!this.mounted) {
       return;
+    }
+
+    // nothing was tapped
+    if (stop == null) {
+      stop = currentStop;
     }
 
     if (homeStop) {

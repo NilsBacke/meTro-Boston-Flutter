@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mbta_companion/src/screens/states/add_saved_state.dart';
 import 'package:mbta_companion/src/screens/states/commute_state.dart';
 import 'package:mbta_companion/src/screens/states/explore_state.dart';
 import 'package:mbta_companion/src/screens/states/nearby_state.dart';
 import 'package:mbta_companion/src/screens/states/saved_state.dart';
-import 'package:mbta_companion/src/screens/states/settings_state.dart';
-import 'package:mbta_companion/src/utils/mbta_colors.dart';
+
+import 'screens/stateless_screens/settings_view.dart';
 
 class Home extends StatefulWidget {
   @override

@@ -19,6 +19,7 @@ class SetStopView extends StatelessWidget {
         topMessage: homeStop
             ? 'Please select the line and direction that you use when getting on the train from home.'
             : 'Please select the line and direction that you use when getting on the train from work.',
+        timeCircles: false,
       ),
     );
   }

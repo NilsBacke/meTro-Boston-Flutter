@@ -56,7 +56,7 @@ class CreateCommuteScreenView extends CreateCommuteScreenState {
                   stop: stop,
                   timeCircles: false,
                   onTap: (_) {
-                    chooseStop(homeStop);
+                    chooseStop(homeStop, currentStop: stop);
                   },
                 ),
         ],

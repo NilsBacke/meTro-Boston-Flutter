@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mbta_companion/src/screens/states/settings_state.dart';
+import 'package:mbta_companion/src/screens/stateless_screens/about_screen.dart';
+import 'package:mbta_companion/src/screens/stateless_screens/map_image_screen.dart';
 
-class SettingsScreenView extends SettingsScreenState {
+class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -10,19 +11,22 @@ class SettingsScreenView extends SettingsScreenState {
           ListTile(
             leading: Icon(Icons.map),
             title: Text('See Map'),
-          ),
-          Divider(),
-          SizedBox(
-            height: 75.0,
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => MapImageScreen()));
+            },
           ),
           Divider(),
           ListTile(
             title: Text('About'),
             subtitle: Text(
-              'Version number, about the author, acknowledgements',
+              'Build info, version number, acknowledgements',
               style: TextStyle(fontSize: 14.0),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => AboutScreen()));
+            },
           ),
           Divider(),
           ListTile(

@@ -8,9 +8,13 @@ class StopsListView extends StatelessWidget {
   final Function(Stop) onTap;
   final bool dismissable;
   final Function(Stop) onDismiss;
+  final bool timeCircles;
 
   StopsListView(this.stops,
-      {this.onTap, this.dismissable = false, this.onDismiss})
+      {this.onTap,
+      this.dismissable = false,
+      this.onDismiss,
+      this.timeCircles = true})
       : assert(dismissable ? onDismiss != null : true);
 
   @override
@@ -44,6 +48,7 @@ class StopsListView extends StatelessWidget {
               includeDistance: true,
               distanceFuture: LocationService.getDistanceFromStop(stops[index]),
               onTap: onTap,
+              timeCircles: this.timeCircles,
             ),
           );
         }
@@ -52,6 +57,7 @@ class StopsListView extends StatelessWidget {
           includeDistance: true,
           distanceFuture: LocationService.getDistanceFromStop(stops[index]),
           onTap: onTap,
+          timeCircles: this.timeCircles,
         );
       },
     );

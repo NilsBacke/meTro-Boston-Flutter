@@ -7,8 +7,9 @@ import '../views/explore_view.dart';
 class ExploreScreen extends StatefulWidget {
   final Function(Stop) onTap;
   final String topMessage;
+  final bool timeCircles;
 
-  ExploreScreen({this.onTap, this.topMessage});
+  ExploreScreen({this.onTap, this.topMessage, this.timeCircles = true});
 
   @override
   ExploreScreenView createState() => ExploreScreenView();
