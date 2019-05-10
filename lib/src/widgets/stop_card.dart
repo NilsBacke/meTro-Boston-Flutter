@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/states/stop_detail_state.dart';
+import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/widgets/stop_details_tile.dart';
 
 class StopCard extends StatelessWidget {
@@ -33,41 +34,45 @@ class StopCard extends StatelessWidget {
       },
       child: Card(
         child: Container(
-          padding: EdgeInsets.all(12.0),
-          child: this.includeDistance
-              ? FutureBuilder(
-                  future: distanceFuture,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Container();
-                    }
-                    return VariablePartTile(
-                      stop.id,
-                      title: stop.name,
-                      subtitle1: stop.lineName,
-                      otherInfo: [
-                        stop.directionDescription,
-                        '${snapshot.data} mi'
-                      ],
-                      lineInitials: stop.lineInitials,
-                      lineColor: stop.lineColor,
-                      overflow: this.overflow,
-                      timeCircles: this.timeCircles,
-                    );
-                  },
-                )
-              : VariablePartTile(
-                  stop.id,
-                  title: stop.name,
-                  subtitle1: stop.lineName,
-                  otherInfo: [stop.directionDescription],
-                  lineInitials: stop.lineInitials,
-                  lineColor: stop.lineColor,
-                  overflow: this.overflow,
-                  timeCircles: this.timeCircles,
-                ),
-        ),
+            padding: EdgeInsets.all(12.0),
+            child: this.includeDistance
+                ? distanceStopCard()
+                : noDistanceStopCard()),
       ),
+    );
+  }
+
+  Widget distanceStopCard() {
+    return FutureBuilder(
+      future: distanceFuture,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        }
+        return VariablePartTile(
+          stop.id,
+          title: stop.name,
+          subtitle1: stop.lineName,
+          otherInfo: [stop.directionDescription, '${snapshot.data} mi'],
+          lineInitials: stop.lineInitials,
+          lineColor: stop.lineColor,
+          overflow: this.overflow,
+          timeCircles: this.timeCircles,
+        );
+      },
+    );
+  }
+
+  Widget noDistanceStopCard() {
+    return VariablePartTile(
+      stop.id,
+      title: stop.name,
+      subtitle1: stop.lineName,
+      otherInfo: [stop.directionDescription],
+      lineInitials: stop.lineInitials,
+      lineColor: stop.lineColor,
+      overflow: this.overflow,
+      timeCircles: this.timeCircles,
     );
   }
 

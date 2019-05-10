@@ -5,6 +5,7 @@ import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
+import 'package:mbta_companion/src/services/permission_service.dart';
 import '../views/nearby_view.dart';
 
 class NearbyScreen extends StatefulWidget {
@@ -16,10 +17,23 @@ abstract class NearbyScreenState extends State<NearbyScreen> {
   Completer<GoogleMapController> controller = Completer();
   List<Stop> stops = List();
   List<Marker> markers = List();
+  bool noLocationPermissions = false;
+  bool noLocationService = false;
 
   // also sets markers
   Future<List<Stop>> getNearbyStops() async {
-    final loc = await LocationService.currentLocation;
+    var loc;
+    LocationStatus locationStatus =
+        await PermissionService.getLocationPermissions();
+    if (locationStatus == LocationStatus.granted) {
+      loc = await LocationService.currentLocation;
+    } else if (locationStatus == LocationStatus.noPermission) {
+      noLocationPermissions = true;
+      return [];
+    } else {
+      noLocationService = true;
+      return [];
+    }
     final stopList = await MBTAService.fetchNearbyStops(loc);
     this.stops = stopList;
 

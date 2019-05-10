@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/screens/stateless_screens/about_screen.dart';
 import 'package:mbta_companion/src/screens/stateless_screens/map_image_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -31,7 +32,9 @@ class SettingsScreen extends StatelessWidget {
           Divider(),
           ListTile(
             title: Text('Manage Permissions'),
-            onTap: () {},
+            onTap: () {
+              PermissionHandler().openAppSettings();
+            },
           ),
           Divider(),
         ],

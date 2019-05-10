@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
+import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/alert.dart';
+import 'package:mbta_companion/src/utils/api_request_counter.dart';
 import '../models/stop.dart';
 import 'dart:convert';
 
@@ -18,7 +19,16 @@ class MBTAService {
     final response = await http.get(
         "$baseURL/stops?api_key=$apiKey&filter[latitude]=${locationData.latitude}&filter[longitude]=${locationData.longitude}&filter[radius]=0.10&filter[route_type]=0,1&sort=distance");
     print("response url: ${response.request.url}");
+
+    if (APIRequestCounter.debug) {
+      APIRequestCounter.incrementCalls('nearest stop');
+    }
+
     final jsonData = json.decode(response.body)['data'];
+    if (jsonData == null) {
+      // error
+      return null;
+    }
     list[0] = (Stop.fromJson(jsonData[0]));
     list[1] = (Stop.fromJson(jsonData[1]));
     return list;
@@ -27,9 +37,22 @@ class MBTAService {
   // range in miles
   static Future<List<Stop>> fetchNearbyStops(LocationData locationData,
       {double range = 1}) async {
-    final radius = range * 0.02;
-    final response = await http.get(
-        "$baseURL/stops?api_key=$apiKey&filter[latitude]=${locationData.latitude}&filter[longitude]=${locationData.longitude}&filter[radius]=$radius&filter[route_type]=0,1&sort=distance");
+    var response;
+
+    if (locationData == null) {
+      // permissions not granted
+      response = await http
+          .get("$baseURL/stops?api_key=$apiKey&filter[route_type]=0,1");
+    } else {
+      final radius = range * 0.02;
+      response = await http.get(
+          "$baseURL/stops?api_key=$apiKey&filter[latitude]=${locationData.latitude}&filter[longitude]=${locationData.longitude}&filter[radius]=$radius&filter[route_type]=0,1&sort=distance");
+    }
+
+    if (APIRequestCounter.debug) {
+      APIRequestCounter.incrementCalls('nearby stops');
+    }
+
     return _jsonToListOfStops(response);
   }
 
@@ -40,6 +63,11 @@ class MBTAService {
   static Future<List<Stop>> fetchAllStopsAtSameLocation(Stop stop) async {
     final response = await http.get(
         "$baseURL/stops?api_key=$apiKey&filter[latitude]=${stop.latitude}&filter[longitude]=${stop.longitude}&filter[radius]=0.01&filter[route_type]=0,1&sort=distance");
+
+    if (APIRequestCounter.debug) {
+      APIRequestCounter.incrementCalls('all stops at same location');
+    }
+
     List<Stop> stops = List();
     final jsonData = json.decode(response.body)['data'];
     if (jsonData == null) {
@@ -60,6 +88,11 @@ class MBTAService {
       {@required String stopId}) async {
     final response =
         await http.get("$baseURL/alerts?api_key=$apiKey&filter[stop]=$stopId");
+
+    if (APIRequestCounter.debug) {
+      APIRequestCounter.incrementCalls('alerts');
+    }
+
     List<Alert> alerts = List();
     final jsonData = json.decode(response.body)['data'];
     if (jsonData == null) {

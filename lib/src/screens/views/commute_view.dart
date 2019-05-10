@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/states/create_commute_state.dart';
-import 'package:mbta_companion/src/utils/mbta_colors.dart';
+import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/utils/timeofday_helper.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../states/commute_state.dart';
 import '../../widgets/stop_details_tile.dart';
 
@@ -13,21 +15,18 @@ class CommuteView extends CommuteScreenState {
       child: ListView(
         children: <Widget>[
           FutureBuilder(
-            future: getNearestStop(),
-            builder: (context, snapshot) {
-              return snapshot.hasData
-                  ? nearbyStopCard(snapshot.data)
-                  : Container(
-                      height: 200.0,
-                      padding: EdgeInsets.all(2.0),
-                      child: Card(
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            semanticsLabel: "Loading closest stop",
-                          ),
-                        ),
-                      ),
-                    );
+            future: PermissionService.getLocationPermissions(),
+            builder: (context, AsyncSnapshot<LocationStatus> snapshot) {
+              if (!snapshot.hasData) {
+                return nearbyStopLoadingIndicator();
+              }
+              if (snapshot.data == LocationStatus.noPermission) {
+                return locationPermissionsNotEnabled();
+              }
+              if (snapshot.data == LocationStatus.noService) {
+                return locationServicesNotEnabled();
+              }
+              return nearbyStopFutureBuilder();
             },
           ),
           this.commute != null ? commuteCard() : emptyCommuteCard(),
@@ -36,7 +35,65 @@ class CommuteView extends CommuteScreenState {
     );
   }
 
+  Widget nearbyStopFutureBuilder() {
+    return FutureBuilder(
+      future: getNearestStop(),
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? nearbyStopCard(snapshot.data)
+            : nearbyStopLoadingIndicator();
+      },
+    );
+  }
+
+  Widget nearbyStopLoadingIndicator() {
+    return blankNearbyStopCard(
+      child: CircularProgressIndicator(
+        semanticsLabel: "Loading closest stop",
+      ),
+    );
+  }
+
+  Widget locationPermissionsNotEnabled() {
+    return blankNearbyStopCard(
+      child: Text(
+        'Location permissions are required to view the nearest stop and distances to stops\n\nGo to settings to enable permissions',
+        style: Theme.of(context).textTheme.body2,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget locationServicesNotEnabled() {
+    return blankNearbyStopCard(
+      child: Text(
+        'Location services are not enabled',
+        style: Theme.of(context).textTheme.body2,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget blankNearbyStopCard({child: Widget}) {
+    return Container(
+      height: 200.0,
+      padding: EdgeInsets.all(2.0),
+      child: Card(
+        child: Center(child: child == null ? Container() : child),
+      ),
+    );
+  }
+
   Widget nearbyStopCard(List<Stop> stops) {
+    if (stops == null) {
+      return blankNearbyStopCard(
+        child: Text(
+          'Unable to load nearest stop',
+          style: Theme.of(context).textTheme.body2,
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
     return threePartCard(
       'Nearest Stop',
       VariablePartTile(

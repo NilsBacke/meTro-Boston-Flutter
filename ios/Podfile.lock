@@ -1,8 +1,15 @@
 PODS:
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
   - Flutter (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - geolocator (4.0.3):
+    - Flutter
+  - google_api_availability (2.0.0):
+    - Flutter
   - google_maps_flutter (0.0.1):
     - Flutter
     - GoogleMaps
@@ -13,10 +20,15 @@ PODS:
     - GoogleMaps/Base
   - location (0.0.1):
     - Flutter
+  - location_permissions (2.0.1):
+    - Flutter
   - package_info (0.0.1):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
+  - permission_handler (3.0.1):
+    - Flutter
+  - Reachability (3.2)
   - sqflite (0.0.1):
     - Flutter
     - FMDB (~> 2.7.2)
@@ -26,11 +38,16 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
+  - geolocator (from `.symlinks/plugins/geolocator/ios`)
+  - google_api_availability (from `.symlinks/plugins/google_api_availability/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - location (from `.symlinks/plugins/location/ios`)
+  - location_permissions (from `.symlinks/plugins/location_permissions/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
@@ -39,18 +56,29 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - FMDB
     - GoogleMaps
+    - Reachability
 
 EXTERNAL SOURCES:
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
+  geolocator:
+    :path: ".symlinks/plugins/geolocator/ios"
+  google_api_availability:
+    :path: ".symlinks/plugins/google_api_availability/ios"
   google_maps_flutter:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
+  location_permissions:
+    :path: ".symlinks/plugins/location_permissions/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
@@ -59,17 +87,23 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
+  connectivity: d5992e3758d68b1c4b12d6e012fe0813f1aa1645
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  geolocator: 191e1ae5853d9d142e9c3c71fe79eb9ff154cf24
+  google_api_availability: 80c105ad2c0ed01c18cf779653da2cb939518192
   google_maps_flutter: 6449d5918d3f1a69a37dc9c557bbad7bb9bcf0e9
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
   location: 26c90953ad5916331d0d1d913898779910416487
+  location_permissions: 37b923ed4b9df9dfe9edb109fb4298f7b182047b
   package_info: d7c98b64f60add4c2908b9d94d82a45d3c8827ad
   path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
+  permission_handler: b4cdd38c1c4385e9f4f394c9881c42b48476ccb6
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   sqflite: d1612813fa7db7c667bed9f1d1b508deffc56999
   url_launcher: 92b89c1029a0373879933c21642958c874539095
   webview_flutter: 9bd234c07e99632356cba112df56fd1d47d6b6e3
 
-PODFILE CHECKSUM: aff02bfeed411c636180d6812254b2daeea14d09
+PODFILE CHECKSUM: d18e18c568bb67760317f101e1f2241619a741f1
 
 COCOAPODS: 1.5.3

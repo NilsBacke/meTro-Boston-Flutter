@@ -44,6 +44,9 @@ class ExploreScreenView extends ExploreScreenState {
   }
 
   Widget noStopsFound() {
+    if (this.loading) {
+      return StopsLoadingIndicator();
+    }
     return Container(
       child: Center(
         child: Text(

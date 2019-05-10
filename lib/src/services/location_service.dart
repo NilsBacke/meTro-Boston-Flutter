@@ -1,9 +1,9 @@
-import 'package:flutter/services.dart';
-import 'package:location/location.dart';
+// import 'package:location/location.dart';
 import 'dart:async';
 import 'package:great_circle_distance/great_circle_distance.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import 'package:mbta_companion/src/models/stop.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 
 class LocationService {
   static LocationData _currentLocation;
@@ -19,15 +19,9 @@ class LocationService {
   }
 
   static Future<LocationData> _loadCurrentLocation() async {
-    var location = Location();
-    var currentLocation;
-    try {
-      currentLocation = await location.getLocation();
-    } on PlatformException catch (e) {
-      print("exception: ${e.message}");
-      currentLocation = null;
-    }
-    return currentLocation;
+    // return await Geolocator()
+    //     .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    return await Location().getLocation();
   }
 
   static double getDistance(

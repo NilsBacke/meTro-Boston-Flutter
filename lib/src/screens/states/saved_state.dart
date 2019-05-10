@@ -20,10 +20,12 @@ abstract class SavedScreenState extends State<SavedScreen> {
 
   Future<void> getAllSavedStops() async {
     final savedStops = await DBService.db.getAllSavedStops();
-    setState(() {
-      this.isLoading = false;
-      this.savedStops = savedStops;
-    });
+    if (this.mounted) {
+      setState(() {
+        this.isLoading = false;
+        this.savedStops = savedStops;
+      });
+    }
   }
 
   Future<void> removeStop(Stop stop) async {

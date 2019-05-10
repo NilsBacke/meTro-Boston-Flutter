@@ -5,7 +5,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "MBTA Subway Companion",
+      title: "Boston Subway Companion",
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
           brightness: Brightness.dark,
           accentColor: Colors.white,

@@ -5,6 +5,7 @@ import 'package:mbta_companion/src/models/alert.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/states/stop_detail_state.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
+import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/widgets/time_circle.dart';
 
 class StopDetailScreenView extends StopDetailScreenState {
@@ -132,15 +133,13 @@ class StopDetailScreenView extends StopDetailScreenState {
               Container(
                 padding: EdgeInsets.all(0.0),
                 child: FutureBuilder(
-                  future: LocationService.getDistanceFromStop(widget.stop),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
+                  future: PermissionService.getLocationPermissions(),
+                  builder: (context, AsyncSnapshot<LocationStatus> snapshot) {
+                    if (!snapshot.hasData ||
+                        snapshot.data != LocationStatus.granted) {
                       return Text('');
                     }
-                    return Text(
-                      '${snapshot.data} mi',
-                      style: Theme.of(context).textTheme.body2,
-                    );
+                    return distanceText();
                   },
                 ),
               ),
@@ -148,6 +147,21 @@ class StopDetailScreenView extends StopDetailScreenState {
           ),
         ),
       ],
+    );
+  }
+
+  Widget distanceText() {
+    return FutureBuilder(
+      future: LocationService.getDistanceFromStop(widget.stop),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Text('');
+        }
+        return Text(
+          '${snapshot.data} mi',
+          style: Theme.of(context).textTheme.body2,
+        );
+      },
     );
   }
 

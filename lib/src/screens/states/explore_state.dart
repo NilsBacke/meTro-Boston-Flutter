@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
+import 'package:mbta_companion/src/services/permission_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../views/explore_view.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -19,6 +21,7 @@ abstract class ExploreScreenState extends State<ExploreScreen> {
   TextEditingController searchBarController = TextEditingController();
   List<Stop> stops = List();
   List<Stop> filteredStops = List();
+  bool loading = true;
 
   @override
   void initState() {
@@ -27,17 +30,28 @@ abstract class ExploreScreenState extends State<ExploreScreen> {
   }
 
   Future<void> getAllStops() async {
-    final loc = await LocationService.currentLocation;
+    var loc;
+    LocationStatus locationStatus =
+        await PermissionService.getLocationPermissions();
+    if (locationStatus == LocationStatus.granted) {
+      loc = await LocationService.currentLocation;
+    } else {
+      loc = null;
+    }
+
     final stopList = await MBTAService.fetchAllStops(loc);
     this.stops = stopList;
-    setState(() {
-      this.filteredStops = stopList;
-    });
+    if (this.mounted) {
+      setState(() {
+        this.filteredStops = stopList;
+        this.loading = false;
+      });
+    }
   }
 
   void filterSearchResults(String searchText) {
     this.filteredStops = this.stops;
-    if (searchText.isNotEmpty) {
+    if (searchText.isNotEmpty && this.mounted) {
       setState(() {
         this.filteredStops = stops
             .where((stop) =>

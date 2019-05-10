@@ -31,6 +31,11 @@ dependencies:
     flutter_datetime_picker: ^1.2.0
     package_info: ^0.4.0+3
     webview_flutter: ^0.3.6
+    connectivity: ^0.4.3+1
+    permission_handler: ^3.0.1
+    geolocator: ^4.0.3
+    firebase_core: ^0.4.0
+    firebase_analytics: ^3.0.1
 
     # The following adds the Cupertino Icons font to your application.
     # Use with the CupertinoIcons class for iOS style icons.
