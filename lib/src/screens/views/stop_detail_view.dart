@@ -13,6 +13,7 @@ class StopDetailScreenView extends StopDetailScreenState {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(widget.stop.name),
       ),
       body: Container(

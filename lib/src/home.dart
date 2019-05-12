@@ -95,6 +95,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(titleForScreen(_currentIndex)),
       ),
       body: _connectionState == ConnectivityResult.none
@@ -107,6 +108,7 @@ class _HomeState extends State<Home> {
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white70,
         showUnselectedLabels: true,
+        backgroundColor: Theme.of(context).appBarTheme.color,
       ),
     );
   }

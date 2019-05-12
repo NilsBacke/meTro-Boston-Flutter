@@ -6,6 +6,7 @@ class MapImageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text("Boston T Map"),
       ),
       body: SafeArea(

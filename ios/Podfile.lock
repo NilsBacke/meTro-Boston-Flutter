@@ -5,12 +5,15 @@ PODS:
   - Crashlytics (3.13.0):
     - Fabric (~> 1.10.0)
   - Fabric (1.10.0)
+  - Firebase/Analytics (6.0.0):
+    - Firebase/Core
   - Firebase/Core (6.0.0):
     - Firebase/CoreOnly
     - FirebaseAnalytics (= 6.0.0)
   - Firebase/CoreOnly (6.0.0):
     - FirebaseCore (= 6.0.0)
   - firebase_analytics (0.0.1):
+    - Firebase/Analytics (~> 6.0)
     - Firebase/Core
     - Flutter
   - firebase_core (0.0.1):
@@ -173,7 +176,7 @@ SPEC CHECKSUMS:
   Crashlytics: 1f5f752c7feac0add0cc1774756f96444fa3b1a7
   Fabric: 09de1e053eb7dc415593166ad3e53d4c88123405
   Firebase: fa80b9d987ca014a1ba9357496ef2a0178b28b12
-  firebase_analytics: 06fd3e199bfbc003a9949b90f3e3c6332fa1299e
+  firebase_analytics: fe329224830629f9a38090b92e23045201c397ed
   firebase_core: c96aa8b2fcf7f5167d32f22034f502f9304952b8
   firebase_crashlytics: 5e46e1d4c4a7ce372583979fa9a59377e2b5c729
   FirebaseAnalytics: 1743c5f4de3687d0745709dfdc4b1dea1484f44c
@@ -194,7 +197,7 @@ SPEC CHECKSUMS:
   path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
   permission_handler: 0b2a5acb642be1ad2406adc31d0cda567b8b01e2
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  sqflite: d1612813fa7db7c667bed9f1d1b508deffc56999
+  sqflite: 801b6b0983f722fa29baf00d1476e4556ada6de4
   url_launcher: 92b89c1029a0373879933c21642958c874539095
   webview_flutter: 9bd234c07e99632356cba112df56fd1d47d6b6e3
 

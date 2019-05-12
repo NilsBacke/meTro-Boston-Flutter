@@ -10,6 +10,7 @@ class CreateCommuteScreenView extends CreateCommuteScreenState {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(appBarText),
       ),
       body: Container(

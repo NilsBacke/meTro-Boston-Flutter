@@ -25,10 +25,11 @@ class MBTAService {
     }
 
     final jsonData = json.decode(response.body)['data'];
-    if (jsonData == null) {
-      // error
+    if (jsonData == null || jsonData.length == 0) {
+      // error or no stops in area
       return null;
     }
+
     list[0] = (Stop.fromJson(jsonData[0]));
     list[1] = (Stop.fromJson(jsonData[1]));
     return list;

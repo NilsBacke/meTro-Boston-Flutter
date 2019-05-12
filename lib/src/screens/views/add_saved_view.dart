@@ -7,6 +7,7 @@ class AddSavedScreenView extends AddSavedScreenState {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Add New Stop'),
       ),
       body: ExploreScreen(onTap: onStopTapped),
