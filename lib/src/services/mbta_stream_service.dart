@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'dart:convert';
@@ -67,5 +68,21 @@ class MBTAStreamService {
 
     assert(countDown.length == 2);
     return countDown;
+  }
+
+  // static Stream<http.Response> streamPredictionsForStopId(String stopId) {
+  //   http.StreamedRequest().;
+  //   return http.get(
+  //     "$baseURL/predictions?api_key=$apiKey&filter[stop]=$stopId&page[limit]=2",
+  //     headers: {"Accept": "text/event-stream"},
+  //   ).asStream();
+  // }
+
+  static TimeOfDay getTimeFromStreamResponse(http.Response response) {
+    final fullJson = json.decode(response.body);
+    print("event type: ${fullJson['event']}");
+    final jsonData = fullJson['data'];
+    print("jsonData: $jsonData");
+    return null;
   }
 }

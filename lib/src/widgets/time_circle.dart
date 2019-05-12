@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/mbta_stream_service.dart';
 
@@ -22,14 +23,19 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
     getPredictions();
   }
 
-  Future<void> getPredictions() async {
-    final preds =
-        await MBTAStreamService.getPredictionsForStopId(widget.stopId);
-    if (this.mounted) {
-      setState(() {
-        this.predictions = preds;
-      });
-    }
+  void getPredictions() {
+    // final preds =
+    //     await MBTAStreamService.getPredictionsForStopId(widget.stopId);
+    // if (this.mounted) {
+    //   setState(() {
+    //     this.predictions = preds;
+    //   });
+    // }
+
+    final predStream = StreamedRequest(method, url)
+    predStream.listen((response) {
+      MBTAStreamService.getTimeFromStreamResponse(response);
+    });
   }
 
   @override
