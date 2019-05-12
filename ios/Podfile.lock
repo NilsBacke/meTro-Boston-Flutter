@@ -2,6 +2,9 @@ PODS:
   - connectivity (0.0.1):
     - Flutter
     - Reachability
+  - Crashlytics (3.13.0):
+    - Fabric (~> 1.10.0)
+  - Fabric (1.10.0)
   - Firebase/Core (6.0.0):
     - Firebase/CoreOnly
     - FirebaseAnalytics (= 6.0.0)
@@ -11,6 +14,11 @@ PODS:
     - Firebase/Core
     - Flutter
   - firebase_core (0.0.1):
+    - Firebase/Core
+    - Flutter
+  - firebase_crashlytics (0.0.1):
+    - Crashlytics
+    - Fabric
     - Firebase/Core
     - Flutter
   - FirebaseAnalytics (6.0.0):
@@ -97,6 +105,7 @@ DEPENDENCIES:
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - google_api_availability (from `.symlinks/plugins/google_api_availability/ios`)
@@ -112,6 +121,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Crashlytics
+    - Fabric
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
@@ -130,6 +141,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_crashlytics:
+    :path: ".symlinks/plugins/firebase_crashlytics/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
   geolocator:
@@ -157,9 +170,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   connectivity: d5992e3758d68b1c4b12d6e012fe0813f1aa1645
+  Crashlytics: 1f5f752c7feac0add0cc1774756f96444fa3b1a7
+  Fabric: 09de1e053eb7dc415593166ad3e53d4c88123405
   Firebase: fa80b9d987ca014a1ba9357496ef2a0178b28b12
   firebase_analytics: 06fd3e199bfbc003a9949b90f3e3c6332fa1299e
   firebase_core: c96aa8b2fcf7f5167d32f22034f502f9304952b8
+  firebase_crashlytics: 5e46e1d4c4a7ce372583979fa9a59377e2b5c729
   FirebaseAnalytics: 1743c5f4de3687d0745709dfdc4b1dea1484f44c
   FirebaseCore: e38f025287b413255a53acc1945d048a112047f7
   FirebaseInstanceID: 0e0348a3c00a734fa376a070f5ad4533ad975cb5

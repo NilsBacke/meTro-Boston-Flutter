@@ -32,10 +32,10 @@
               "client_type": 3
             },
             {
-              "client_id": "910453714856-ebo5e71mski1p9dbaunhm52uc0sk36do.apps.googleusercontent.com",
+              "client_id": "910453714856-1vedo8v6novb9vc755ahi67rcgb435k2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.plushundred.boston-t-map"
+                "bundle_id": "com.plushundred.boston-t-companion"
               }
             }
           ]

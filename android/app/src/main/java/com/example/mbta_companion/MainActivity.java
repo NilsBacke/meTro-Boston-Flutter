@@ -1,4 +1,4 @@
-package com.example.mbta_companion;
+package com.plushundred.boston_t_companion;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

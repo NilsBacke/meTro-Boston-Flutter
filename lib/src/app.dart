@@ -1,9 +1,9 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
+// import 'package:firebase_analytics/firebase_analytics.dart';
+// import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'home.dart';
 
-FirebaseAnalytics analytics = FirebaseAnalytics();
+// FirebaseAnalytics analytics = FirebaseAnalytics();
 
 class App extends StatelessWidget {
   @override
@@ -30,9 +30,9 @@ class App extends StatelessWidget {
             buttonColor: Colors.lightGreen,
           )),
       home: Home(),
-      navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: analytics),
-      ],
+      // navigatorObservers: [
+      //   FirebaseAnalyticsObserver(analytics: analytics),
+      // ],
     );
   }
 }
