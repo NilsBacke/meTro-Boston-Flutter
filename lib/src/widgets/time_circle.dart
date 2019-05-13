@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:async/async.dart';
+import 'package:eventsource/eventsource.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/mbta_stream_service.dart';
+import 'package:mbta_companion/src/utils/timeofday_helper.dart';
 
 class TimeCircleCombo extends StatefulWidget {
   final String stopId;
@@ -15,26 +19,11 @@ class TimeCircleCombo extends StatefulWidget {
 }
 
 class _TimeCircleComboState extends State<TimeCircleCombo> {
-  List<String> predictions = List.from(["---", "---"]);
+  final AsyncMemoizer _memoizer = AsyncMemoizer();
 
-  @override
-  void initState() {
-    super.initState();
-    getPredictions();
-  }
-
-  void getPredictions() {
-    // final preds =
-    //     await MBTAStreamService.getPredictionsForStopId(widget.stopId);
-    // if (this.mounted) {
-    //   setState(() {
-    //     this.predictions = preds;
-    //   });
-    // }
-
-    final predStream = StreamedRequest(method, url)
-    predStream.listen((response) {
-      MBTAStreamService.getTimeFromStreamResponse(response);
+  getPredictionStream() {
+    return this._memoizer.runOnce(() async {
+      return MBTAStreamService.streamPredictionsForStopId(widget.stopId);
     });
   }
 
@@ -42,26 +31,53 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 95.0,
-      child: Row(
-        children: <Widget>[
-          TimeCircle(predictions[0]),
-          TimeCircle(
-            predictions[1],
-            height: 40.0,
-            width: 40.0,
-          ),
-        ],
+      child: FutureBuilder(
+        future: getPredictionStream(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return rowWidget([null, null]);
+          }
+          return StreamBuilder<List<DateTime>>(
+            stream: snapshot.data,
+            initialData: [null, null],
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return rowWidget([null, null]);
+              }
+              if (snapshot.hasError) {
+                throw 'Error: ' + snapshot.error;
+              }
+              return rowWidget(snapshot.data);
+            },
+          );
+        },
       ),
+    );
+  }
+
+  Widget rowWidget(List<DateTime> predictions) {
+    assert(predictions != null);
+    assert(predictions.length == 2);
+
+    return Row(
+      children: <Widget>[
+        TimeCircle(predictions[0]),
+        TimeCircle(
+          predictions[1],
+          height: 40.0,
+          width: 40.0,
+        ),
+      ],
     );
   }
 }
 
 class TimeCircle extends StatelessWidget {
-  final String text;
+  final DateTime time;
   final double height;
   final double width;
 
-  TimeCircle(this.text, {this.height = 55.0, this.width = 55.0});
+  TimeCircle(this.time, {this.height = 55.0, this.width = 55.0});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +98,10 @@ class TimeCircle extends StatelessWidget {
             textDirection: TextDirection.ltr,
             child: Center(
               child: Text(
-                this.text,
+                this.time != null
+                    ? TimeOfDayHelper.getDifferenceFormatted(
+                        this.time, DateTime.now())
+                    : "---",
                 style: TextStyle(fontSize: this.width / 2.75),
               ),
             ),

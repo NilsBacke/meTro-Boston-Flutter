@@ -1,0 +1,36 @@
+[
+	{
+		"attributes": {
+			"arrival_time": "2019-05-13T17:23:51-04:00",
+			"departure_time": "2019-05-13T17:24:39-04:00",
+			"direction_id": 0,
+			"schedule_relationship": null,
+			"status": "Stopped 3 stops away",
+			"stop_sequence": 620
+		},
+		"id": "prediction-39988707-20:30-NewtonHighlandsRiverside-70247-620",
+		"relationships": {
+			"route": { "data": { "id": "Green-E", "type": "route" } },
+			"stop": { "data": { "id": "70247", "type": "stop" } },
+			"trip": { "data": { "id": "39988707-20:30-NewtonHighlandsRiverside", "type": "trip" } }
+		},
+		"type": "prediction"
+	},
+	{
+		"attributes": {
+			"arrival_time": "2019-05-13T17:28:26-04:00",
+			"departure_time": "2019-05-13T17:29:14-04:00",
+			"direction_id": 0,
+			"schedule_relationship": null,
+			"status": null,
+			"stop_sequence": 620
+		},
+		"id": "prediction-39988709-20:30-NewtonHighlandsRiverside-70247-620",
+		"relationships": {
+			"route": { "data": { "id": "Green-E", "type": "route" } },
+			"stop": { "data": { "id": "70247", "type": "stop" } },
+			"trip": { "data": { "id": "39988709-20:30-NewtonHighlandsRiverside", "type": "trip" } }
+		},
+		"type": "prediction"
+	}
+]
