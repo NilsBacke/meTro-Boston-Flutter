@@ -1,11 +1,6 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:async/async.dart';
-import 'package:eventsource/eventsource.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:mbta_companion/src/models/stop.dart';
+import 'package:mbta_companion/src/models/prediction.dart';
 import 'package:mbta_companion/src/services/mbta_stream_service.dart';
 import 'package:mbta_companion/src/utils/timeofday_helper.dart';
 
@@ -19,43 +14,68 @@ class TimeCircleCombo extends StatefulWidget {
 }
 
 class _TimeCircleComboState extends State<TimeCircleCombo> {
-  final AsyncMemoizer _memoizer = AsyncMemoizer();
+  List<Prediction> predictions = [null, null];
+  StreamSubscription subscription;
 
-  getPredictionStream() {
-    return this._memoizer.runOnce(() async {
-      return MBTAStreamService.streamPredictionsForStopId(widget.stopId);
+  @override
+  void initState() {
+    getStream();
+    super.initState();
+  }
+
+  Future<void> getStream() async {
+    final stream =
+        await MBTAStreamService.streamPredictionsForStopId(widget.stopId);
+    subscription = stream.listen((List<Prediction> preds) {
+      print("preds for stop: ${widget.stopId}: $preds");
+      if (this.predictions == null) {
+        if (this.mounted) {
+          setState(() {
+            this.predictions = preds;
+          });
+        }
+      } else {
+        List<Prediction> tempPreds = this.predictions;
+
+        for (int i = 0; i < this.predictions.length; i++) {
+          if (this.predictions[i] == null ||
+              (preds[i] != null && this.predictions[i].id == preds[i].id)) {
+            tempPreds[i] = preds[i];
+          } else if (preds[i] != null &&
+              TimeOfDayHelper.getDifferenceFormatted(
+                      this.predictions[i].time, DateTime.now()) ==
+                  "BOARD") {
+            assert(i == 0);
+            tempPreds[i] = tempPreds[i + 1];
+            tempPreds[i + 1] = preds[i];
+          }
+        }
+        if (this.mounted) {
+          setState(() {
+            this.predictions = tempPreds;
+          });
+        }
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (subscription != null) {
+      subscription.cancel();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 95.0,
-      child: FutureBuilder(
-        future: getPredictionStream(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return rowWidget([null, null]);
-          }
-          return StreamBuilder<List<DateTime>>(
-            stream: snapshot.data,
-            initialData: [null, null],
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return rowWidget([null, null]);
-              }
-              if (snapshot.hasError) {
-                throw 'Error: ' + snapshot.error;
-              }
-              return rowWidget(snapshot.data);
-            },
-          );
-        },
-      ),
+      child: rowWidget(this.predictions),
     );
   }
 
-  Widget rowWidget(List<DateTime> predictions) {
+  Widget rowWidget(List<Prediction> predictions) {
     assert(predictions != null);
     assert(predictions.length == 2);
 
@@ -73,41 +93,53 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
 }
 
 class TimeCircle extends StatelessWidget {
-  final DateTime time;
+  final Prediction prediction;
   final double height;
   final double width;
 
-  TimeCircle(this.time, {this.height = 55.0, this.width = 55.0});
+  TimeCircle(this.prediction, {this.height = 55.0, this.width = 55.0});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: height,
       width: width,
-      child: Stack(
-        children: <Widget>[
-          SizedBox(
-            height: height,
-            width: width,
-            child: CircularProgressIndicator(
-              value: 1.0,
-              strokeWidth: 2.0,
-            ),
+      child: StreamBuilder<String>(
+          stream: Stream.periodic(
+            Duration(seconds: 1),
+            compute,
           ),
-          Positioned.directional(
-            textDirection: TextDirection.ltr,
-            child: Center(
-              child: Text(
-                this.time != null
-                    ? TimeOfDayHelper.getDifferenceFormatted(
-                        this.time, DateTime.now())
-                    : "---",
-                style: TextStyle(fontSize: this.width / 2.75),
-              ),
-            ),
-          ),
-        ],
-      ),
+          builder: (context, snapshot) {
+            return Stack(
+              children: <Widget>[
+                SizedBox(
+                  height: height,
+                  width: width,
+                  child: CircularProgressIndicator(
+                    value: 1.0,
+                    strokeWidth: 2.0,
+                  ),
+                ),
+                Positioned.directional(
+                  textDirection: TextDirection.ltr,
+                  child: Center(
+                    child: Text(
+                      snapshot.data ?? "---",
+                      style: TextStyle(fontSize: this.width / 2.75),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
     );
+  }
+
+  String compute(int countdown) {
+    if (this.prediction == null) {
+      return "---";
+    }
+    return TimeOfDayHelper.getDifferenceFormatted(
+        this.prediction.time, DateTime.now());
   }
 }

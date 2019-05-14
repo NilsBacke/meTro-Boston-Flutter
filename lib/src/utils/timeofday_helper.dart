@@ -21,11 +21,14 @@ class TimeOfDayHelper {
 
   /// time1 should be bigger
   static String getDifferenceFormatted(DateTime time1, DateTime time2) {
-    int minuteDiff = (time1.minute - time2.minute) % 60;
-    int secondDiff = (time1.second - time2.second) % 60;
-    if (minuteDiff == 0) {
-      return secondDiff.toString() + "s";
+    Duration diff = time1.difference(time2);
+    if (diff.isNegative || diff.inSeconds == 0) {
+      return "BOARD";
     }
-    return minuteDiff.toString() + "m";
+
+    if (diff.inMinutes == 0) {
+      return diff.inSeconds.toString() + "s";
+    }
+    return diff.inMinutes.toString() + "m";
   }
 }

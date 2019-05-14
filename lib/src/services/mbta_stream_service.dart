@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:eventsource/eventsource.dart';
+import 'package:mbta_companion/src/models/prediction.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'dart:convert';
 
@@ -10,7 +11,7 @@ class MBTAStreamService {
   static const apiKey = MBTAService.apiKey;
 
   // two element list, one datetime for each stop
-  static Future<Stream<List<DateTime>>> streamPredictionsForStopId(
+  static Future<Stream<List<Prediction>>> streamPredictionsForStopId(
       String stopId) async {
     final stream = await EventSource.connect(
         "$baseURL/predictions?api_key=$apiKey&filter[stop]=$stopId&page[limit]=2");
@@ -30,42 +31,46 @@ class MBTAStreamService {
   }
 
   // two element list, one timeofday for each stop
-  static List<DateTime> _getTimeFromStreamResponse(String jsonStr) {
+  static List<Prediction> _getTimeFromStreamResponse(String jsonStr) {
     final jsonData = json.decode(jsonStr);
 
     if (jsonData.length == 0 || jsonData is Map) {
-      DateTime dateTime;
+      Prediction pred;
       try {
-        dateTime = DateTime.parse(jsonData['attributes']['arrival_time']);
+        pred = Prediction(jsonData['id'],
+            DateTime.parse(jsonData['attributes']['arrival_time']));
       } on Exception catch (e) {
-        dateTime = null;
+        pred = null;
         print("Exception: " + e.toString());
       }
-      return [dateTime, null];
+      return [pred, null];
     } else if (jsonData.length == 1) {
-      DateTime dateTime;
+      Prediction pred;
       try {
-        dateTime = DateTime.parse(jsonData[0]['attributes']['arrival_time']);
+        pred = Prediction(jsonData[0]['id'],
+            DateTime.parse(jsonData[0]['attributes']['arrival_time']));
       } on Exception catch (e) {
-        dateTime = null;
+        pred = null;
         print("Exception: " + e.toString());
       }
-      return [dateTime, null];
+      return [pred, null];
     } else {
-      DateTime dateTime1, dateTime2;
+      Prediction pred1, pred2;
       try {
-        dateTime1 = DateTime.parse(jsonData[0]['attributes']['arrival_time']);
+        pred1 = Prediction(jsonData[0]['id'],
+            DateTime.parse(jsonData[0]['attributes']['arrival_time']));
       } on Exception catch (e) {
-        dateTime1 = null;
+        pred1 = null;
         print("Exception: " + e.toString());
       }
       try {
-        dateTime2 = DateTime.parse(jsonData[1]['attributes']['arrival_time']);
+        pred2 = Prediction(jsonData[1]['id'],
+            DateTime.parse(jsonData[1]['attributes']['arrival_time']));
       } on Exception catch (e) {
-        dateTime2 = null;
+        pred2 = null;
         print("Exception: " + e.toString());
       }
-      return [dateTime1, dateTime2];
+      return [pred1, pred2];
     }
   }
 }
