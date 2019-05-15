@@ -31,4 +31,11 @@ class TimeOfDayHelper {
     }
     return diff.inMinutes.toString() + "m";
   }
+
+  static String formatSeconds(int seconds) {
+    if (seconds < 60) {
+      return '${seconds}s';
+    }
+    return '${seconds ~/ 60}m';
+  }
 }

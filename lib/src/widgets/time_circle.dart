@@ -26,36 +26,44 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
   Future<void> getStream() async {
     final stream =
         await MBTAStreamService.streamPredictionsForStopId(widget.stopId);
-    subscription = stream.listen((List<Prediction> preds) {
-      print("preds for stop: ${widget.stopId}: $preds");
-      if (this.predictions == null) {
-        if (this.mounted) {
-          setState(() {
-            this.predictions = preds;
-          });
-        }
-      } else {
-        List<Prediction> tempPreds = this.predictions;
+    subscription = stream.listen((PredictionEvent event) {
+      print("event for stop: ${widget.stopId}: $event");
 
-        for (int i = 0; i < this.predictions.length; i++) {
-          if (this.predictions[i] == null ||
-              (preds[i] != null && this.predictions[i].id == preds[i].id)) {
-            tempPreds[i] = preds[i];
-          } else if (preds[i] != null &&
-              TimeOfDayHelper.getDifferenceFormatted(
-                      this.predictions[i].time, DateTime.now()) ==
-                  "BOARD") {
-            assert(i == 0);
-            tempPreds[i] = tempPreds[i + 1];
-            tempPreds[i + 1] = preds[i];
-          }
-        }
-        if (this.mounted) {
-          setState(() {
-            this.predictions = tempPreds;
-          });
-        }
+      if (!this.mounted) {
+        return;
       }
+
+      switch (event.event) {
+        case "reset":
+          setState(() {
+            this.predictions = event.predictions;
+          });
+          break;
+        case "update":
+          _updatePredictions(event.predictions[0]);
+          break;
+        case "add":
+          _addPrediction(event.predictions[0]);
+      }
+    });
+  }
+
+  void _updatePredictions(Prediction pred) {
+    if (this.predictions[0].id == pred.id) {
+      setState(() {
+        this.predictions = [pred, this.predictions[1]];
+      });
+    } else if (this.predictions[1].id == pred.id) {
+      setState(() {
+        this.predictions = [this.predictions[0], pred];
+      });
+    }
+  }
+
+  void _addPrediction(Prediction pred) {
+    setState(() {
+      this.predictions[0] = this.predictions[1];
+      this.predictions[1] = pred;
     });
   }
 
@@ -104,19 +112,46 @@ class TimeCircle extends StatelessWidget {
     return SizedBox(
       height: height,
       width: width,
-      child: StreamBuilder<String>(
+      child: StreamBuilder<int>(
+          // in seconds
           stream: Stream.periodic(
             Duration(seconds: 1),
             compute,
           ),
           builder: (context, snapshot) {
+            Color color = Colors.white;
+            if (snapshot.hasData && snapshot.data != null) {
+              if (snapshot.data < 60) {
+                color = Colors.red;
+              } else if (snapshot.data < 180) {
+                color = Colors.yellow;
+              }
+            }
+
+            String timeText = "---";
+            double fontSize = this.width / 2.75;
+            if (snapshot.hasData && snapshot.data != null) {
+              if (snapshot.data <= 0) {
+                timeText = "BOARD";
+                fontSize = this.width / 4;
+              } else {
+                timeText = TimeOfDayHelper.formatSeconds(snapshot.data);
+              }
+            }
+
+            double value = 1.0;
+            if (snapshot.hasData && snapshot.data != null) {
+              if (snapshot.data < 60) {
+                value = (1 - snapshot.data / 60);
+              }
+            }
             return Stack(
               children: <Widget>[
                 SizedBox(
                   height: height,
                   width: width,
                   child: CircularProgressIndicator(
-                    value: 1.0,
+                    value: value,
                     strokeWidth: 2.0,
                   ),
                 ),
@@ -124,8 +159,11 @@ class TimeCircle extends StatelessWidget {
                   textDirection: TextDirection.ltr,
                   child: Center(
                     child: Text(
-                      snapshot.data ?? "---",
-                      style: TextStyle(fontSize: this.width / 2.75),
+                      timeText,
+                      style: TextStyle(
+                        fontSize: fontSize,
+                        color: color,
+                      ),
                     ),
                   ),
                 ),
@@ -135,11 +173,10 @@ class TimeCircle extends StatelessWidget {
     );
   }
 
-  String compute(int countdown) {
+  int compute(int countdown) {
     if (this.prediction == null) {
-      return "---";
+      return null;
     }
-    return TimeOfDayHelper.getDifferenceFormatted(
-        this.prediction.time, DateTime.now());
+    return this.prediction.time.difference(DateTime.now()).inSeconds;
   }
 }
