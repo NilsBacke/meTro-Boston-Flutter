@@ -11,16 +11,20 @@ class VariablePartTile extends StatelessWidget {
   final List<Widget> otherWidgets;
   final TextOverflow overflow;
   final bool timeCircles;
+  final Widget trailing;
 
-  VariablePartTile(this.stopId,
-      {@required this.title,
-      @required this.subtitle1,
-      @required this.lineInitials,
-      @required this.lineColor,
-      this.otherInfo = const [],
-      this.overflow = TextOverflow.ellipsis,
-      this.otherWidgets = const [],
-      this.timeCircles = true});
+  VariablePartTile(
+    this.stopId, {
+    @required this.title,
+    @required this.subtitle1,
+    @required this.lineInitials,
+    @required this.lineColor,
+    this.otherInfo = const [],
+    this.overflow = TextOverflow.ellipsis,
+    this.otherWidgets = const [],
+    this.timeCircles = true,
+    this.trailing,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +94,9 @@ class VariablePartTile extends StatelessWidget {
                 ),
               ),
             ),
-            this.timeCircles ? TimeCircleCombo(this.stopId) : Container(),
+            this.timeCircles
+                ? TimeCircleCombo(this.stopId)
+                : (this.trailing != null ? this.trailing : Container()),
           ],
         ),
       ),

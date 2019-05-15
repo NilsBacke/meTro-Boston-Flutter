@@ -27,8 +27,6 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
     final stream =
         await MBTAStreamService.streamPredictionsForStopId(widget.stopId);
     subscription = stream.listen((PredictionEvent event) {
-      print("event for stop: ${widget.stopId}: $event");
-
       if (!this.mounted) {
         return;
       }

@@ -4,6 +4,7 @@ import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/states/create_commute_state.dart';
 import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/utils/timeofday_helper.dart';
+import 'package:mbta_companion/src/widgets/commute_time_circle_combo.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../states/commute_state.dart';
 import '../../widgets/stop_details_tile.dart';
@@ -137,6 +138,9 @@ class CommuteView extends CommuteScreenState {
         otherInfo: [TimeOfDayHelper.convertToString(this.commute.arrivalTime)],
         lineInitials: this.commute.stop2.lineInitials,
         lineColor: this.commute.stop2.lineColor,
+        timeCircles: false,
+        trailing:
+            CommuteTimeCircleCombo(this.commute.stop1, this.commute.stop2),
       ),
       trailing: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

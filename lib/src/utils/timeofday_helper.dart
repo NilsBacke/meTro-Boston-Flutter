@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TimeOfDayHelper {
   static String convertToString(TimeOfDay time,
-      {bool accountForTimeZone = false}) {
+      {bool accountForTimeZone = false, bool includeAMPM = true}) {
     String minute = time.minute.toString();
     int hour = time.hour;
 
@@ -14,9 +14,9 @@ class TimeOfDayHelper {
       minute = "0${time.minute}";
     }
     if (hour > 12) {
-      return '${hour - 12}:$minute PM';
+      return '${hour - 12}:$minute${includeAMPM ? ' PM' : ''}';
     }
-    return '$hour:$minute AM';
+    return '$hour:$minute${includeAMPM ? ' AM' : ''}';
   }
 
   /// time1 should be bigger
