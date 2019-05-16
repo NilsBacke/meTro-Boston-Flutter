@@ -12,6 +12,7 @@ class VariablePartTile extends StatelessWidget {
   final TextOverflow overflow;
   final bool timeCircles;
   final Widget trailing;
+  final VoidCallback onTap;
 
   VariablePartTile(
     this.stopId, {
@@ -24,6 +25,7 @@ class VariablePartTile extends StatelessWidget {
     this.otherWidgets = const [],
     this.timeCircles = true,
     this.trailing,
+    this.onTap,
   });
 
   @override
@@ -67,37 +69,40 @@ class VariablePartTile extends StatelessWidget {
     widgets.addAll(this.otherWidgets);
 
     return Container(
-      child: Container(
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(right: 8.0),
-              child: CircleAvatar(
-                child: Text(
-                  lineInitials,
-                  style: TextStyle(
-                    color: Colors.white,
+      child: GestureDetector(
+        onTap: this.onTap,
+        child: Container(
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(right: 8.0),
+                child: CircleAvatar(
+                  child: Text(
+                    lineInitials,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  backgroundColor: lineColor,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: widgets,
                   ),
                 ),
-                backgroundColor: lineColor,
               ),
-            ),
-            Expanded(
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: widgets,
-                ),
-              ),
-            ),
-            this.timeCircles
-                ? TimeCircleCombo(this.stopId)
-                : (this.trailing != null ? this.trailing : Container()),
-          ],
+              this.timeCircles
+                  ? TimeCircleCombo(this.stopId)
+                  : (this.trailing != null ? this.trailing : Container()),
+            ],
+          ),
         ),
       ),
     );

@@ -34,10 +34,10 @@ class StopCard extends StatelessWidget {
       },
       child: Card(
         child: Container(
-            padding: EdgeInsets.all(12.0),
-            child: this.includeDistance
-                ? distanceStopCard()
-                : noDistanceStopCard()),
+          padding: EdgeInsets.all(12.0),
+          child:
+              this.includeDistance ? distanceStopCard() : noDistanceStopCard(),
+        ),
       ),
     );
   }

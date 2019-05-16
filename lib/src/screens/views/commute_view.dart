@@ -97,21 +97,43 @@ class CommuteView extends CommuteScreenState {
     }
     return threePartCard(
       'Nearest Stop',
-      VariablePartTile(
-        stops[0].id,
-        title: stops[0].name,
-        subtitle1: stops[0].lineName,
-        otherInfo: [stops[0].directionDescription],
-        lineInitials: stops[0].lineInitials,
-        lineColor: stops[0].lineColor,
+      GestureDetector(
+        onTap: () {
+          showDetailForStop(context, stops[0]);
+        },
+        child: Card(
+          elevation: 0.0,
+          child: VariablePartTile(
+            stops[0].id,
+            title: stops[0].name,
+            subtitle1: stops[0].lineName,
+            otherInfo: [stops[0].directionDescription],
+            lineInitials: stops[0].lineInitials,
+            lineColor: stops[0].lineColor,
+            onTap: () {
+              showDetailForStop(context, stops[0]);
+            },
+          ),
+        ),
       ),
-      VariablePartTile(
-        stops[1].id,
-        title: stops[1].name,
-        subtitle1: stops[1].lineName,
-        otherInfo: [stops[1].directionDescription],
-        lineInitials: stops[1].lineInitials,
-        lineColor: stops[1].lineColor,
+      GestureDetector(
+        onTap: () {
+          showDetailForStop(context, stops[1]);
+        },
+        child: Card(
+          elevation: 0.0,
+          child: VariablePartTile(
+            stops[1].id,
+            title: stops[1].name,
+            subtitle1: stops[1].lineName,
+            otherInfo: [stops[1].directionDescription],
+            lineInitials: stops[1].lineInitials,
+            lineColor: stops[1].lineColor,
+            onTap: () {
+              showDetailForStop(context, stops[1]);
+            },
+          ),
+        ),
       ),
       trailing: Text(
         '$dist mi',
@@ -123,24 +145,52 @@ class CommuteView extends CommuteScreenState {
   Widget commuteCard() {
     return threePartCard(
       'Work Commute',
-      VariablePartTile(
-        this.commute.stop1.id,
-        title: this.commute.stop1.name,
-        subtitle1: this.commute.stop1.lineName,
-        otherInfo: [this.commute.stop1.directionDescription],
-        lineInitials: this.commute.stop1.lineInitials,
-        lineColor: this.commute.stop1.lineColor,
+      GestureDetector(
+        onTap: () {
+          showDetailForStop(context, this.commute.stop1);
+        },
+        child: Card(
+          elevation: 0.0,
+          child: VariablePartTile(
+            this.commute.stop1.id,
+            title: this.commute.stop1.name,
+            subtitle1: this.commute.stop1.lineName,
+            otherInfo: [this.commute.stop1.directionDescription],
+            lineInitials: this.commute.stop1.lineInitials,
+            lineColor: this.commute.stop1.lineColor,
+            onTap: () {
+              showDetailForStop(context, this.commute.stop1);
+            },
+          ),
+        ),
       ),
-      VariablePartTile(
-        this.commute.stop2.id,
-        title: this.commute.stop2.name,
-        subtitle1: this.commute.stop2.lineName,
-        otherInfo: [TimeOfDayHelper.convertToString(this.commute.arrivalTime)],
-        lineInitials: this.commute.stop2.lineInitials,
-        lineColor: this.commute.stop2.lineColor,
-        timeCircles: false,
-        trailing:
-            CommuteTimeCircleCombo(this.commute.stop1, this.commute.stop2),
+      GestureDetector(
+        onTap: () {
+          showDetailForStop(context, this.commute.stop2);
+        },
+        child: Card(
+          elevation: 0.0,
+          child: VariablePartTile(
+            this.commute.stop2.id,
+            title: this.commute.stop2.name,
+            subtitle1: this.commute.stop2.lineName,
+            otherInfo: [
+              TimeOfDayHelper.convertToString(this.commute.arrivalTime)
+            ],
+            lineInitials: this.commute.stop2.lineInitials,
+            lineColor: this.commute.stop2.lineColor,
+            timeCircles: false,
+            trailing: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.only(bottom: 8.0, top: 4.0, right: 4.0),
+                  child: Text('Arrive at:'),
+                ),
+                CommuteTimeCircleCombo(this.commute.stop1, this.commute.stop2),
+              ],
+            ),
+          ),
+        ),
       ),
       trailing: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

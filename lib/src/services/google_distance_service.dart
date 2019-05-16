@@ -27,6 +27,6 @@ class GoogleDistanceService {
   static String getArrivalTime(DateTime time, int minutes) {
     final dateTime = time.add(Duration(minutes: minutes));
     return TimeOfDayHelper.convertToString(TimeOfDay.fromDateTime(dateTime),
-        includeAMPM: false);
+        accountForTimeZone: true, includeAMPM: false);
   }
 }

@@ -2,6 +2,8 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/commute.dart';
+import 'package:mbta_companion/src/models/stop.dart';
+import 'package:mbta_companion/src/screens/states/stop_detail_state.dart';
 import 'package:mbta_companion/src/screens/views/commute_view.dart';
 import 'package:mbta_companion/src/services/db_service.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
@@ -46,8 +48,23 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
     });
   }
 
+  static Commute reverseCommuteIfNecessary(Commute commute) {
+    final now = TimeOfDay.fromDateTime(DateTime.now());
+
+    // if needs to swap
+    if (now.hour > commute.arrivalTime.hour + 1 &&
+        now.hour < commute.departureTime.hour + 1) {
+      // swap
+      TimeOfDay temp = commute.departureTime;
+      commute.departureTime = commute.arrivalTime;
+      commute.arrivalTime = temp;
+    }
+    return commute;
+  }
+
   Future<void> getCommute() async {
-    final commute = await DBService.db.getCommute();
+    var commute = await DBService.db.getCommute();
+    commute = reverseCommuteIfNecessary(commute);
     if (this.mounted) {
       setState(() {
         this.commute = commute;
@@ -74,5 +91,10 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
           ),
         )
         .then((val) => getCommute());
+  }
+
+  void showDetailForStop(BuildContext context, Stop stop) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => StopDetailScreen(stop)));
   }
 }
