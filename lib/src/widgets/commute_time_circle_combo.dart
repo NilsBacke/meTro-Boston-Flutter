@@ -57,9 +57,11 @@ class _CommuteTimeCircleComboState extends State<CommuteTimeCircleCombo> {
 
     final singlePred =
         await MBTAStreamService.getSinglePrediction(widget.startStop.id);
-    setState(() {
-      this.predictions = singlePred.predictions;
-    });
+    if (this.mounted) {
+      setState(() {
+        this.predictions = singlePred.predictions;
+      });
+    }
   }
 
   void _updatePredictions(Prediction pred) {

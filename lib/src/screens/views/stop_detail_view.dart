@@ -227,7 +227,7 @@ class StopDetailScreenView extends StopDetailScreenState {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          TimeCircleCombo(widget.stop.id),
+          TimeCircleCombo(stop.id),
         ],
       ),
     );
