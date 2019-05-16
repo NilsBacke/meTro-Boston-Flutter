@@ -161,6 +161,7 @@
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				30F5A633B84A83E5616FE782 /* [CP] Embed Pods Frameworks */,
 				7254CCA83B49BFF77A143069 /* [CP] Copy Pods Resources */,
+				EDAC32EF228DE74B00DE9F4A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -348,7 +349,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+		};
+		EDAC32EF228DE74B00DE9F4A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" e5b2358dc3826f949044e5ddf3e8b30f2847f95e d877c26810a98a71078f35a016f948251f2c0f05218c3111db6090663ee53de8\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -486,7 +505,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
