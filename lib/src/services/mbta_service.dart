@@ -10,14 +10,17 @@ import 'dart:convert';
 class MBTAService {
   static const apiKey = "dc44b30101114e88b45041a4a9b65e06";
   static const baseURL = "https://api-v3.mbta.com";
+  static const rangeInMiles = 100;
 
   // returns a list of the 2 stops that is closest to the given location data
   // will be the same stop, but both directions
   static Future<List<Stop>> fetchNearestStop(LocationData locationData) async {
     List<Stop> list = List<Stop>(2);
 
+    final radius = 0.02 * rangeInMiles;
+
     final response = await http.get(
-        "$baseURL/stops?api_key=$apiKey&filter[latitude]=${locationData.latitude}&filter[longitude]=${locationData.longitude}&filter[radius]=0.10&filter[route_type]=0,1&sort=distance");
+        "$baseURL/stops?api_key=$apiKey&filter[latitude]=${locationData.latitude}&filter[longitude]=${locationData.longitude}&filter[radius]=$radius&filter[route_type]=0,1&sort=distance&page[limit]=2");
     print("response url: ${response.request.url}");
 
     if (APIRequestCounter.debug) {
@@ -37,17 +40,20 @@ class MBTAService {
 
   // range in miles
   static Future<List<Stop>> fetchNearbyStops(LocationData locationData,
-      {double range = 1}) async {
+      {int range}) async {
     var response;
+
+    if (range == null) {
+      range = rangeInMiles;
+    }
 
     if (locationData == null) {
       // permissions not granted
       response = await http
           .get("$baseURL/stops?api_key=$apiKey&filter[route_type]=0,1");
     } else {
-      final radius = range * 0.02;
       response = await http.get(
-          "$baseURL/stops?api_key=$apiKey&filter[latitude]=${locationData.latitude}&filter[longitude]=${locationData.longitude}&filter[radius]=$radius&filter[route_type]=0,1&sort=distance");
+          "$baseURL/stops?api_key=$apiKey&filter[latitude]=${locationData.latitude}&filter[longitude]=${locationData.longitude}&filter[radius]=${range * 0.02}&filter[route_type]=0,1&sort=distance");
     }
 
     if (APIRequestCounter.debug) {

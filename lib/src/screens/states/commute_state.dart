@@ -16,8 +16,6 @@ class CommuteScreen extends StatefulWidget {
 }
 
 abstract class CommuteScreenState extends State<CommuteScreen> {
-  final AsyncMemoizer _memoizer = AsyncMemoizer();
-  double dist;
   Commute commute;
 
   @override
@@ -29,23 +27,21 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
     super.initState();
   }
 
-  getNearestStop() {
-    return this._memoizer.runOnce(() async {
-      final loc = await LocationService.currentLocation;
-      final stops = await MBTAService.fetchNearestStop(loc);
-      if (stops == null) {
-        return null;
-      }
-      final stop = stops[0];
-      final distVal = LocationService.getDistance(
-          loc.latitude, loc.longitude, stop.latitude, stop.longitude);
-      if (this.mounted) {
-        setState(() {
-          this.dist = distVal;
-        });
-      }
-      return stops;
-    });
+  Future<List<Stop>> getNearestStop() async {
+    final loc = await LocationService.currentLocation;
+    final stops = await MBTAService.fetchNearestStop(loc);
+    if (stops == null) {
+      return [];
+    }
+    return stops;
+  }
+
+  Future<double> getDistanceFromNearestStop(List<Stop> stops) async {
+    final loc = await LocationService.currentLocation;
+    final stop = stops[0];
+    final distVal = LocationService.getDistance(
+        loc.latitude, loc.longitude, stop.latitude, stop.longitude);
+    return distVal;
   }
 
   static Commute reverseCommuteIfNecessary(Commute commute) {

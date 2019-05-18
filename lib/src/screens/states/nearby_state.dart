@@ -63,13 +63,11 @@ abstract class NearbyScreenState extends State<NearbyScreen> {
     return stopList;
   }
 
-  Future<void> refreshNearbyStops() {}
-
-  Future<void> moveCameraTo(Stop stop) async {
-    final GoogleMapController c = await controller.future;
-    c.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: LatLng(stop.latitude, stop.longitude),
-      zoom: 15,
-    )));
-  }
+  // Future<void> moveCameraTo(Stop stop) async {
+  //   final GoogleMapController c = await controller.future;
+  //   c.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+  //     target: LatLng(stop.latitude, stop.longitude),
+  //     zoom: 15,
+  //   )));
+  // }
 }

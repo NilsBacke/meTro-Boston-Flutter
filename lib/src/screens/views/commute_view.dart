@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/states/create_commute_state.dart';
+import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/utils/timeofday_helper.dart';
 import 'package:mbta_companion/src/widgets/commute_time_circle_combo.dart';
@@ -39,7 +40,7 @@ class CommuteView extends CommuteScreenState {
   Widget nearbyStopFutureBuilder() {
     return FutureBuilder(
       future: getNearestStop(),
-      builder: (context, snapshot) {
+      builder: (context, AsyncSnapshot<List<Stop>> snapshot) {
         return snapshot.hasData
             ? nearbyStopCard(snapshot.data)
             : nearbyStopLoadingIndicator();
@@ -86,10 +87,10 @@ class CommuteView extends CommuteScreenState {
   }
 
   Widget nearbyStopCard(List<Stop> stops) {
-    if (stops == null) {
+    if (stops.length == 0) {
       return blankNearbyStopCard(
         child: Text(
-          'Unable to load nearest stop',
+          'No stops within ${MBTAService.rangeInMiles} miles',
           style: Theme.of(context).textTheme.body2,
           textAlign: TextAlign.center,
         ),
@@ -135,9 +136,14 @@ class CommuteView extends CommuteScreenState {
           ),
         ),
       ),
-      trailing: Text(
-        '$dist mi',
-        style: Theme.of(context).textTheme.body2,
+      trailing: FutureBuilder(
+        future: getDistanceFromNearestStop(stops),
+        builder: (context, snapshot) {
+          return Text(
+            snapshot.hasData ? '${snapshot.data} mi' : '---',
+            style: Theme.of(context).textTheme.body2,
+          );
+        },
       ),
     );
   }

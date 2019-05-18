@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
+import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
 import 'package:mbta_companion/src/widgets/stops_list_view.dart';
 import '../states/nearby_state.dart';
 
 class NearbyScreenView extends NearbyScreenState {
   static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(42.34067, -71.0911),
+    target: LatLng(42.353699, -71.067251),
     zoom: 14.4746,
   );
 
@@ -16,7 +18,7 @@ class NearbyScreenView extends NearbyScreenState {
     return SafeArea(
       child: FutureBuilder(
           future: getNearbyStops(),
-          builder: (context, snapshot) {
+          builder: (context, AsyncSnapshot<List<Stop>> snapshot) {
             if (!snapshot.hasData) {
               return StopsLoadingIndicator();
             }
@@ -32,7 +34,7 @@ class NearbyScreenView extends NearbyScreenState {
                   child: topHalf(),
                 ),
                 Expanded(
-                  child: bottomHalf(),
+                  child: bottomHalf(snapshot.data),
                 ),
               ],
             );
@@ -45,19 +47,36 @@ class NearbyScreenView extends NearbyScreenState {
       child: GoogleMap(
         initialCameraPosition: _kGooglePlex,
         myLocationEnabled: true,
-        onMapCreated: (mapscontroller) {
+        onMapCreated: (mapscontroller) async {
           controller.complete(mapscontroller);
+          final location = await LocationService.currentLocation;
+          final GoogleMapController c = await controller.future;
+          c.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+            target: LatLng(location.latitude, location.longitude),
+            zoom: 15,
+          )));
         },
         markers: this.markers.toSet(),
       ),
     );
   }
 
-  ListView bottomHalf() {
+  Widget bottomHalf(List<Stop> stops) {
+    if (stops.length == 0) {
+      return Container(
+        child: Center(
+          child: Text(
+            'No stops within ${MBTAService.rangeInMiles} miles',
+            style: Theme.of(context).textTheme.body2,
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
     return ListView.builder(
-      itemCount: this.stops.length,
+      itemCount: stops.length,
       itemBuilder: (context, int index) {
-        final stop = this.stops[index];
+        final stop = stops[index];
         return StopCard(
           distanceFuture: LocationService.getDistanceFromStop(stop),
           stop: stop,
