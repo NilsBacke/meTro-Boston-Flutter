@@ -63,7 +63,7 @@ packages:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
+    version: "0.4.0+1"
   firebase_crashlytics:
     dependency: "direct main"
     description:
@@ -115,7 +115,7 @@ packages:
       name: google_maps_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.13"
+    version: "0.5.3"
   great_circle_distance:
     dependency: "direct main"
     description:

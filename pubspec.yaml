@@ -19,26 +19,26 @@ environment:
 dependencies:
     flutter:
         sdk: flutter
-    google_maps_flutter: 0.5.13
-    location: ^2.3.5
-    http: ^0.12.0+2
-    great_circle_distance: ^1.0.1
+    google_maps_flutter: 0.5.3
+    location: 2.3.5
+    http: 0.12.0+2
+    great_circle_distance: 1.0.1
     sqflite: 1.0.0
-    path: ^1.6.2
+    path: 1.6.2
     url_launcher: 4.1.0+1
     path_provider: 0.4.1
-    flutter_datetime_picker: ^1.2.0
+    flutter_datetime_picker: 1.2.0
     package_info: 0.3.2+1
     webview_flutter: 0.2.0
     connectivity: 0.3.2
-    permission_handler: ^2.2.0
-    geolocator: ^4.0.3
-    firebase_core: ^0.4.0
-    firebase_analytics: ^3.0.1
-    eventsource: ^0.2.1
+    permission_handler: 2.2.0
+    geolocator: 4.0.3
+    eventsource: 0.2.1
+    shared_preferences: 0.5.2
+    firebase_core: ^0.4.0+1
     firebase_performance: ^0.2.0
+    firebase_analytics: ^3.0.1
     firebase_crashlytics: ^0.0.4+3
-    shared_preferences: ^0.5.2
 
     # The following adds the Cupertino Icons font to your application.
     # Use with the CupertinoIcons class for iOS style icons.
