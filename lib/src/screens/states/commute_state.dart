@@ -64,7 +64,10 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
 
   Future<void> getCommute() async {
     var commute = await DBService.db.getCommute();
-    commute = reverseCommuteIfNecessary(commute);
+    if (commute != null) {
+      commute = reverseCommuteIfNecessary(commute);
+    }
+
     if (this.mounted) {
       setState(() {
         this.commute = commute;

@@ -132,6 +132,8 @@ PODS:
     - Flutter
   - Protobuf (3.7.0)
   - Reachability (3.2)
+  - shared_preferences (0.0.1):
+    - Flutter
   - sqflite (0.0.1):
     - Flutter
     - FMDB (~> 2.7.2)
@@ -155,6 +157,7 @@ DEPENDENCIES:
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
@@ -209,6 +212,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
@@ -249,6 +254,7 @@ SPEC CHECKSUMS:
   permission_handler: 0b2a5acb642be1ad2406adc31d0cda567b8b01e2
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
   sqflite: 801b6b0983f722fa29baf00d1476e4556ada6de4
   url_launcher: 92b89c1029a0373879933c21642958c874539095
   webview_flutter: 9bd234c07e99632356cba112df56fd1d47d6b6e3

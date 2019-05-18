@@ -1,11 +1,12 @@
 import 'dart:async';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/screens/states/commute_state.dart';
 import 'package:mbta_companion/src/screens/states/explore_state.dart';
 import 'package:mbta_companion/src/screens/states/nearby_state.dart';
 import 'package:mbta_companion/src/screens/states/saved_state.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:mbta_companion/src/widgets/onboarding.dart';
 import 'screens/stateless_screens/settings_view.dart';
 
 class Home extends StatefulWidget {
@@ -46,10 +47,12 @@ class _HomeState extends State<Home> {
   ];
 
   var _currentIndex = 0;
+  static final _keyInitialLaunch = "initial_launch";
 
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<ConnectivityResult> _connectionSubscription;
   ConnectivityResult _connectionState = ConnectivityResult.mobile;
+  bool initialLaunch;
 
   @override
   void initState() {
@@ -60,12 +63,66 @@ class _HomeState extends State<Home> {
         _connectionState = result;
       });
     });
+    SharedPreferences.getInstance().then((pref) {
+      if (!pref.containsKey(_keyInitialLaunch)) {
+        pref.setBool(_keyInitialLaunch, false);
+        if (this.mounted) {
+          setState(() {
+            this.initialLaunch = true;
+          });
+        }
+      } else {
+        if (this.mounted) {
+          setState(() {
+            this.initialLaunch = pref.getBool(_keyInitialLaunch);
+          });
+        }
+      }
+    });
   }
 
   @override
   dispose() {
     super.dispose();
     _connectionSubscription.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (this.initialLaunch == null) {
+      return Container();
+    }
+
+    if (this.initialLaunch == true) {
+      return OnboardingScreen();
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(titleForScreen(_currentIndex)),
+      ),
+      body: _connectionState == ConnectivityResult.none
+          ? noInternetWidget()
+          : _children[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTabTapped,
+        currentIndex: _currentIndex,
+        items: items,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
+        showUnselectedLabels: true,
+        backgroundColor: Theme.of(context).appBarTheme.color,
+      ),
+    );
+  }
+
+  Widget noInternetWidget() {
+    return Container(
+      child: Center(
+        child: Text("No Internet Connection"),
+      ),
+    );
   }
 
   void onTabTapped(int index) {
@@ -89,35 +146,5 @@ class _HomeState extends State<Home> {
       default:
         return 'Boston Subway Companion';
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(titleForScreen(_currentIndex)),
-      ),
-      body: _connectionState == ConnectivityResult.none
-          ? noInternetWidget
-          : _children[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: onTabTapped,
-        currentIndex: _currentIndex,
-        items: items,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white70,
-        showUnselectedLabels: true,
-        backgroundColor: Theme.of(context).appBarTheme.color,
-      ),
-    );
-  }
-
-  Widget noInternetWidget() {
-    return Container(
-      child: Center(
-        child: Text("No Internet Connection"),
-      ),
-    );
   }
 }
