@@ -7,6 +7,7 @@ class Commute {
   String id;
   Stop stop1, stop2;
   TimeOfDay arrivalTime, departureTime;
+  String homeStopId, workStopId;
 
   Commute(this.stop1, this.stop2, this.arrivalTime, this.departureTime) {
     this.id = "1";
@@ -14,6 +15,8 @@ class Commute {
 
   Commute.fromJson(Map<String, dynamic> parsedJson) {
     this.id = "1";
+    this.homeStopId = parsedJson['home_stop_id'];
+    this.workStopId = parsedJson['work_stop_id'];
     this.stop1 = Stop(
         parsedJson['id_one'].toString(),
         parsedJson['name_one'],
@@ -50,8 +53,12 @@ class Commute {
         "platform_name_two": this.stop2.directionDestination,
         "direction_name_two": this.stop2.directionName,
         "description_two": this.stop2.lineName,
-        "arrival_time": TimeOfDayHelper.convertToString(this.arrivalTime),
-        "departure_time": TimeOfDayHelper.convertToString(this.departureTime),
+        "arrival_time": TimeOfDayHelper.convertToString(this.arrivalTime,
+            saveAs24HourTime: true),
+        "departure_time": TimeOfDayHelper.convertToString(this.departureTime,
+            saveAs24HourTime: true),
+        "home_stop_id": this.homeStopId,
+        "work_stop_id": this.workStopId,
       };
 
   TimeOfDay _stringToTimeOfDay(String time) {
@@ -63,6 +70,13 @@ class Commute {
     if (minute[0] == "0") {
       minute = minute[1];
     }
-    return TimeOfDay(hour: int.parse(hour), minute: int.parse(minute));
+    int offset = 0;
+    if (minute.contains("AM")) {
+      minute = minute.substring(0, minute.length - 3);
+    } else if (minute.contains("PM")) {
+      minute = minute.substring(0, minute.length - 3);
+      offset = 12;
+    }
+    return TimeOfDay(hour: int.parse(hour) + offset, minute: int.parse(minute));
   }
 }

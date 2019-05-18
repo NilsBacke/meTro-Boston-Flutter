@@ -53,6 +53,11 @@ class MBTAStreamService {
     try {
       pred1 = Prediction(jsonData[0]['id'],
           DateTime.parse(jsonData[0]['attributes']['arrival_time']));
+      // for end of line stops
+      if (pred1 == null) {
+        pred1 = Prediction(jsonData[0]['id'],
+            DateTime.parse(jsonData[0]['attributes']['departure_time']));
+      }
     } on Exception catch (e) {
       pred1 = null;
       print("Exception: " + e.toString());
@@ -60,6 +65,11 @@ class MBTAStreamService {
     try {
       pred2 = Prediction(jsonData[1]['id'],
           DateTime.parse(jsonData[1]['attributes']['arrival_time']));
+      // for end of line stops
+      if (pred2 == null) {
+        pred2 = Prediction(jsonData[1]['id'],
+            DateTime.parse(jsonData[1]['attributes']['departure_time']));
+      }
     } on Exception catch (e) {
       pred2 = null;
       print("Exception: " + e.toString());
@@ -80,6 +90,11 @@ class MBTAStreamService {
     try {
       pred = Prediction(jsonData['id'],
           DateTime.parse(jsonData['attributes']['arrival_time']));
+      // for end of line stops
+      if (pred == null || pred.time.hour - DateTime.now().hour > 1) {
+        pred = Prediction(jsonData[0]['id'],
+            DateTime.parse(jsonData[0]['attributes']['departure_time']));
+      }
     } on Exception catch (e) {
       pred = null;
       print("Exception: " + e.toString());
@@ -100,8 +115,12 @@ class MBTAStreamService {
     Prediction pred1, pred2;
     if (jsonData.length > 0) {
       try {
-        pred1 = Prediction(jsonData[0]['id'],
-            DateTime.parse(jsonData[0]['attributes']['arrival_time']));
+        String arrivalTime = jsonData[0]['attributes']['arrival_time'];
+        if (arrivalTime == null) {
+          // for stops at the end of the line
+          arrivalTime = jsonData[0]['attributes']['departure_time'];
+        }
+        pred1 = Prediction(jsonData[0]['id'], DateTime.parse(arrivalTime));
       } on Exception catch (e) {
         pred1 = null;
         print("Exception: " + e.toString());
@@ -109,8 +128,11 @@ class MBTAStreamService {
     }
     if (jsonData.length > 1) {
       try {
-        pred2 = Prediction(jsonData[1]['id'],
-            DateTime.parse(jsonData[1]['attributes']['arrival_time']));
+        String arrivalTime = jsonData[1]['attributes']['arrival_time'];
+        if (arrivalTime == null) {
+          arrivalTime = jsonData[1]['attributes']['departure_time'];
+        }
+        pred2 = Prediction(jsonData[1]['id'], DateTime.parse(arrivalTime));
       } on Exception catch (e) {
         pred2 = null;
         print("Exception: " + e.toString());

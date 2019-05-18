@@ -22,10 +22,17 @@ abstract class CreateCommuteScreenState extends State<CreateCommuteScreen> {
   @override
   initState() {
     if (widget.commute != null) {
-      this.stop1 = widget.commute.stop1;
-      this.stop2 = widget.commute.stop2;
-      this.arrivalTime = widget.commute.arrivalTime;
-      this.departureTime = widget.commute.departureTime;
+      if (isCommuteSwapped()) {
+        this.stop1 = widget.commute.stop2;
+        this.stop2 = widget.commute.stop1;
+        this.arrivalTime = widget.commute.departureTime;
+        this.departureTime = widget.commute.arrivalTime;
+      } else {
+        this.stop1 = widget.commute.stop1;
+        this.stop2 = widget.commute.stop2;
+        this.arrivalTime = widget.commute.arrivalTime;
+        this.departureTime = widget.commute.departureTime;
+      }
       this.appBarText = "Update Commute";
     } else {
       this.arrivalTime = TimeOfDay(hour: 9, minute: 0);
@@ -33,6 +40,10 @@ abstract class CreateCommuteScreenState extends State<CreateCommuteScreen> {
       this.appBarText = "Create Commute";
     }
     super.initState();
+  }
+
+  bool isCommuteSwapped() {
+    return !(widget.commute.stop1.id == widget.commute.homeStopId);
   }
 
   String get arrivalTimeString {
@@ -50,9 +61,11 @@ abstract class CreateCommuteScreenState extends State<CreateCommuteScreen> {
           ? TimeOfDay(hour: 9, minute: 0)
           : TimeOfDay(hour: 17, minute: 0),
     ).then((time) {
-      setState(() {
-        arrival ? arrivalTime = time : departureTime = time;
-      });
+      if (time != null) {
+        setState(() {
+          arrival ? arrivalTime = time : departureTime = time;
+        });
+      }
     });
   }
 

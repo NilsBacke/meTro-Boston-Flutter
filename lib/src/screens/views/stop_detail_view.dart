@@ -65,11 +65,15 @@ class StopDetailScreenView extends StopDetailScreenState {
             physics: NeverScrollableScrollPhysics(),
             itemCount: stopsAtLocation.length,
             itemBuilder: (context, int i) {
+              // end of line stop
+              if (stopsAtLocation.length == 1) {
+                return singleTimer(stopsAtLocation[i]);
+              }
+
               if (i % 2 == 0) {
                 return twoLinesTimerRow(
                     stopsAtLocation[i], stopsAtLocation[i + 1]);
               }
-              return Container();
             },
           ),
           Container(
@@ -205,6 +209,24 @@ class StopDetailScreenView extends StopDetailScreenState {
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  Widget singleTimer(Stop stop) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(18.0),
+          child: Center(
+            child: Text(
+              stop.lineName,
+              style: TextStyle(color: stop.textColor),
+            ),
+          ),
+        ),
+        TimeCircleCombo(stop.id),
       ],
     );
   }

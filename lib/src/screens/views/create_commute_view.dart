@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/states/create_commute_state.dart';
-import 'package:mbta_companion/src/screens/states/explore_state.dart';
-import 'package:mbta_companion/src/screens/states/stop_detail_state.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
 
 class CreateCommuteScreenView extends CreateCommuteScreenState {

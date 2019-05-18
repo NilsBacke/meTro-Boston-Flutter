@@ -2,38 +2,14 @@ PODS:
   - connectivity (0.0.1):
     - Flutter
     - Reachability
-  - Crashlytics (3.13.0):
-    - Fabric (~> 1.10.0)
-  - Fabric (1.10.0)
-  - Firebase/Analytics (6.0.0):
-    - Firebase/Core
   - Firebase/Core (6.0.0):
     - Firebase/CoreOnly
     - FirebaseAnalytics (= 6.0.0)
   - Firebase/CoreOnly (6.0.0):
     - FirebaseCore (= 6.0.0)
-  - Firebase/Performance (6.0.0):
-    - Firebase/CoreOnly
-    - FirebasePerformance (~> 3.0.0)
-  - firebase_analytics (0.0.1):
-    - Firebase/Analytics (~> 6.0)
-    - Firebase/Core
-    - Flutter
   - firebase_core (0.0.1):
     - Firebase/Core
     - Flutter
-  - firebase_crashlytics (0.0.1):
-    - Crashlytics
-    - Fabric
-    - Firebase/Core
-    - Flutter
-  - firebase_performance (0.0.1):
-    - Firebase/Core
-    - Firebase/Performance
-    - Flutter
-  - FirebaseABTesting (3.0.0):
-    - FirebaseCore (~> 6.0)
-    - Protobuf (~> 3.5)
   - FirebaseAnalytics (6.0.0):
     - FirebaseCore (~> 6.0)
     - FirebaseInstanceID (~> 4.0)
@@ -50,24 +26,6 @@ PODS:
     - FirebaseCore (~> 6.0)
     - GoogleUtilities/Environment (~> 6.0)
     - GoogleUtilities/UserDefaults (~> 6.0)
-  - FirebasePerformance (3.0.0):
-    - FirebaseCore (~> 6.0)
-    - FirebaseInstanceID (~> 4.0)
-    - FirebaseRemoteConfig (~> 4.0)
-    - GoogleToolboxForMac/Logger (~> 2.1)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-    - GoogleUtilities/Environment (~> 6.0)
-    - GoogleUtilities/ISASwizzler (~> 6.0)
-    - GoogleUtilities/MethodSwizzler (~> 6.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-    - Protobuf (~> 3.5)
-  - FirebaseRemoteConfig (4.0.0):
-    - FirebaseABTesting (~> 3.0)
-    - FirebaseCore (~> 6.0)
-    - FirebaseInstanceID (~> 4.0)
-    - GoogleUtilities/Environment (~> 6.0)
-    - "GoogleUtilities/NSData+zlib (~> 6.0)"
-    - Protobuf (~> 3.5)
   - Flutter (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -90,17 +48,11 @@ PODS:
   - GoogleMaps/Base (2.7.0)
   - GoogleMaps/Maps (2.7.0):
     - GoogleMaps/Base
-  - GoogleToolboxForMac/Defines (2.2.0)
-  - GoogleToolboxForMac/Logger (2.2.0):
-    - GoogleToolboxForMac/Defines (= 2.2.0)
-  - "GoogleToolboxForMac/NSData+zlib (2.2.0)":
-    - GoogleToolboxForMac/Defines (= 2.2.0)
   - GoogleUtilities/AppDelegateSwizzler (6.0.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
   - GoogleUtilities/Environment (6.0.0)
-  - GoogleUtilities/ISASwizzler (6.0.0)
   - GoogleUtilities/Logger (6.0.0):
     - GoogleUtilities/Environment
   - GoogleUtilities/MethodSwizzler (6.0.0):
@@ -114,7 +66,6 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (6.0.0):
     - GoogleUtilities/Logger
-  - GTMSessionFetcher/Core (1.2.1)
   - location (0.0.1):
     - Flutter
   - location_permissions (2.0.1):
@@ -130,7 +81,6 @@ PODS:
     - Flutter
   - permission_handler (2.2.0):
     - Flutter
-  - Protobuf (3.7.0)
   - Reachability (3.2)
   - shared_preferences (0.0.1):
     - Flutter
@@ -144,10 +94,7 @@ PODS:
 
 DEPENDENCIES:
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
-  - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
-  - firebase_performance (from `.symlinks/plugins/firebase_performance/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - google_api_availability (from `.symlinks/plugins/google_api_availability/ios`)
@@ -164,36 +111,22 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - Crashlytics
-    - Fabric
     - Firebase
-    - FirebaseABTesting
     - FirebaseAnalytics
     - FirebaseCore
     - FirebaseInstanceID
-    - FirebasePerformance
-    - FirebaseRemoteConfig
     - FMDB
     - GoogleAppMeasurement
     - GoogleMaps
-    - GoogleToolboxForMac
     - GoogleUtilities
-    - GTMSessionFetcher
     - nanopb
-    - Protobuf
     - Reachability
 
 EXTERNAL SOURCES:
   connectivity:
     :path: ".symlinks/plugins/connectivity/ios"
-  firebase_analytics:
-    :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
-  firebase_crashlytics:
-    :path: ".symlinks/plugins/firebase_crashlytics/ios"
-  firebase_performance:
-    :path: ".symlinks/plugins/firebase_performance/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
   geolocator:
@@ -223,19 +156,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   connectivity: d5992e3758d68b1c4b12d6e012fe0813f1aa1645
-  Crashlytics: 1f5f752c7feac0add0cc1774756f96444fa3b1a7
-  Fabric: 09de1e053eb7dc415593166ad3e53d4c88123405
   Firebase: fa80b9d987ca014a1ba9357496ef2a0178b28b12
-  firebase_analytics: fe329224830629f9a38090b92e23045201c397ed
   firebase_core: c96aa8b2fcf7f5167d32f22034f502f9304952b8
-  firebase_crashlytics: 5e46e1d4c4a7ce372583979fa9a59377e2b5c729
-  firebase_performance: 66d2630faa8a2281681ed710d6d39dd49151cd8c
-  FirebaseABTesting: a32c488eb75089a61eb3d86db061dfb909d765db
   FirebaseAnalytics: 1743c5f4de3687d0745709dfdc4b1dea1484f44c
   FirebaseCore: e38f025287b413255a53acc1945d048a112047f7
   FirebaseInstanceID: 0e0348a3c00a734fa376a070f5ad4533ad975cb5
-  FirebasePerformance: 3dd8dbe6eb1258b8d148eb33768f6aa6e1684127
-  FirebaseRemoteConfig: 40f75c6ea20a52bf65ef44e3898910dd5b57c532
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator: 191e1ae5853d9d142e9c3c71fe79eb9ff154cf24
@@ -243,22 +168,19 @@ SPEC CHECKSUMS:
   google_maps_flutter: 6449d5918d3f1a69a37dc9c557bbad7bb9bcf0e9
   GoogleAppMeasurement: 7f028ea162b72c8f326daec74afc95d94f7a47d6
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
-  GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   GoogleUtilities: f1faafc033ea203adf1783ce00af455bb99d0e5b
-  GTMSessionFetcher: 32aeca0aa144acea523e1c8e053089dec2cb98ca
   location: 26c90953ad5916331d0d1d913898779910416487
   location_permissions: 37b923ed4b9df9dfe9edb109fb4298f7b182047b
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   package_info: d7c98b64f60add4c2908b9d94d82a45d3c8827ad
   path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
   permission_handler: 0b2a5acb642be1ad2406adc31d0cda567b8b01e2
-  Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
   sqflite: 801b6b0983f722fa29baf00d1476e4556ada6de4
   url_launcher: 92b89c1029a0373879933c21642958c874539095
   webview_flutter: 9bd234c07e99632356cba112df56fd1d47d6b6e3
 
-PODFILE CHECKSUM: d18e18c568bb67760317f101e1f2241619a741f1
+PODFILE CHECKSUM: ebd43b443038e611b86ede96e613bd6033c49497
 
 COCOAPODS: 1.5.3

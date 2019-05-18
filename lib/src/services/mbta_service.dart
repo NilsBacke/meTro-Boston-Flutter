@@ -87,7 +87,7 @@ class MBTAService {
     }
     stops.sort((stop1, stop2) => stop1.lineName.compareTo(stop2.lineName));
     print('stops: ${stops.toString()}');
-    assert(stops.length == 2 || stops.length == 4);
+    assert(stops.length == 1 || stops.length == 2 || stops.length == 4);
     return stops;
   }
 

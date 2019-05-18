@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/screens/states/commute_state.dart';
@@ -113,6 +114,7 @@ class _HomeState extends State<Home> {
         unselectedItemColor: Colors.white70,
         showUnselectedLabels: true,
         backgroundColor: Theme.of(context).appBarTheme.color,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }

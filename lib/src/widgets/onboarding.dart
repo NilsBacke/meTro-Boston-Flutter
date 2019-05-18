@@ -23,6 +23,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Boston Subway Companion"),
+        centerTitle: true,
       ),
       body: Container(
         child: Stack(

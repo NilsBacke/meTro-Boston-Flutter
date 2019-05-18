@@ -54,7 +54,9 @@ class DBService {
         "direction_name_two TEXT,"
         "description_two TEXT,"
         "arrival_time TEXT,"
-        "departure_time TEXT"
+        "departure_time TEXT,"
+        "home_stop_id TEXT,"
+        "work_stop_id TEXT"
         ")");
   }
 
@@ -118,6 +120,8 @@ class DBService {
       "description_two",
       "arrival_time",
       "departure_time",
+      "home_stop_id",
+      "work_stop_id",
     ]);
 
     final listOfOne = result.map((e) {

@@ -1,4 +1,3 @@
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/commute.dart';
@@ -49,11 +48,15 @@ abstract class CommuteScreenState extends State<CommuteScreen> {
 
     // if needs to swap
     if (now.hour > commute.arrivalTime.hour + 1 &&
-        now.hour < commute.departureTime.hour + 1) {
+        now.hour < commute.departureTime.hour + 2) {
       // swap
       TimeOfDay temp = commute.departureTime;
       commute.departureTime = commute.arrivalTime;
       commute.arrivalTime = temp;
+
+      Stop tempStop = commute.stop1;
+      commute.stop1 = commute.stop2;
+      commute.stop2 = tempStop;
     }
     return commute;
   }

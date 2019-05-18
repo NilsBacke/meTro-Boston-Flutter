@@ -180,9 +180,9 @@ class CommuteView extends CommuteScreenState {
             this.commute.stop2.id,
             title: this.commute.stop2.name,
             subtitle1: this.commute.stop2.lineName,
-            otherInfo: [
-              TimeOfDayHelper.convertToString(this.commute.arrivalTime)
-            ],
+            otherInfo: this.commute.stop2.id == this.commute.workStopId
+                ? [TimeOfDayHelper.convertToString(this.commute.arrivalTime)]
+                : [],
             lineInitials: this.commute.stop2.lineInitials,
             lineColor: this.commute.stop2.lineColor,
             timeCircles: false,
