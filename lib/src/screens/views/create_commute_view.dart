@@ -11,26 +11,28 @@ class CreateCommuteScreenView extends CreateCommuteScreenState {
         centerTitle: true,
         title: Text(appBarText),
       ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: ListView(
-                children: <Widget>[
-                  stopContainer(
-                      true, "Home", "Tap to add home stop", this.stop1),
-                  stopContainer(
-                      false, "Work", "Tap to add work stop", this.stop2),
-                  timeSelectionRow(),
-                ],
+      body: SafeArea(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: ListView(
+                  children: <Widget>[
+                    stopContainer(
+                        true, "Home", "Tap to add home stop", this.stop1),
+                    stopContainer(
+                        false, "Work", "Tap to add work stop", this.stop2),
+                    timeSelectionRow(),
+                  ],
+                ),
               ),
-            ),
-            infoText(),
-            createButton(),
-            Container(
-              height: 12.0,
-            )
-          ],
+              infoText(),
+              createButton(),
+              Container(
+                height: 12.0,
+              )
+            ],
+          ),
         ),
       ),
     );

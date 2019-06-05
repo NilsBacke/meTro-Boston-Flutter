@@ -69,11 +69,12 @@ class StopDetailScreenView extends StopDetailScreenState {
               if (stopsAtLocation.length == 1) {
                 return singleTimer(stopsAtLocation[i]);
               }
-
+              print("i: $i length: ${stopsAtLocation.length}");
               if (i % 2 == 0) {
                 return twoLinesTimerRow(
                     stopsAtLocation[i], stopsAtLocation[i + 1]);
               }
+              return Container();
             },
           ),
           Container(

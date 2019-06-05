@@ -3,7 +3,6 @@ import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/services/permission_service.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../views/explore_view.dart';
 
 class ExploreScreen extends StatefulWidget {

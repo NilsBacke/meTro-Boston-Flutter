@@ -69,7 +69,9 @@ class MBTAService {
 
   static Future<List<Stop>> fetchAllStopsAtSameLocation(Stop stop) async {
     final response = await http.get(
-        "$baseURL/stops?api_key=$apiKey&filter[latitude]=${stop.latitude}&filter[longitude]=${stop.longitude}&filter[radius]=0.01&filter[route_type]=0,1&sort=distance");
+        "$baseURL/stops?api_key=$apiKey&filter[latitude]=${stop.latitude}&filter[longitude]=${stop.longitude}&filter[radius]=0.02&filter[route_type]=0,1&sort=distance");
+
+    print("all stops at same location url: ${response.request.url}");
 
     if (APIRequestCounter.debug) {
       APIRequestCounter.incrementCalls('all stops at same location');

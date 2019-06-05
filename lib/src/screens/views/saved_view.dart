@@ -7,7 +7,9 @@ class SavedScreenView extends SavedScreenState {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: bodyWidget(),
+      body: SafeArea(
+        child: bodyWidget(),
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
