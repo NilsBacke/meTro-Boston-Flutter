@@ -62,6 +62,14 @@ abstract class ExploreScreenState extends State<ExploreScreen> {
                     .toLowerCase()
                     .contains(searchText.toLowerCase()))
             .toList();
+
+        this.filteredStops.sort((stop1, stop2) {
+          if (stop1.name.toLowerCase().contains(searchText.toLowerCase())) {
+            // at top
+            return -1;
+          }
+          return 1;
+        });
       });
     }
   }
