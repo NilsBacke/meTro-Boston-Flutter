@@ -7,7 +7,7 @@ import 'package:mbta_companion/src/utils/timeofday_helper.dart';
 import 'package:mbta_companion/src/widgets/set_stop_view.dart';
 
 class CreateCommuteScreen extends StatefulWidget {
-  final Commute commute;
+  Commute commute;
   CreateCommuteScreen({this.commute});
 
   @override
