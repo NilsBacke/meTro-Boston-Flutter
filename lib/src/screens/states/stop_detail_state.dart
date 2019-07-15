@@ -20,8 +20,8 @@ abstract class StopDetailScreenState extends State<StopDetailScreen> {
   @override
   void initState() {
     super.initState();
-    getAlerts(widget.stop);
     getAssociatedStops();
+    getAlerts(widget.stop);
   }
 
   Future<void> getAssociatedStops() async {
