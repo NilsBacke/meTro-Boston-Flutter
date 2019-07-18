@@ -104,31 +104,31 @@ class Stop {
   Stop(this.id, this.name, this.latitude, this.longitude,
       this.directionDestination, this.directionName, this.lineName);
 
-  Stop.fromJson(Map<String, dynamic> parsedJson) {
-    final attributes = parsedJson[attributesKey];
-    this.id = parsedJson[idKey];
-    this.name = attributes[nameKey];
-    this.latitude = attributes[latitudeKey];
-    this.longitude = attributes[longitudeKey];
-    this.directionDestination = attributes[directionKey];
-    this.directionName =
-        _convertDirectionToName(this.directionDestination, this.id);
-    final String desc = attributes[lineNameKey];
+  // Stop.fromJson(Map<String, dynamic> parsedJson) {
+  //   final attributes = parsedJson[attributesKey];
+  //   this.id = parsedJson[idKey];
+  //   this.name = attributes[nameKey];
+  //   this.latitude = attributes[latitudeKey];
+  //   this.longitude = attributes[longitudeKey];
+  //   this.directionDestination = attributes[directionKey];
+  //   this.directionName =
+  //       _convertDirectionToName(this.directionDestination, this.id);
+  //   final String desc = attributes[lineNameKey];
 
-    // formulate line name
-    try {
-      this.lineName =
-          desc.substring(desc.indexOf("- ") + 2, desc.lastIndexOf(" -"));
-    } on Error catch (e) {
-      try {
-        this.lineName = desc.substring(desc.indexOf("- ") + 2);
-      } on Error catch (e) {
-        throw Exception('Could not formulate line name from: $desc. Error: $e');
-      }
-    }
-  }
+  //   // formulate line name
+  //   try {
+  //     this.lineName =
+  //         desc.substring(desc.indexOf("- ") + 2, desc.lastIndexOf(" -"));
+  //   } on Error catch (e) {
+  //     try {
+  //       this.lineName = desc.substring(desc.indexOf("- ") + 2);
+  //     } on Error catch (e) {
+  //       throw Exception('Could not formulate line name from: $desc. Error: $e');
+  //     }
+  //   }
+  // }
 
-  Stop.fromDb(Map<String, dynamic> parsedJson) {
+  Stop.from(Map<String, dynamic> parsedJson) {
     this.id = parsedJson[idKey].toString();
     this.name = parsedJson[nameKey];
     this.latitude = double.parse(parsedJson[latitudeKey]);

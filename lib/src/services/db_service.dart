@@ -79,7 +79,7 @@ class DBService {
     ]);
 
     return result.map((e) {
-      return Stop.fromDb(e);
+      return Stop.from(e);
     }).toList();
   }
 
