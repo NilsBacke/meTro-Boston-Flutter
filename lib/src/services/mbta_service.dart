@@ -8,12 +8,12 @@ import '../models/stop.dart';
 import 'dart:convert';
 
 class MBTAService {
-  static const apiKey = "dc44b30101114e88b45041a4a9b65e06";
-  static const baseURL = "https://api-v3.mbta.com";
   static const newAPIURL =
       "https://ad3zbfaf1i.execute-api.us-east-1.amazonaws.com/develop";
   static const nearestStopRoute = "/stops/nearest/";
   static const nearbyStopsRoute = "/stops/allnearby/";
+  static const stopsAtSameLocationRoute = "/stops/location/";
+  static const alertsRoute = "/stops/alerts/";
   static const rangeInMiles = 100;
 
   // returns a list of the 2 stops that is closest to the given location data
@@ -35,10 +35,6 @@ class MBTAService {
     }
 
     final jsonData = jsonResult['body'];
-    if (jsonData == null || jsonData.length == 0) {
-      // error or no stops in area
-      return null;
-    }
 
     List<Stop> list = List<Stop>(2);
     list[0] = (Stop.from(jsonData[0]));
@@ -58,6 +54,8 @@ class MBTAService {
       APIRequestCounter.incrementCalls('nearby stops');
     }
 
+    // TODO: error handling
+
     return _jsonToListOfStops(response);
   }
 
@@ -66,8 +64,8 @@ class MBTAService {
   }
 
   static Future<List<Stop>> fetchAllStopsAtSameLocation(Stop stop) async {
-    final response = await http.get(
-        "$baseURL/stops?api_key=$apiKey&filter[latitude]=${stop.latitude}&filter[longitude]=${stop.longitude}&filter[radius]=0.02&filter[route_type]=0,1&sort=distance");
+    final response = await http.post("$newAPIURL$stopsAtSameLocationRoute",
+        body: json.encode(stop));
 
     print("all stops at same location url: ${response.request.url}");
 
@@ -75,45 +73,28 @@ class MBTAService {
       APIRequestCounter.incrementCalls('all stops at same location');
     }
 
-    List<Stop> stops = List();
-    final jsonData = json.decode(response.body)['data'];
-    if (jsonData == null) {
-      throw Exception('Json data is null. Body: ${response.body}');
-    }
-    for (final obj in jsonData) {
-      if (obj['attributes']['name'] == stop.name) {
-        stops.add(Stop.from(obj));
-      }
-    }
-    stops.sort((stop1, stop2) => stop1.lineName.compareTo(stop2.lineName));
-    print('stops: ${stops.toString()}');
-    assert(stops.length == 1 || stops.length == 2 || stops.length == 4);
-    return stops;
+    return _jsonToListOfStops(response);
   }
 
   static Future<List<Alert>> fetchAlertsForStop(
       {@required String stopId}) async {
-    final response =
-        await http.get("$baseURL/alerts?api_key=$apiKey&filter[stop]=$stopId");
+    final response = await http.get("$newAPIURL/$alertsRoute?stopId=$stopId");
 
     if (APIRequestCounter.debug) {
       APIRequestCounter.incrementCalls('alerts');
     }
 
     List<Alert> alerts = List();
-    final jsonData = json.decode(response.body)['data'];
-    if (jsonData == null) {
-      throw Exception('Json data is null. Body: ${response.body}');
-    }
-    for (final obj in jsonData) {
-      alerts.add(Alert.from(obj));
+    final jsonData = json.decode(response.body)['body'];
+    for (final alert in jsonData) {
+      alerts.add(Alert.fromJson(alert));
     }
     return alerts;
   }
 
   static List<Stop> _jsonToListOfStops(http.Response response) {
     List<Stop> list = List<Stop>();
-    final jsonData = json.decode(response.body)['data'];
+    final jsonData = json.decode(response.body)['body'];
     if (jsonData == null) {
       throw Exception('Json data is null. Body: ${response.body}');
     }
