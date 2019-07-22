@@ -15,6 +15,8 @@ class MBTAService {
   static const stopsAtSameLocationRoute = "/stops/location/";
   static const alertsRoute = "/stops/alerts/";
   static const rangeInMiles = 100;
+  static const apiKey = 'dc44b30101114e88b45041a4a9b65e06';
+  static const baseURL = 'https://api-v3.mbta.com';
 
   // returns a list of the 2 stops that is closest to the given location data
   // will be the same stop, but both directions

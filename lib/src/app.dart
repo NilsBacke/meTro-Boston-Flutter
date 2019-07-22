@@ -1,13 +1,19 @@
 // import 'package:firebase_analytics/firebase_analytics.dart';
 // import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+import 'package:mbta_companion/src/state/state.dart';
+import 'package:redux/redux.dart';
 import 'home.dart';
+import 'package:mbta_companion/src/state/reducers/reducers.dart';
 
 // FirebaseAnalytics analytics = FirebaseAnalytics();
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Store<AppState> store =
+        Store<AppState>(appReducer, initialState: AppState.initial());
+
     return MaterialApp(
       title: "Boston Subway Companion",
       debugShowCheckedModeBanner: false,

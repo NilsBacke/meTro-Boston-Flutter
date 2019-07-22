@@ -2,25 +2,10 @@
 import 'dart:async';
 import 'package:great_circle_distance/great_circle_distance.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 
 class LocationService {
-  static LocationData _currentLocation;
-
   static Future<LocationData> get currentLocation async {
-    if (_currentLocation != null) {
-      return _currentLocation;
-    }
-
-    final loc = await _loadCurrentLocation();
-    _currentLocation = loc;
-    return loc;
-  }
-
-  static Future<LocationData> _loadCurrentLocation() async {
-    // return await Geolocator()
-    //     .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     return await Location().getLocation();
   }
 

@@ -9,6 +9,7 @@ class Alert {
   String description;
   DateTime updatedAt;
 
+  static const stopIdKey = "stopId";
   static const idKey = "id";
   static const startDateKey = "startDate";
   static const endDateKey = "endDate";
@@ -30,6 +31,7 @@ class Alert {
       this.updatedAt});
 
   Alert.fromJson(parsedJson) {
+    this.stopId = parsedJson[stopIdKey];
     this.id = parsedJson[idKey];
     this.startDate = DateTime.parse(parsedJson[startDateKey]);
     this.endDate = DateTime.parse(parsedJson[endDateKey]);
