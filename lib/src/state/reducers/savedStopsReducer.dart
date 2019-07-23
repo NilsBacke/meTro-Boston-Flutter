@@ -6,8 +6,12 @@ final Reducer<SavedStopsState> savedStopsReducer = combineReducers([
   TypedReducer(savedStopsFetchSuccess),
   TypedReducer(savedStopsFetchPending),
   TypedReducer(savedStopsFetchFailure),
-  TypedReducer(addSavedStop),
-  TypedReducer(removeSavedStop),
+  TypedReducer(savedStopsAddSuccess),
+  TypedReducer(savedStopsAddPending),
+  TypedReducer(savedStopsAddFailure),
+  TypedReducer(savedStopsRemoveSuccess),
+  TypedReducer(savedStopsRemovePending),
+  TypedReducer(savedStopsRemoveFailure),
 ]);
 
 SavedStopsState savedStopsFetchSuccess(
@@ -27,18 +31,42 @@ SavedStopsState savedStopsFetchFailure(
       action.savedStopsErrorMessage);
 }
 
-SavedStopsState addSavedStop(
-    SavedStopsState savedStopsState, AddSavedStop action) {
+SavedStopsState savedStopsAddSuccess(
+    SavedStopsState savedStopsState, SavedStopsAddSuccess action) {
   return SavedStopsState(
       List.unmodifiable(savedStopsState.savedStops..add(action.stop)),
-      savedStopsState.isSavedStopsLoading,
-      savedStopsState.savedStopsErrorMessage);
+      false,
+      '');
 }
 
-SavedStopsState removeSavedStop(
-    SavedStopsState savedStopsState, RemoveSavedStop action) {
+SavedStopsState savedStopsAddPending(
+    SavedStopsState savedStopsState, SavedStopsAddPending action) {
+  return SavedStopsState(
+      List.unmodifiable(savedStopsState.savedStops), true, '');
+}
+
+SavedStopsState savedStopsAddFailure(
+    SavedStopsState savedStopsState, SavedStopsAddFailure action) {
+  return SavedStopsState(List.unmodifiable(savedStopsState.savedStops), false,
+      action.savedStopsAddErrorMessage);
+}
+
+SavedStopsState savedStopsRemoveSuccess(
+    SavedStopsState savedStopsState, SavedStopsRemoveSuccess action) {
   return SavedStopsState(
       List.unmodifiable(savedStopsState.savedStops..remove(action.stop)),
-      savedStopsState.isSavedStopsLoading,
-      savedStopsState.savedStopsErrorMessage);
+      false,
+      '');
+}
+
+SavedStopsState savedStopsRemovePending(
+    SavedStopsState savedStopsState, SavedStopsRemovePending action) {
+  return SavedStopsState(
+      List.unmodifiable(savedStopsState.savedStops), true, '');
+}
+
+SavedStopsState savedStopsRemoveFailure(
+    SavedStopsState savedStopsState, SavedStopsRemoveFailure action) {
+  return SavedStopsState(List.unmodifiable(savedStopsState.savedStops), false,
+      action.savedStopsRemoveErrorMessage);
 }

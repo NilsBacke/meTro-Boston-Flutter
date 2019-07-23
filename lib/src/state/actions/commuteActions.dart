@@ -13,3 +13,31 @@ class CommuteFetchFailure {
 
   CommuteFetchFailure(this.commuteErrorMessage);
 }
+
+class CommuteSavePending {}
+
+class CommuteSaveSuccess {
+  final Commute commute;
+
+  CommuteSaveSuccess(this.commute);
+}
+
+class CommuteSaveFailure {
+  final String commuteSaveErrorMessage;
+
+  CommuteSaveFailure(this.commuteSaveErrorMessage);
+}
+
+class CommuteDeletePending {}
+
+class CommuteDeleteSuccess {
+  final Commute commute;
+
+  CommuteDeleteSuccess(this.commute);
+}
+
+class CommuteDeleteFailure {
+  final String commuteDeleteErrorMessage;
+
+  CommuteDeleteFailure(this.commuteDeleteErrorMessage);
+}

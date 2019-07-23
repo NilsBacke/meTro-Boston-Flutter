@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
+import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import 'package:mbta_companion/src/screens/states/create_commute_state.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/services/permission_service.dart';
+import 'package:mbta_companion/src/state/operations/commuteOperations.dart';
+import 'package:mbta_companion/src/state/operations/locationOperations.dart';
+import 'package:mbta_companion/src/state/operations/nearestStopOperations.dart';
+import 'package:mbta_companion/src/state/state.dart';
 import 'package:mbta_companion/src/utils/timeofday_helper.dart';
 import 'package:mbta_companion/src/widgets/commute_time_circle_combo.dart';
-import '../states/commute_state.dart';
+import 'package:redux/redux.dart';
 import '../../widgets/stop_details_tile.dart';
 
-class CommuteView extends CommuteScreenState {
+class CommuteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -293,5 +298,62 @@ class CommuteView extends CommuteScreenState {
             ],
           );
         });
+  }
+}
+
+// TODO: should split up into sections?
+class _CommuteViewModel {
+  final LocationData location;
+  final bool isLocationLoading;
+  final String locationErrorMessage;
+  final List<Stop> nearestStop;
+  final bool isNearestStopLoading;
+  final String nearestStopErrorMessage;
+  final Commute commute;
+  final bool isCommuteLoading;
+  final String commuteErrorMessage;
+
+  final Function() getLocation;
+  final Function(LocationData) getNearestStop;
+  final Function() getCommute;
+  final Function(Commute) saveCommute;
+  final Function(Commute) deleteCommute;
+
+  _CommuteViewModel(
+      {this.location,
+      this.isLocationLoading,
+      this.locationErrorMessage,
+      this.nearestStop,
+      this.isNearestStopLoading,
+      this.nearestStopErrorMessage,
+      this.commute,
+      this.isCommuteLoading,
+      this.commuteErrorMessage,
+      this.getLocation,
+      this.getNearestStop,
+      this.getCommute,
+      this.saveCommute,
+      this.deleteCommute});
+
+  factory _CommuteViewModel.create(Store<AppState> store) {
+    final state = store.state;
+    return _CommuteViewModel(
+        location: state.locationState.locationData,
+        isLocationLoading: state.locationState.isLocationLoading,
+        locationErrorMessage: state.locationState.locationErrorMessage,
+        nearestStop: state.nearestStopState.nearestStop,
+        isNearestStopLoading: state.nearestStopState.isNearestStopLoading,
+        nearestStopErrorMessage: state.nearestStopState.nearestStopErrorMessage,
+        commute: state.commuteState.commute,
+        isCommuteLoading: state.commuteState.isCommuteLoading,
+        commuteErrorMessage: state.commuteState.commuteErrorMessage,
+        getLocation: () => store.dispatch(fetchLocation()),
+        getNearestStop: (LocationData locationData) =>
+            store.dispatch(fetchNearestStop(locationData)),
+        getCommute: () => store.dispatch(fetchCommute()),
+        saveCommute: (Commute commute) =>
+            store.dispatch(saveCommuteOp(commute)),
+        deleteCommute: (Commute commute) =>
+            store.dispatch(deleteCommuteOp(commute)));
   }
 }

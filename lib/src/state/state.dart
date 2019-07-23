@@ -1,23 +1,37 @@
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/models/alert.dart';
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 
 class AppState {
   final LocationState locationState;
+  final NearestStopState nearestStopState;
   final CommuteState commuteState;
   final SavedStopsState savedStopsState;
   final AllStopsState allStopsState;
   final NearbyStopsState nearbyStopsState;
+  final AlertsState alertsState;
+  final SelectedStopState selectedStopState;
 
-  AppState(this.locationState, this.commuteState, this.savedStopsState,
-      this.allStopsState, this.nearbyStopsState);
+  AppState(
+      this.locationState,
+      this.nearestStopState,
+      this.commuteState,
+      this.savedStopsState,
+      this.allStopsState,
+      this.nearbyStopsState,
+      this.alertsState,
+      this.selectedStopState);
 
   factory AppState.initial() => AppState(
       LocationState.initial(),
+      NearestStopState.initial(),
       CommuteState.initial(),
       SavedStopsState.initial(),
       AllStopsState.initial(),
-      NearbyStopsState.initial());
+      NearbyStopsState.initial(),
+      AlertsState.initial(),
+      SelectedStopState.initial());
 }
 
 class LocationState {
@@ -75,4 +89,35 @@ class NearbyStopsState {
 
   factory NearbyStopsState.initial() =>
       NearbyStopsState(List.unmodifiable([]), false, '');
+}
+
+class NearestStopState {
+  final List<Stop> nearestStop;
+  final bool isNearestStopLoading;
+  final String nearestStopErrorMessage;
+
+  NearestStopState(this.nearestStop, this.isNearestStopLoading,
+      this.nearestStopErrorMessage);
+
+  factory NearestStopState.initial() =>
+      NearestStopState(List.unmodifiable([]), false, '');
+}
+
+class AlertsState {
+  final List<Alert> alerts;
+  final bool isAlertsLoading;
+  final String alertsErrorMessage;
+
+  AlertsState(this.alerts, this.isAlertsLoading, this.alertsErrorMessage);
+
+  factory AlertsState.initial() =>
+      AlertsState(List.unmodifiable([]), false, '');
+}
+
+class SelectedStopState {
+  final Stop stop;
+
+  SelectedStopState(this.stop);
+
+  factory SelectedStopState.initial() => SelectedStopState(null);
 }

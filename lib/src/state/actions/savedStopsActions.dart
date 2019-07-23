@@ -14,14 +14,30 @@ class SavedStopsFetchFailure {
   SavedStopsFetchFailure(this.savedStopsErrorMessage);
 }
 
-class AddSavedStop {
+class SavedStopsAddSuccess {
   final Stop stop;
 
-  AddSavedStop(this.stop);
+  SavedStopsAddSuccess(this.stop);
 }
 
-class RemoveSavedStop {
+class SavedStopsAddPending {}
+
+class SavedStopsAddFailure {
+  final String savedStopsAddErrorMessage;
+
+  SavedStopsAddFailure(this.savedStopsAddErrorMessage);
+}
+
+class SavedStopsRemoveSuccess {
   final Stop stop;
 
-  RemoveSavedStop(this.stop);
+  SavedStopsRemoveSuccess(this.stop);
+}
+
+class SavedStopsRemovePending {}
+
+class SavedStopsRemoveFailure {
+  final String savedStopsRemoveErrorMessage;
+
+  SavedStopsRemoveFailure(this.savedStopsRemoveErrorMessage);
 }
