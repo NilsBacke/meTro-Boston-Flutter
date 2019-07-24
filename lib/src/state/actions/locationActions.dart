@@ -1,4 +1,5 @@
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/services/permission_service.dart';
 
 class LocationFetchSuccess {
   final LocationData locationData;
@@ -9,7 +10,7 @@ class LocationFetchSuccess {
 class LocationFetchPending {}
 
 class LocationFetchFailure {
-  final String locationErrorMessage;
+  final LocationStatus locationErrorStatus;
 
-  LocationFetchFailure(this.locationErrorMessage);
+  LocationFetchFailure(this.locationErrorStatus);
 }

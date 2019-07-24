@@ -2,6 +2,7 @@ import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/alert.dart';
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/models/stop.dart';
+import 'package:mbta_companion/src/services/permission_service.dart';
 
 class AppState {
   final LocationState locationState;
@@ -37,22 +38,24 @@ class AppState {
 class LocationState {
   final LocationData locationData;
   final bool isLocationLoading;
-  final String locationErrorMessage;
+  final LocationStatus locationErrorStatus;
 
   LocationState(
-      this.locationData, this.isLocationLoading, this.locationErrorMessage);
+      this.locationData, this.isLocationLoading, this.locationErrorStatus);
 
-  factory LocationState.initial() => LocationState(null, false, '');
+  factory LocationState.initial() => LocationState(null, false, null);
 }
 
 class CommuteState {
   final Commute commute;
   final bool isCommuteLoading;
   final String commuteErrorMessage;
+  final bool doesCommuteExist;
 
-  CommuteState(this.commute, this.isCommuteLoading, this.commuteErrorMessage);
+  CommuteState(this.commute, this.isCommuteLoading, this.commuteErrorMessage,
+      this.doesCommuteExist);
 
-  factory CommuteState.initial() => CommuteState(null, false, '');
+  factory CommuteState.initial() => CommuteState(null, false, '', null);
 }
 
 class SavedStopsState {

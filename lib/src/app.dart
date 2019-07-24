@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mbta_companion/src/state/state.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 import 'home.dart';
 import 'package:mbta_companion/src/state/reducers/reducers.dart';
+import 'package:redux_logging/redux_logging.dart';
 
 // FirebaseAnalytics analytics = FirebaseAnalytics();
 
 class App extends StatelessWidget {
-  final Store<AppState> store =
-      Store<AppState>(appReducer, initialState: AppState.initial());
+  final Store<AppState> store = Store<AppState>(appReducer,
+      initialState: AppState.initial(),
+      middleware: [thunkMiddleware, LoggingMiddleware.printer()]);
 
   @override
   Widget build(BuildContext context) {

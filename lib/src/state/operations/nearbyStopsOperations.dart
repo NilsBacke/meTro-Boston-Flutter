@@ -13,7 +13,7 @@ ThunkAction fetchNearbyStops(LocationData locationData) {
         store.dispatch(NearbyStopsFetchSuccess(nearbyStops));
       } catch (e) {
         print("$e");
-        store.dispatch(NearbyStopsFetchFailure(e));
+        store.dispatch(NearbyStopsFetchFailure(e.message));
       }
     });
   };

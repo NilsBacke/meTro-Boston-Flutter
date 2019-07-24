@@ -13,7 +13,7 @@ ThunkAction fetchAlertsForStop(Stop stop) {
         store.dispatch(AlertsFetchSuccess(alerts));
       } catch (e) {
         print("$e");
-        store.dispatch(AlertsFetchFailure(e));
+        store.dispatch(AlertsFetchFailure(e.message));
       }
     });
   };

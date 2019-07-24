@@ -2,7 +2,7 @@ import 'package:mbta_companion/src/state/actions/alertsActions.dart';
 import 'package:redux/redux.dart';
 import '../state.dart';
 
-final Reducer<AlertsState> allStopsReducer = combineReducers([
+final Reducer<AlertsState> alertsReducer = combineReducers([
   TypedReducer(alertsFetchSuccess),
   TypedReducer(alertsFetchPending),
   TypedReducer(alertsFetchFailure),

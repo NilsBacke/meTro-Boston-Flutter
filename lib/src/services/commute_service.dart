@@ -13,10 +13,18 @@ class CommuteService {
           .collection("users")
           .document(udid);
       // TODO: change staging
+
       var doc = await docRef.get();
+      if (!doc.exists) {
+        throw new Exception("Doc does not exist"); // TODO: revisit approach
+      }
       return Commute.fromJson(doc.data);
     } catch (e) {
-      throw new Exception("Could not load commute");
+      if (e.message == "Doc does not exist") {
+        throw new Exception(e.message);
+      } else {
+        throw new Exception("Could not load commute");
+      }
     }
   }
 

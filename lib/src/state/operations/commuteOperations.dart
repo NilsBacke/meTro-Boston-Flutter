@@ -13,7 +13,12 @@ ThunkAction fetchCommute() {
         store.dispatch(CommuteFetchSuccess(commute));
       } catch (e) {
         print("$e");
-        store.dispatch(CommuteFetchFailure(e));
+        if (e.message == "Doc does not exist") {
+          store.dispatch(CommuteSetExists(false));
+          store.dispatch(CommuteFetchSuccess(null));
+          return;
+        }
+        store.dispatch(CommuteFetchFailure(e.message));
       }
     });
   };
@@ -28,7 +33,7 @@ ThunkAction saveCommuteOp(Commute commute) {
         store.dispatch(CommuteFetchSuccess(commute));
       } catch (e) {
         print("$e");
-        store.dispatch(CommuteSaveFailure(e));
+        store.dispatch(CommuteSaveFailure(e.message));
       }
     });
   };
@@ -43,7 +48,7 @@ ThunkAction deleteCommuteOp(Commute commute) {
         store.dispatch(CommuteDeleteSuccess(commute));
       } catch (e) {
         print("$e");
-        store.dispatch(CommuteDeleteFailure(e));
+        store.dispatch(CommuteDeleteFailure(e.message));
       }
     });
   };

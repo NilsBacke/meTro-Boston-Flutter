@@ -41,3 +41,9 @@ class CommuteDeleteFailure {
 
   CommuteDeleteFailure(this.commuteDeleteErrorMessage);
 }
+
+class CommuteSetExists {
+  final bool exists;
+
+  CommuteSetExists(this.exists);
+}

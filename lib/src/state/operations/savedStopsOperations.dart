@@ -13,7 +13,7 @@ ThunkAction fetchSavedStops() {
         store.dispatch(SavedStopsFetchSuccess(savedStops));
       } catch (e) {
         print("$e");
-        store.dispatch(SavedStopsFetchFailure(e));
+        store.dispatch(SavedStopsFetchFailure(e.message));
       }
     });
   };
@@ -28,7 +28,7 @@ ThunkAction addSavedStop(Stop stop) {
         store.dispatch(SavedStopsAddSuccess(stop));
       } catch (e) {
         print("$e");
-        store.dispatch(SavedStopsAddFailure(e));
+        store.dispatch(SavedStopsAddFailure(e.message));
       }
     });
   };
@@ -43,7 +43,7 @@ ThunkAction removeSavedStop(Stop stop) {
         store.dispatch(SavedStopsRemoveSuccess(stop));
       } catch (e) {
         print("$e");
-        store.dispatch(SavedStopsRemoveFailure(e));
+        store.dispatch(SavedStopsRemoveFailure(e.message));
       }
     });
   };

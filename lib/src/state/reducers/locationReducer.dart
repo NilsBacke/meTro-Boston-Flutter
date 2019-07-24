@@ -10,15 +10,15 @@ final Reducer<LocationState> locationDataReducer = combineReducers([
 
 LocationState locationFetchSuccess(
     LocationState locationState, LocationFetchSuccess action) {
-  return LocationState(action.locationData, false, '');
+  return LocationState(action.locationData, false, null);
 }
 
 LocationState locationFetchPending(
     LocationState locationState, LocationFetchPending action) {
-  return LocationState(null, true, '');
+  return LocationState(null, true, null);
 }
 
 LocationState locationFetchFailure(
     LocationState locationState, LocationFetchFailure action) {
-  return LocationState(null, false, action.locationErrorMessage);
+  return LocationState(null, false, action.locationErrorStatus);
 }
