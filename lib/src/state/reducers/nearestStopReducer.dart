@@ -16,11 +16,19 @@ NearestStopState nearestStopFetchSuccess(
 NearestStopState nearestStopFetchPending(
     NearestStopState nearestStopState, NearestStopFetchPending action) {
   return NearestStopState(
-      List.unmodifiable(nearestStopState.nearestStop), true, '');
+      nearestStopState.nearestStop == null
+          ? null
+          : List.unmodifiable(nearestStopState.nearestStop),
+      true,
+      '');
 }
 
 NearestStopState nearestStopFetchFailure(
     NearestStopState nearestStopState, NearestStopFetchFailure action) {
-  return NearestStopState(List.unmodifiable(nearestStopState.nearestStop),
-      false, action.nearestStopErrorMessage);
+  return NearestStopState(
+      nearestStopState.nearestStop == null
+          ? null
+          : List.unmodifiable(nearestStopState.nearestStop),
+      false,
+      action.nearestStopErrorMessage);
 }

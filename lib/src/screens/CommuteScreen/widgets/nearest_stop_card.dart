@@ -43,13 +43,13 @@ class _NearestStopCardState extends State<NearestStopCard> {
       builder: (context, viewModel) {
         if (viewModel.location == null &&
             !viewModel.isLocationLoading &&
-            viewModel.locationErrorStatus != null) {
+            viewModel.locationErrorStatus == null) {
           viewModel.getLocation();
         }
 
         if (viewModel.nearestStop == null &&
             !viewModel.isNearestStopLoading &&
-            viewModel.nearestStopErrorMessage != '' &&
+            viewModel.nearestStopErrorMessage == '' &&
             viewModel.location != null) {
           viewModel.getNearestStop(viewModel.location);
         }
@@ -107,7 +107,7 @@ class _NearestStopCardState extends State<NearestStopCard> {
   }
 
   nearestStopCard(context, _NearestStopViewModel viewModel) {
-    if (viewModel.nearestStop.length == 0) {
+    if (viewModel.nearestStop == null || viewModel.nearestStop.length == 0) {
       return blankNearestStopCard(
         child: Text(
           'No stops within ${MBTAService.rangeInMiles} miles',

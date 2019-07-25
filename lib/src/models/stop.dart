@@ -67,8 +67,8 @@ class Stop {
   Stop.from(Map<String, dynamic> parsedJson) {
     this.id = parsedJson[idKey].toString();
     this.name = parsedJson[nameKey];
-    this.latitude = double.parse(parsedJson[latitudeKey]);
-    this.longitude = double.parse(parsedJson[longitudeKey]);
+    this.latitude = parsedJson[latitudeKey];
+    this.longitude = parsedJson[longitudeKey];
     this.directionDestination = parsedJson[directionDestinationKey];
     this.directionName = parsedJson[directionNameKey];
     this.lineName = parsedJson[lineNameKey];
@@ -81,8 +81,8 @@ class Stop {
   Map<String, dynamic> toJson() => {
         idKey: id,
         nameKey: name,
-        longitudeKey: longitude.toString(),
-        latitudeKey: latitude.toString(),
+        longitudeKey: longitude,
+        latitudeKey: latitude,
         directionDestinationKey: directionDestination,
         directionNameKey: directionName,
         lineNameKey: lineName,

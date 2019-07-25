@@ -10,6 +10,7 @@ import 'dart:convert';
 class MBTAService {
   static const newAPIURL =
       "https://ad3zbfaf1i.execute-api.us-east-1.amazonaws.com/develop";
+  static const awsAPIKey = "q9sdm8YIPS2M8wf3frWic56cqZ4WSIuM4NNnYoKf";
   static const nearestStopRoute = "/stops/nearest/";
   static const nearbyStopsRoute = "/stops/allnearby/";
   static const stopsAtSameLocationRoute = "/stops/location/";
@@ -21,27 +22,31 @@ class MBTAService {
   // returns a list of the 2 stops that is closest to the given location data
   // will be the same stop, but both directions
   static Future<List<Stop>> fetchNearestStop(LocationData locationData) async {
-    final response = await http.get(
-        "$newAPIURL$nearestStopRoute?latitude=${locationData.latitude}&longitude=${locationData.longitude}");
-    print("response url: ${response.request.url}");
+    try {
+      final response = await http.get(
+          "$newAPIURL$nearestStopRoute?latitude=${locationData.latitude}&longitude=${locationData.longitude}",
+          headers: {"x-api-key": awsAPIKey});
+      print("response url: ${response.request.url}");
 
-    if (APIRequestCounter.debug) {
-      APIRequestCounter.incrementCalls('nearest stop');
+      if (APIRequestCounter.debug) {
+        APIRequestCounter.incrementCalls('nearest stop');
+      }
+
+      final jsonResult = json.decode(response.body);
+
+      if (response.statusCode != 200) {
+        print('Error: ' + jsonResult["error"]);
+        return null;
+      }
+
+      List<Stop> list = List<Stop>(2);
+      list[0] = (Stop.from(jsonResult[0]));
+      list[1] = (Stop.from(jsonResult[1]));
+      return list;
+    } on Exception catch (e) {
+      print(e.toString());
+      throw new Exception("Could not fetch nearest stop");
     }
-
-    final jsonResult = json.decode(response.body);
-
-    if (jsonResult['statusCode'] != 200) {
-      print('Error: ' + jsonResult['body']);
-      return null;
-    }
-
-    final jsonData = jsonResult['body'];
-
-    List<Stop> list = List<Stop>(2);
-    list[0] = (Stop.from(jsonData[0]));
-    list[1] = (Stop.from(jsonData[1]));
-    return list;
   }
 
   // range in miles
@@ -96,7 +101,7 @@ class MBTAService {
 
   static List<Stop> _jsonToListOfStops(http.Response response) {
     List<Stop> list = List<Stop>();
-    final jsonData = json.decode(response.body)['body'];
+    final jsonData = json.decode(response.body);
     if (jsonData == null) {
       throw Exception('Json data is null. Body: ${response.body}');
     }

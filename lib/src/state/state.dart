@@ -33,6 +33,11 @@ class AppState {
       NearbyStopsState.initial(),
       AlertsState.initial(),
       SelectedStopState.initial());
+
+  @override
+  String toString() {
+    return "\n{ \nlocationState: ${this.locationState.toString()}, \nnearestStopState: ${this.nearestStopState.toString()} \ncommuteState: ${this.commuteState.toString()}, \nsavedStopsState: ${this.savedStopsState.toString()}, \nallStopsState: ${this.allStopsState.toString()}, \nnearbyStopsState: ${this.nearbyStopsState.toString()}, \nalertsState: ${this.alertsState.toString()}, \nselectedStopState: ${this.selectedStopState.toString()} \n}\n";
+  }
 }
 
 class LocationState {
@@ -44,6 +49,27 @@ class LocationState {
       this.locationData, this.isLocationLoading, this.locationErrorStatus);
 
   factory LocationState.initial() => LocationState(null, false, null);
+
+  @override
+  String toString() {
+    return "{ locationData: ${this.locationData.toString()}, isLocationLoading: ${this.isLocationLoading}, locationErrorStatus: ${this.locationErrorStatus.toString()} }";
+  }
+}
+
+class NearestStopState {
+  final List<Stop> nearestStop;
+  final bool isNearestStopLoading;
+  final String nearestStopErrorMessage;
+
+  NearestStopState(this.nearestStop, this.isNearestStopLoading,
+      this.nearestStopErrorMessage);
+
+  factory NearestStopState.initial() => NearestStopState(null, false, '');
+
+  @override
+  String toString() {
+    return "{ nearestStop: ${this.nearestStop.toString()}, isNearestStopLoading: ${this.isNearestStopLoading}, nearestStopErrorMessage: ${this.nearestStopErrorMessage} }";
+  }
 }
 
 class CommuteState {
@@ -56,6 +82,11 @@ class CommuteState {
       this.doesCommuteExist);
 
   factory CommuteState.initial() => CommuteState(null, false, '', null);
+
+  @override
+  String toString() {
+    return "{ commute: ${this.commute.toString()}, isCommuteLoading: ${this.isCommuteLoading}, commuteErrorMessage: ${this.commuteErrorMessage}, doesCommuteExist: ${this.doesCommuteExist} }";
+  }
 }
 
 class SavedStopsState {
@@ -68,6 +99,11 @@ class SavedStopsState {
 
   factory SavedStopsState.initial() =>
       SavedStopsState(List.unmodifiable([]), false, '');
+
+  @override
+  String toString() {
+    return "{ savedStops: ${this.savedStops.toString()}, isSavedStopsLoading: ${this.isSavedStopsLoading}, savedStopsErrorMessage: ${this.savedStopsErrorMessage} }";
+  }
 }
 
 class AllStopsState {
@@ -80,6 +116,11 @@ class AllStopsState {
 
   factory AllStopsState.initial() =>
       AllStopsState(List.unmodifiable([]), false, '');
+
+  @override
+  String toString() {
+    return "{ allStops: ${this.allStops.toString()}, isAllStopsLoading: ${this.isAllStopsLoading}, allStopsErrorMessage: ${this.allStopsErrorMessage} }";
+  }
 }
 
 class NearbyStopsState {
@@ -92,18 +133,11 @@ class NearbyStopsState {
 
   factory NearbyStopsState.initial() =>
       NearbyStopsState(List.unmodifiable([]), false, '');
-}
 
-class NearestStopState {
-  final List<Stop> nearestStop;
-  final bool isNearestStopLoading;
-  final String nearestStopErrorMessage;
-
-  NearestStopState(this.nearestStop, this.isNearestStopLoading,
-      this.nearestStopErrorMessage);
-
-  factory NearestStopState.initial() =>
-      NearestStopState(List.unmodifiable([]), false, '');
+  @override
+  String toString() {
+    return "{ nearbyStops: ${this.nearbyStops.toString()}, isNearbyStopsLoading: ${this.isNearbyStopsLoading}, nearbyStopsErrorMessage: ${this.nearbyStopsErrorMessage} }";
+  }
 }
 
 class AlertsState {
@@ -115,6 +149,11 @@ class AlertsState {
 
   factory AlertsState.initial() =>
       AlertsState(List.unmodifiable([]), false, '');
+
+  @override
+  String toString() {
+    return "{ alerts: ${this.alerts.toString()}, isAlertsLoading: ${this.isAlertsLoading}, alertsErrorMessage: ${this.alertsErrorMessage} }";
+  }
 }
 
 class SelectedStopState {
@@ -123,4 +162,9 @@ class SelectedStopState {
   SelectedStopState(this.stop);
 
   factory SelectedStopState.initial() => SelectedStopState(null);
+
+  @override
+  String toString() {
+    return "{ selectedStop: ${this.stop.toString()} }";
+  }
 }
