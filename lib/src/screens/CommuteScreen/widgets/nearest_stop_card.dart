@@ -20,23 +20,6 @@ class NearestStopCard extends StatefulWidget {
 
 class _NearestStopCardState extends State<NearestStopCard> {
   @override
-  void initState() {
-    super.initState();
-    // final store = StoreProvider.of<AppState>(context);
-    // final viewModel = _NearestStopViewModel.create(store);
-
-    // if (viewModel.location == null && !viewModel.isLocationLoading) {
-    //   viewModel.getLocation();
-    // }
-
-    // if (viewModel.nearestStop == null &&
-    //     !viewModel.isNearestStopLoading &&
-    //     viewModel.location != null) {
-    //   viewModel.getNearestStop(viewModel.location);
-    // }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _NearestStopViewModel>(
       converter: (store) => _NearestStopViewModel.create(store),
@@ -156,12 +139,15 @@ class _NearestStopCardState extends State<NearestStopCard> {
           ),
         ),
       ),
-      trailing: Text(
-        viewModel.location != null
-            ? '${getDistanceFromNearestStop(viewModel.location, viewModel.nearestStop)} mi'
-            : '---',
-        style: Theme.of(context).textTheme.body2,
-      ),
+      trailing: FutureBuilder(
+          future: getDistanceFromNearestStop(
+              viewModel.location, viewModel.nearestStop),
+          builder: (context, snapshot) {
+            return Text(
+              snapshot.hasData ? '${snapshot.data} mi' : '---',
+              style: Theme.of(context).textTheme.body2,
+            );
+          }),
     );
   }
 }

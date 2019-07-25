@@ -18,17 +18,6 @@ class CommuteScreen extends StatefulWidget {
 
 class _CommuteScreenState extends State<CommuteScreen> {
   @override
-  void initState() {
-    super.initState();
-    // final store = StoreProvider.of<AppState>(context);
-    // final viewModel = _CommuteViewModel.create(store);
-
-    // if (viewModel.commute == null && !viewModel.isCommuteLoading) {
-    //   viewModel.getCommute();
-    // }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: ListView(
