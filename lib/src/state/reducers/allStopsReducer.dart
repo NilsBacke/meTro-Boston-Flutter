@@ -15,10 +15,11 @@ AllStopsState allStopsFetchSuccess(
 
 AllStopsState allStopsFetchPending(
     AllStopsState allStopsState, AllStopsFetchPending action) {
-  return AllStopsState(null, true, '');
+  return AllStopsState(List.unmodifiable([]), true, '');
 }
 
 AllStopsState allStopsFetchFailure(
     AllStopsState allStopsState, AllStopsFetchFailure action) {
-  return AllStopsState(null, false, action.allStopsErrorMessage);
+  return AllStopsState(
+      List.unmodifiable([]), false, action.allStopsErrorMessage);
 }

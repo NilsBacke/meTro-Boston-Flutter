@@ -15,10 +15,11 @@ NearbyStopsState nearbyStopsFetchSuccess(
 
 NearbyStopsState nearbyStopsFetchPending(
     NearbyStopsState nearbyStopsState, NearbyStopsFetchPending action) {
-  return NearbyStopsState(null, true, '');
+  return NearbyStopsState(List.unmodifiable([]), true, '');
 }
 
 NearbyStopsState nearbyStopsFetchFailure(
     NearbyStopsState nearbyStopsState, NearbyStopsFetchFailure action) {
-  return NearbyStopsState(null, false, action.nearbyStopsErrorMessage);
+  return NearbyStopsState(
+      List.unmodifiable([]), false, action.nearbyStopsErrorMessage);
 }

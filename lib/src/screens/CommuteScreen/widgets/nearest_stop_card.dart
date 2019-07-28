@@ -46,6 +46,16 @@ class _NearestStopCardState extends State<NearestStopCard> {
         if (viewModel.locationErrorStatus == LocationStatus.noService) {
           return locationServicesNotEnabled(context);
         }
+        if (viewModel.nearestStop == null ||
+            viewModel.nearestStop.length == 0) {
+          return blankNearestStopCard(
+            child: Text(
+              'No stops within ${MBTAService.rangeInMiles} miles',
+              style: Theme.of(context).textTheme.body2,
+              textAlign: TextAlign.center,
+            ),
+          );
+        }
         return nearestStopCard(context, viewModel);
       },
     );
@@ -90,15 +100,6 @@ class _NearestStopCardState extends State<NearestStopCard> {
   }
 
   nearestStopCard(context, _NearestStopViewModel viewModel) {
-    if (viewModel.nearestStop == null || viewModel.nearestStop.length == 0) {
-      return blankNearestStopCard(
-        child: Text(
-          'No stops within ${MBTAService.rangeInMiles} miles',
-          style: Theme.of(context).textTheme.body2,
-          textAlign: TextAlign.center,
-        ),
-      );
-    }
     return ThreePartCard(
       'Nearest Stop',
       GestureDetector(

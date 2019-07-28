@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/alert.dart';
-import 'package:mbta_companion/src/utils/api_request_counter.dart';
+import 'package:mbta_companion/src/services/utils/makeRequest.dart';
 import '../models/stop.dart';
 import 'dart:convert';
+import 'utils/executeCall.dart';
 
 class MBTAService {
   static const newAPIURL =
@@ -22,48 +22,32 @@ class MBTAService {
   // returns a list of the 2 stops that is closest to the given location data
   // will be the same stop, but both directions
   static Future<List<Stop>> fetchNearestStop(LocationData locationData) async {
-    try {
-      final response = await http.get(
-          "$newAPIURL$nearestStopRoute?latitude=${locationData.latitude}&longitude=${locationData.longitude}",
-          headers: {"x-api-key": awsAPIKey});
-      print("response url: ${response.request.url}");
+    final route =
+        "$newAPIURL$nearestStopRoute?latitude=${locationData.latitude}&longitude=${locationData.longitude}";
+    final result =
+        await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
-      if (APIRequestCounter.debug) {
-        APIRequestCounter.incrementCalls('nearest stop');
-      }
-
-      final jsonResult = json.decode(response.body);
-
-      if (response.statusCode != 200) {
-        print('Error: ' + jsonResult["error"]);
-        return null;
-      }
-
-      List<Stop> list = List<Stop>(2);
-      list[0] = (Stop.from(jsonResult[0]));
-      list[1] = (Stop.from(jsonResult[1]));
-      return list;
-    } on Exception catch (e) {
-      print(e.toString());
-      throw new Exception("Could not fetch nearest stop");
+    if (result.hasError) {
+      throw new Exception(result.error);
     }
+
+    return _jsonToListOfStops(result.payload);
   }
 
   // range in miles
   static Future<List<Stop>> fetchNearbyStops(LocationData locationData,
       {int range}) async {
-    final response = await http.get(
+    final route =
         "$newAPIURL$nearbyStopsRoute?latitude=${locationData.latitude}&longitude=${locationData.longitude}" +
-            (range != null ? "&range=" + range.toString() : ""));
-    print("response url: ${response.request.url}");
+            (range != null ? "&range=" + range.toString() : "");
+    final result =
+        await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
-    if (APIRequestCounter.debug) {
-      APIRequestCounter.incrementCalls('nearby stops');
+    if (result.hasError) {
+      throw new Exception(result.error);
     }
 
-    // TODO: error handling
-
-    return _jsonToListOfStops(response);
+    return _jsonToListOfStops(result.payload);
   }
 
   static Future<List<Stop>> fetchAllStops(LocationData locationData) async {
@@ -71,40 +55,36 @@ class MBTAService {
   }
 
   static Future<List<Stop>> fetchAllStopsAtSameLocation(Stop stop) async {
-    final response = await http.post("$newAPIURL$stopsAtSameLocationRoute",
-        body: json.encode(stop));
+    final route = "$newAPIURL$stopsAtSameLocationRoute";
+    final result = await makeRequest(Method.POST, route,
+        headers: {"x-api-key": awsAPIKey}, body: json.encode(stop));
 
-    print("all stops at same location url: ${response.request.url}");
-
-    if (APIRequestCounter.debug) {
-      APIRequestCounter.incrementCalls('all stops at same location');
+    if (result.hasError) {
+      throw new Exception(result.error);
     }
 
-    return _jsonToListOfStops(response);
+    return _jsonToListOfStops(result);
   }
 
   static Future<List<Alert>> fetchAlertsForStop(
       {@required String stopId}) async {
-    final response = await http.get("$newAPIURL/$alertsRoute?stopId=$stopId");
+    final route = "$newAPIURL/$alertsRoute?stopId=$stopId";
+    final result =
+        await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
-    if (APIRequestCounter.debug) {
-      APIRequestCounter.incrementCalls('alerts');
+    if (result.hasError) {
+      throw new Exception(result.error);
     }
 
     List<Alert> alerts = List();
-    final jsonData = json.decode(response.body)['body'];
-    for (final alert in jsonData) {
+    for (final alert in result.payload) {
       alerts.add(Alert.fromJson(alert));
     }
     return alerts;
   }
 
-  static List<Stop> _jsonToListOfStops(http.Response response) {
+  static List<Stop> _jsonToListOfStops(dynamic jsonData) {
     List<Stop> list = List<Stop>();
-    final jsonData = json.decode(response.body);
-    if (jsonData == null) {
-      throw Exception('Json data is null. Body: ${response.body}');
-    }
     for (final obj in jsonData) {
       list.add(Stop.from(obj));
     }

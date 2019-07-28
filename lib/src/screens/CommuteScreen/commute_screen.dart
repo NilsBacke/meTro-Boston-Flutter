@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/widgets/nearest_stop_card.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/widgets/three_part_card.dart';
+import 'package:mbta_companion/src/screens/CreateCommuteScreen/create_commute_view.dart';
 import 'package:mbta_companion/src/state/operations/commuteOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
 import 'package:mbta_companion/src/utils/navigation_utils.dart';
@@ -153,15 +154,12 @@ class _CommuteScreenState extends State<CommuteScreen> {
   }
 
   Future<void> editCommute(context, _CommuteViewModel viewModel) async {
-    // Navigator.of(context)
-    //     .push(
-    //       MaterialPageRoute(
-    //         builder: (context) => CreateCommuteScreen(
-    //           commute: viewModel.commute,
-    //         ),
-    //       ),
-    //     )
-    //     .then((val) => viewModel.getCommute());
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => CreateCommuteScreen(),
+      ),
+    );
+    // .then((val) => viewModel.getCommute());
   }
 
   void showDeleteDialog(context, _CommuteViewModel viewModel) {
