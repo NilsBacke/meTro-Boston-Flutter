@@ -4,8 +4,8 @@ import 'package:mbta_companion/src/screens/CreateCommuteScreen/utils/choose_stop
 import 'package:mbta_companion/src/screens/CreateCommuteScreen/widgets/empty_card.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
 
-Widget stopContainer(
-    BuildContext context, bool homeStop, String title, String body, Stop stop) {
+Widget stopContainer(BuildContext context, bool homeStop, String title,
+    String body, Stop stop, Function(bool) onSelectStop) {
   return Container(
     padding: EdgeInsets.all(12.0),
     child: Column(
@@ -19,12 +19,12 @@ Widget stopContainer(
           ),
         ),
         stop == null
-            ? emptyCard(context, homeStop, body)
+            ? emptyCard(context, homeStop, body, onSelectStop)
             : StopCard(
                 stop: stop,
                 timeCircles: false,
                 onTap: (_) {
-                  chooseStop(context, homeStop, currentStop: stop);
+                  onSelectStop(homeStop);
                 },
               ),
       ],

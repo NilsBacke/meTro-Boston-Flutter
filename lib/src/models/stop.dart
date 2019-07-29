@@ -86,9 +86,9 @@ class Stop {
         directionDestinationKey: directionDestination,
         directionNameKey: directionName,
         lineNameKey: lineName,
-        textColorHex: textColorHex,
-        lineColorHex: lineColorHex,
-        lineInitials: lineInitials,
-        directionDescription: directionDescription,
+        textColorHexKey: textColorHex,
+        lineColorHexKey: lineColorHex,
+        lineInitialsKey: lineInitials,
+        directionDescriptionKey: directionDescription,
       };
 }

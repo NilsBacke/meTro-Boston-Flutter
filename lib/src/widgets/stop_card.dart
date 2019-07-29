@@ -44,14 +44,16 @@ class StopCard extends StatelessWidget {
     return FutureBuilder(
       future: distanceFuture,
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Container();
+        final otherInfo = [stop.directionDescription];
+        if (snapshot.hasData) {
+          otherInfo.add('${snapshot.data} mi');
         }
+
         return VariablePartTile(
           stop.id,
           title: stop.name,
           subtitle1: stop.lineName,
-          otherInfo: [stop.directionDescription, '${snapshot.data} mi'],
+          otherInfo: otherInfo,
           lineInitials: stop.lineInitials,
           lineColor: stop.lineColor,
           overflow: this.overflow,

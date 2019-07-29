@@ -35,7 +35,7 @@ Future<void> createCommute(
   }
 
   final newCommute = Commute(stop1, stop2, arrivalTime, departureTime);
-  viewModel.saveCommute(newCommute);
 
+  viewModel.saveCommute(newCommute);
   Navigator.of(context).pop();
 }

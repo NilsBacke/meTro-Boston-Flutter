@@ -50,15 +50,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
       return StopsLoadingIndicator();
     }
 
-    if (filteredStops == null || filteredStops.length == 0) {
+    if ((filteredStops == null || filteredStops.length == 0) &&
+        viewModel.allStops.length != 0) {
       this.filteredStops = viewModel.allStops;
     }
 
-    if (filteredStops.length == 0 && viewModel.allStops.length != 0) {
+    if (filteredStops.length == 0) {
       return errorTextWidget();
     }
 
-    return StopsListView(filteredStops,
+    return StopsListView(filteredStops, viewModel.location != null,
         onTap: widget.onTap, timeCircles: widget.timeCircles);
   }
 

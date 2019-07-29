@@ -29,9 +29,14 @@ class _CommuteScreenState extends State<CommuteScreen> {
             builder: (context, _CommuteViewModel viewModel) {
               if (viewModel.commute == null &&
                   !viewModel.isCommuteLoading &&
+                  viewModel.commuteErrorMessage.length == 0 &&
                   (viewModel.commuteExists == null ||
                       viewModel.commuteExists == true)) {
                 viewModel.getCommute();
+              }
+
+              if (viewModel.commuteErrorMessage.length != 0) {
+                return commuteCardWithText(viewModel.commuteErrorMessage);
               }
 
               if (viewModel.isCommuteLoading) {
@@ -136,16 +141,19 @@ class _CommuteScreenState extends State<CommuteScreen> {
 
   Widget emptyCommuteCard(context, _CommuteViewModel viewModel) {
     return GestureDetector(
-      onTap: () => editCommute(context, viewModel),
-      child: Container(
-        height: 200.0,
-        child: Card(
-          child: Center(
-            child: Text(
-              "Tap here to create a commute",
-              style: TextStyle(
-                color: Colors.white54,
-              ),
+        onTap: () => editCommute(context, viewModel),
+        child: commuteCardWithText("Tap here to create a commute"));
+  }
+
+  Widget commuteCardWithText(String text) {
+    return Container(
+      height: 200.0,
+      child: Card(
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.white54,
             ),
           ),
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
-import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
 
 class StopsListView extends StatelessWidget {
@@ -10,8 +9,9 @@ class StopsListView extends StatelessWidget {
   final bool dismissable;
   final Function(Stop) onDismiss;
   final bool timeCircles;
+  final bool permissionsGranted;
 
-  StopsListView(this.stops,
+  StopsListView(this.stops, this.permissionsGranted,
       {this.onTap,
       this.dismissable = false,
       this.onDismiss,
@@ -20,21 +20,6 @@ class StopsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: PermissionService.getLocationPermissions(),
-      builder: (context, AsyncSnapshot<LocationStatus> snapshot) {
-        if (!snapshot.hasData) {
-          return StopsLoadingIndicator();
-        }
-        if (snapshot.data != LocationStatus.granted) {
-          return listView(permissionsGranted: false);
-        }
-        return listView();
-      },
-    );
-  }
-
-  Widget listView({bool permissionsGranted = true}) {
     return ListView.builder(
       itemCount: stops.length,
       itemBuilder: (context, int index) {

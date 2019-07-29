@@ -11,10 +11,10 @@ class MBTAService {
   static const newAPIURL =
       "https://ad3zbfaf1i.execute-api.us-east-1.amazonaws.com/develop";
   static const awsAPIKey = "q9sdm8YIPS2M8wf3frWic56cqZ4WSIuM4NNnYoKf";
-  static const nearestStopRoute = "/stops/nearest/";
-  static const nearbyStopsRoute = "/stops/allnearby/";
-  static const stopsAtSameLocationRoute = "/stops/location/";
-  static const alertsRoute = "/stops/alerts/";
+  static const nearestStopRoute = "/stops/nearest";
+  static const nearbyStopsRoute = "/stops/allnearby";
+  static const stopsAtSameLocationRoute = "/stops/location";
+  static const alertsRoute = "/stops/alerts";
   static const rangeInMiles = 100;
   static const apiKey = 'dc44b30101114e88b45041a4a9b65e06';
   static const baseURL = 'https://api-v3.mbta.com';
@@ -51,7 +51,7 @@ class MBTAService {
   }
 
   static Future<List<Stop>> fetchAllStops(LocationData locationData) async {
-    return fetchNearbyStops(locationData, range: 2000);
+    return await fetchNearbyStops(locationData, range: 200000);
   }
 
   static Future<List<Stop>> fetchAllStopsAtSameLocation(Stop stop) async {

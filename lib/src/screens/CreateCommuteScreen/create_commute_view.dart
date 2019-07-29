@@ -77,9 +77,26 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
           : TimeOfDay(hour: 17, minute: 0),
     ).then((time) {
       if (time != null) {
-        setState(() {
-          arrival ? arrivalTime = time : departureTime = time;
-        });
+        if (arrival) {
+          setState(() {
+            this.arrivalTime = time;
+          });
+        } else {
+          setState(() {
+            this.departureTime = time;
+          });
+        }
+      }
+    });
+  }
+
+  void onSelectStop(bool homeStop) async {
+    final newStop = await chooseStop(context, homeStop);
+    setState(() {
+      if (homeStop) {
+        this.stop1 = newStop;
+      } else {
+        this.stop2 = newStop;
       }
     });
   }
@@ -87,10 +104,9 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, CreateCommuteViewModel>(
+      onInit: (store) => initVariables(store.state.commuteState.commute),
       converter: (store) => CreateCommuteViewModel.create(store),
       builder: (context, CreateCommuteViewModel viewModel) {
-        initVariables(viewModel.commute);
-
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -103,10 +119,20 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
                   Expanded(
                     child: ListView(
                       children: <Widget>[
-                        stopContainer(context, true, "Home",
-                            "Tap to add home stop", this.stop1),
-                        stopContainer(context, false, "Work",
-                            "Tap to add work stop", this.stop2),
+                        stopContainer(
+                            context,
+                            true,
+                            "Home",
+                            "Tap to add home stop",
+                            this.stop1,
+                            this.onSelectStop),
+                        stopContainer(
+                            context,
+                            false,
+                            "Work",
+                            "Tap to add work stop",
+                            this.stop2,
+                            this.onSelectStop),
                         timeSelectionRow(context, this.arrivalTime,
                             this.departureTime, pickTime),
                       ],

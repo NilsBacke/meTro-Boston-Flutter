@@ -10,14 +10,16 @@ class Commute {
 
   Commute(this.stop1, this.stop2, this.arrivalTime, this.departureTime) {
     this.id = this.stop1.id + "_" + this.stop2.id;
+    this.homeStopId = stop1.id;
+    this.workStopId = stop2.id;
   }
 
   Commute.fromJson(Map<String, dynamic> parsedJson) {
     this.id = parsedJson['id'];
     this.homeStopId = parsedJson['home_stop_id'];
     this.workStopId = parsedJson['work_stop_id'];
-    this.stop1 = Stop.from(parsedJson["stop_one"]);
-    this.stop2 = Stop.from(parsedJson["stop_two"]);
+    this.stop1 = Stop.from(Map<String, dynamic>.from(parsedJson["stop_one"]));
+    this.stop2 = Stop.from(Map<String, dynamic>.from(parsedJson["stop_two"]));
     this.arrivalTime = _stringToTimeOfDay(parsedJson['arrival_time']);
     this.departureTime = _stringToTimeOfDay(parsedJson['departure_time']);
   }

@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:mbta_companion/src/utils/api_request_counter.dart';
-
 import 'executeCall.dart';
 
 class Result {
@@ -14,15 +12,25 @@ class Result {
 
 Future<Result> makeRequest(Method method, String route,
     {Map<String, String> headers, String body}) async {
-  final result = await executeCall(
-      new GenericRequest(method, route, headers: headers, body: body));
-
   if (APIRequestCounter.debug) {
-    print("response url: $route");
+    print("request url: $route");
     APIRequestCounter.incrementCalls(route);
   }
 
+  var result;
+  try {
+    result = await executeCall(
+        new GenericRequest(method, route, headers: headers, body: body));
+  } catch (e) {
+    print(
+        'Error making $method request to $route: ${result.statusCode}, ${result.reasonPhrase}');
+    return new Result(null, true,
+        'Error making $method request to $route: ${result.statusCode}, ${result.reasonPhrase}');
+  }
+
   if (result.statusCode != 200) {
+    print(
+        'Error making $method request to $route: ${result.statusCode}, ${result.reasonPhrase}');
     return new Result(null, true,
         'Error making $method request to $route: ${result.statusCode}, ${result.reasonPhrase}');
   }

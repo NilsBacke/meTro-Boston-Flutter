@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mbta_companion/src/screens/CreateCommuteScreen/utils/choose_stop.dart';
 
-Widget emptyCard(BuildContext context, bool homeStop, String text) {
+Widget emptyCard(BuildContext context, bool homeStop, String text,
+    Function(bool) onSelectStop) {
   return GestureDetector(
-    onTap: () => chooseStop(context, homeStop),
+    onTap: () {
+      onSelectStop(homeStop);
+    },
     child: Container(
       height: 100.0,
       child: Card(

@@ -18,11 +18,12 @@ class CommuteService {
       if (!doc.exists) {
         throw new Exception("Doc does not exist"); // TODO: revisit approach
       }
-      return Commute.fromJson(doc.data);
+      return Commute.fromJson(Map<String, dynamic>.from(doc.data));
     } catch (e) {
       if (e.message == "Doc does not exist") {
         throw new Exception(e.message);
       } else {
+        print('$e');
         throw new Exception("Could not load commute");
       }
     }

@@ -10,7 +10,6 @@ class AppState {
   final CommuteState commuteState;
   final SavedStopsState savedStopsState;
   final AllStopsState allStopsState;
-  final NearbyStopsState nearbyStopsState;
   final AlertsState alertsState;
   final SelectedStopState selectedStopState;
 
@@ -20,7 +19,6 @@ class AppState {
       this.commuteState,
       this.savedStopsState,
       this.allStopsState,
-      this.nearbyStopsState,
       this.alertsState,
       this.selectedStopState);
 
@@ -30,13 +28,12 @@ class AppState {
       CommuteState.initial(),
       SavedStopsState.initial(),
       AllStopsState.initial(),
-      NearbyStopsState.initial(),
       AlertsState.initial(),
       SelectedStopState.initial());
 
   @override
   String toString() {
-    return "\n{ \nlocationState: ${this.locationState.toString()}, \nnearestStopState: ${this.nearestStopState.toString()} \ncommuteState: ${this.commuteState.toString()}, \nsavedStopsState: ${this.savedStopsState.toString()}, \nallStopsState: ${this.allStopsState.toString()}, \nnearbyStopsState: ${this.nearbyStopsState.toString()}, \nalertsState: ${this.alertsState.toString()}, \nselectedStopState: ${this.selectedStopState.toString()} \n}\n";
+    return "\n{ \nlocationState: ${this.locationState.toString()}, \nnearestStopState: ${this.nearestStopState.toString()} \ncommuteState: ${this.commuteState.toString()}, \nsavedStopsState: ${this.savedStopsState.toString()}, \nallStopsState: ${this.allStopsState.toString()}, \nalertsState: ${this.alertsState.toString()}, \nselectedStopState: ${this.selectedStopState.toString()} \n}\n";
   }
 }
 
@@ -120,23 +117,6 @@ class AllStopsState {
   @override
   String toString() {
     return "{ allStops: ${this.allStops.toString()}, isAllStopsLoading: ${this.isAllStopsLoading}, allStopsErrorMessage: ${this.allStopsErrorMessage} }";
-  }
-}
-
-class NearbyStopsState {
-  final List<Stop> nearbyStops;
-  final bool isNearbyStopsLoading;
-  final String nearbyStopsErrorMessage;
-
-  NearbyStopsState(this.nearbyStops, this.isNearbyStopsLoading,
-      this.nearbyStopsErrorMessage);
-
-  factory NearbyStopsState.initial() =>
-      NearbyStopsState(List.unmodifiable([]), false, '');
-
-  @override
-  String toString() {
-    return "{ nearbyStops: ${this.nearbyStops.toString()}, isNearbyStopsLoading: ${this.isNearbyStopsLoading}, nearbyStopsErrorMessage: ${this.nearbyStopsErrorMessage} }";
   }
 }
 
