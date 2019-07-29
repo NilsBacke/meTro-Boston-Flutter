@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mbta_companion/src/models/commute.dart';
+import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/widgets/nearest_stop_card.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/widgets/three_part_card.dart';
 import 'package:mbta_companion/src/screens/CreateCommuteScreen/create_commute_view.dart';
@@ -223,7 +224,7 @@ class _CommuteViewModel {
   factory _CommuteViewModel.create(Store<AppState> store) {
     final state = store.state;
     return _CommuteViewModel(
-        commute: state.commuteState.commute,
+        commute: reverseCommuteIfNecessary(state.commuteState.commute),
         isCommuteLoading: state.commuteState.isCommuteLoading,
         commuteErrorMessage: state.commuteState.commuteErrorMessage,
         commuteExists: state.commuteState.doesCommuteExist,
@@ -233,4 +234,26 @@ class _CommuteViewModel {
         deleteCommute: (Commute commute) =>
             store.dispatch(deleteCommuteOp(commute)));
   }
+}
+
+Commute reverseCommuteIfNecessary(Commute commute) {
+  if (commute == null) {
+    return null;
+  }
+
+  final now = TimeOfDay.fromDateTime(DateTime.now());
+
+  // if needs to swap
+  if (now.hour > commute.arrivalTime.hour + 1 &&
+      now.hour < commute.departureTime.hour + 2) {
+    // swap
+    TimeOfDay temp = commute.departureTime;
+    commute.departureTime = commute.arrivalTime;
+    commute.arrivalTime = temp;
+
+    Stop tempStop = commute.stop1;
+    commute.stop1 = commute.stop2;
+    commute.stop2 = tempStop;
+  }
+  return commute;
 }
