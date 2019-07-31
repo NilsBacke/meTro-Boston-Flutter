@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import 'package:mbta_companion/src/screens/CreateCommuteScreen/create_commute_view.dart';
+import 'package:mbta_companion/src/screens/CreateCommuteScreen/create_commute_screen.dart';
 import 'package:mbta_companion/src/screens/CreateCommuteScreen/utils/showUnableDialog.dart';
 
 Widget createButton(

@@ -34,7 +34,8 @@ SavedStopsState savedStopsFetchFailure(
 SavedStopsState savedStopsAddSuccess(
     SavedStopsState savedStopsState, SavedStopsAddSuccess action) {
   return SavedStopsState(
-      List.unmodifiable(savedStopsState.savedStops..add(action.stop)),
+      List.unmodifiable(
+          List.from(savedStopsState.savedStops)..add(action.stop)),
       false,
       '');
 }
@@ -54,7 +55,8 @@ SavedStopsState savedStopsAddFailure(
 SavedStopsState savedStopsRemoveSuccess(
     SavedStopsState savedStopsState, SavedStopsRemoveSuccess action) {
   return SavedStopsState(
-      List.unmodifiable(savedStopsState.savedStops..remove(action.stop)),
+      List.unmodifiable(
+          List.from(savedStopsState.savedStops)..remove(action.stop)),
       false,
       '');
 }

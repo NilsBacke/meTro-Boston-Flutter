@@ -4,7 +4,7 @@ import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/widgets/nearest_stop_card.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/widgets/three_part_card.dart';
-import 'package:mbta_companion/src/screens/CreateCommuteScreen/create_commute_view.dart';
+import 'package:mbta_companion/src/screens/CreateCommuteScreen/create_commute_screen.dart';
 import 'package:mbta_companion/src/state/operations/commuteOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
 import 'package:mbta_companion/src/utils/navigation_utils.dart';

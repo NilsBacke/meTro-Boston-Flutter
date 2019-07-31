@@ -7,6 +7,7 @@ import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/state/operations/allStopsOperations.dart';
 import 'package:mbta_companion/src/state/operations/locationOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
+import 'package:mbta_companion/src/widgets/error_text_widget.dart';
 import 'package:mbta_companion/src/widgets/stops_list_view.dart';
 import 'package:redux/redux.dart';
 
@@ -33,16 +34,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
     // error handling
     if (viewModel.locationErrorStatus != null) {
       if (viewModel.locationErrorStatus == LocationStatus.noPermission) {
-        return errorTextWidget(text: locationPermissionText);
+        return errorTextWidget(context, text: locationPermissionText);
       }
 
       if (viewModel.locationErrorStatus == LocationStatus.noService) {
-        return errorTextWidget(text: locationServicesText);
+        return errorTextWidget(context, text: locationServicesText);
       }
     }
 
     if (viewModel.allStopsErrorMessage.isNotEmpty) {
-      return errorTextWidget(text: viewModel.allStopsErrorMessage);
+      return errorTextWidget(context, text: viewModel.allStopsErrorMessage);
     }
 
     // loading
@@ -56,10 +57,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
     }
 
     if (filteredStops.length == 0) {
-      return errorTextWidget();
+      return errorTextWidget(context);
     }
 
-    return StopsListView(filteredStops, viewModel.location != null,
+    return StopsListView(filteredStops,
         onTap: widget.onTap, timeCircles: widget.timeCircles);
   }
 
@@ -120,18 +121,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
             ],
           );
         },
-      ),
-    );
-  }
-
-  Widget errorTextWidget({String text}) {
-    return Container(
-      child: Center(
-        child: Text(
-          text ?? "No stops found\nTry searching something else",
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.body2,
-        ),
       ),
     );
   }
