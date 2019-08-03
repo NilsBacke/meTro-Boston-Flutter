@@ -63,7 +63,7 @@ class MBTAService {
       throw new Exception(result.error);
     }
 
-    return _jsonToListOfStops(result);
+    return _jsonToListOfStops(result.payload);
   }
 
   static Future<List<Alert>> fetchAlertsForStop(

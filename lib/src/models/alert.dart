@@ -31,7 +31,7 @@ class Alert {
       this.updatedAt});
 
   Alert.fromJson(parsedJson) {
-    this.stopId = parsedJson[stopIdKey];
+    this.stopId = parsedJson[stopIdKey].toString();
     this.id = parsedJson[idKey];
     this.startDate = DateTime.parse(parsedJson[startDateKey]);
     this.endDate = DateTime.parse(parsedJson[endDateKey]);

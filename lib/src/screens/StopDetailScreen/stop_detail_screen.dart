@@ -32,7 +32,7 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
   void initState() {
     super.initState();
     getAssociatedStops();
-    // getAlerts(widget.stop);
+    getAlerts(widget.stop);
   }
 
   Future<void> getAssociatedStops() async {
@@ -44,15 +44,15 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
     }
   }
 
-  // Future<void> getAlerts(Stop stop) async {
-  //   final alerts = await MBTAService.fetchAlertsForStop(stopId: stop.id);
-  //   print('Alerts: $alerts');
-  //   if (this.mounted) {
-  //     setState(() {
-  //       this.alerts = alerts;
-  //     });
-  //   }
-  // }
+  Future<void> getAlerts(Stop stop) async {
+    final alerts = await MBTAService.fetchAlertsForStop(stopId: stop.id);
+    print('Alerts: $alerts');
+    if (this.mounted) {
+      setState(() {
+        this.alerts = alerts;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
