@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/commute_screen.dart';
+import 'package:mbta_companion/src/screens/ExploreScreen/explore_screen.dart';
+import 'package:mbta_companion/src/screens/NearbyScreen/nearby_screen.dart';
 import 'package:mbta_companion/src/screens/SavedStopsScreen/saved_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +42,8 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     CommuteScreen(),
     SavedScreen(),
-    CommuteScreen(),
-    CommuteScreen(),
+    ExploreScreen(),
+    NearbyScreen(),
     SettingsScreen()
   ];
 

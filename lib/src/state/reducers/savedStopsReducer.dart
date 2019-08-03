@@ -12,6 +12,7 @@ final Reducer<SavedStopsState> savedStopsReducer = combineReducers([
   TypedReducer(savedStopsRemoveSuccess),
   TypedReducer(savedStopsRemovePending),
   TypedReducer(savedStopsRemoveFailure),
+  TypedReducer(clearSavedStopsError),
 ]);
 
 SavedStopsState savedStopsFetchSuccess(
@@ -22,7 +23,11 @@ SavedStopsState savedStopsFetchSuccess(
 SavedStopsState savedStopsFetchPending(
     SavedStopsState savedStopsState, SavedStopsFetchPending action) {
   return SavedStopsState(
-      List.unmodifiable(savedStopsState.savedStops), true, '');
+      savedStopsState.savedStops == null
+          ? null
+          : List.unmodifiable(savedStopsState.savedStops),
+      true,
+      '');
 }
 
 SavedStopsState savedStopsFetchFailure(
@@ -71,4 +76,10 @@ SavedStopsState savedStopsRemoveFailure(
     SavedStopsState savedStopsState, SavedStopsRemoveFailure action) {
   return SavedStopsState(List.unmodifiable(savedStopsState.savedStops), false,
       action.savedStopsRemoveErrorMessage);
+}
+
+SavedStopsState clearSavedStopsError(
+    SavedStopsState savedStopsState, ClearSavedStopsError action) {
+  return SavedStopsState(List.unmodifiable(savedStopsState.savedStops),
+      savedStopsState.isSavedStopsLoading, '');
 }

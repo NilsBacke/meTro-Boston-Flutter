@@ -18,7 +18,7 @@ class LocationService {
         .toStringAsFixed(2)); // to miles
   }
 
-  static Future<double> getDistanceFromStop(Stop stop, LocationData loc) async {
+  static double getDistanceFromStop(Stop stop, LocationData loc) {
     return LocationService.getDistance(
         stop.latitude, stop.longitude, loc.latitude, loc.longitude);
   }

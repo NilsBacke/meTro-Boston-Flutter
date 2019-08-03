@@ -4,6 +4,7 @@ import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/AddSavedScreen/add_saved_screen.dart';
 import 'package:mbta_companion/src/screens/SavedStopsScreen/widgets/empty_saved_list.dart';
 import 'package:mbta_companion/src/screens/SavedStopsScreen/widgets/error_list.dart';
+import 'package:mbta_companion/src/state/actions/savedStopsActions.dart';
 import 'package:mbta_companion/src/state/operations/savedStopsOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
 import 'package:mbta_companion/src/widgets/stops_list_view.dart';
@@ -33,8 +34,7 @@ class _SavedScreenState extends State<SavedScreen> {
     return StoreConnector<AppState, _SavedViewModel>(
       converter: (store) => _SavedViewModel.create(store),
       builder: (context, _SavedViewModel viewModel) {
-        if ((viewModel.savedStops == null ||
-                viewModel.savedStops.length == 0) &&
+        if (viewModel.savedStops == null &&
             !viewModel.isSavedStopsLoading &&
             viewModel.savedStopsError.length == 0) {
           viewModel.getSavedStops();
@@ -45,7 +45,8 @@ class _SavedScreenState extends State<SavedScreen> {
           bodyWidget = StopsLoadingIndicator();
         } else if (viewModel.savedStopsError.isNotEmpty) {
           bodyWidget = errorSavedList(context, viewModel.savedStopsError);
-        } else if (viewModel.savedStops.length == 0) {
+        } else if (viewModel.savedStops == null ||
+            viewModel.savedStops.length == 0) {
           bodyWidget = emptySavedList(context);
         } else {
           bodyWidget = StopsListView(
@@ -55,13 +56,19 @@ class _SavedScreenState extends State<SavedScreen> {
           );
         }
 
-        return Scaffold(
-          body: SafeArea(
-            child: bodyWidget,
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () => goToAddStop(viewModel.addStop),
+        return WillPopScope(
+          onWillPop: () async {
+            viewModel.clearError();
+            return true;
+          },
+          child: Scaffold(
+            body: SafeArea(
+              child: bodyWidget,
+            ),
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => goToAddStop(viewModel.addStop),
+            ),
           ),
         );
       },
@@ -77,6 +84,7 @@ class _SavedViewModel {
   final Function() getSavedStops;
   final Function(Stop) addStop;
   final Function(Stop) removeStop;
+  final Function() clearError;
 
   _SavedViewModel(
       {this.savedStops,
@@ -84,7 +92,8 @@ class _SavedViewModel {
       this.savedStopsError,
       this.getSavedStops,
       this.addStop,
-      this.removeStop});
+      this.removeStop,
+      this.clearError});
 
   factory _SavedViewModel.create(Store<AppState> store) {
     final state = store.state;
@@ -94,6 +103,7 @@ class _SavedViewModel {
         savedStopsError: state.savedStopsState.savedStopsErrorMessage,
         getSavedStops: () => store.dispatch(fetchSavedStops()),
         addStop: (Stop stop) => store.dispatch(addSavedStop(stop)),
-        removeStop: (Stop stop) => store.dispatch(removeSavedStop(stop)));
+        removeStop: (Stop stop) => store.dispatch(removeSavedStop(stop)),
+        clearError: () => store.dispatch(ClearSavedStopsError()));
   }
 }

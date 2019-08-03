@@ -41,3 +41,5 @@ class SavedStopsRemoveFailure {
 
   SavedStopsRemoveFailure(this.savedStopsRemoveErrorMessage);
 }
+
+class ClearSavedStopsError {}

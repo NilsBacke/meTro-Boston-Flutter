@@ -94,8 +94,7 @@ class SavedStopsState {
   SavedStopsState(
       this.savedStops, this.isSavedStopsLoading, this.savedStopsErrorMessage);
 
-  factory SavedStopsState.initial() =>
-      SavedStopsState(List.unmodifiable([]), false, '');
+  factory SavedStopsState.initial() => SavedStopsState(null, false, '');
 
   @override
   String toString() {

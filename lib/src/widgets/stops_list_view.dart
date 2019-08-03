@@ -64,9 +64,7 @@ class StopsListView extends StatelessWidget {
     return StopCard(
       stop: stops[index],
       includeDistance: locationData != null,
-      distanceFuture: locationData != null
-          ? LocationService.getDistanceFromStop(stops[index], locationData)
-          : null,
+      location: locationData,
       onTap: onTap,
       timeCircles: this.timeCircles,
     );
