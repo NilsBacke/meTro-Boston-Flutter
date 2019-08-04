@@ -9,16 +9,15 @@ class Alert {
   String description;
   DateTime updatedAt;
 
+  static const stopIdKey = "stopId";
   static const idKey = "id";
-  static const startDateKey = "start";
-  static const endDateKey = "end";
-  static const activePeriodKey = "active_period";
-  static const attributesKey = "attributes";
+  static const startDateKey = "startDate";
+  static const endDateKey = "endDate";
   static const timeframeKey = "timeframe";
-  static const titleKey = "service_effect";
-  static const subtitleKey = "short_header";
+  static const titleKey = "title";
+  static const subtitleKey = "subtitle";
   static const descriptionKey = "description";
-  static const updatedAtKey = "updated_at";
+  static const updatedAtKey = "updatedAt";
 
   Alert(
       {this.id,
@@ -32,14 +31,14 @@ class Alert {
       this.updatedAt});
 
   Alert.fromJson(parsedJson) {
+    this.stopId = parsedJson[stopIdKey].toString();
     this.id = parsedJson[idKey];
-    final attr = parsedJson[attributesKey];
-    this.startDate = DateTime.parse(attr[activePeriodKey][0][startDateKey]);
-    this.endDate = DateTime.parse(attr[activePeriodKey][0][endDateKey]);
-    this.timeframe = attr[timeframeKey];
-    this.title = attr[titleKey];
-    this.subtitle = attr[subtitleKey];
-    this.description = attr[descriptionKey];
-    this.updatedAt = DateTime.parse(attr[updatedAtKey]);
+    this.startDate = DateTime.parse(parsedJson[startDateKey]);
+    this.endDate = DateTime.parse(parsedJson[endDateKey]);
+    this.timeframe = parsedJson[timeframeKey];
+    this.title = parsedJson[titleKey];
+    this.subtitle = parsedJson[subtitleKey];
+    this.description = parsedJson[descriptionKey];
+    this.updatedAt = DateTime.parse(parsedJson[updatedAtKey]);
   }
 }

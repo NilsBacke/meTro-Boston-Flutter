@@ -8,7 +8,7 @@ class GoogleDistanceService {
   // returns time in minutes
   static Future<int> getTimeBetweenStops(Stop stop1, Stop stop2) async {
     final response = await http.get(
-        "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&mode=transit&origins=${stop1.name}&destinations=${stop2.name}&key=AIzaSyAWdYvAyOYBjqqlTDQCKYCn9psNJkNHR_g");
+        "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&mode=transit&origins=${stop1.name} t stop&destinations=${stop2.name} t stop&key=AIzaSyAWdYvAyOYBjqqlTDQCKYCn9psNJkNHR_g");
 
     print("distance matrix response: ${response.body}");
 

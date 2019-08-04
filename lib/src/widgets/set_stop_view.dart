@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import 'package:mbta_companion/src/screens/states/explore_state.dart';
+import 'package:mbta_companion/src/screens/ExploreScreen/explore_screen.dart';
 
 class SetStopView extends StatelessWidget {
   final bool homeStop;

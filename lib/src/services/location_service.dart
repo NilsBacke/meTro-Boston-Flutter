@@ -2,25 +2,10 @@
 import 'dart:async';
 import 'package:great_circle_distance/great_circle_distance.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 
 class LocationService {
-  static LocationData _currentLocation;
-
   static Future<LocationData> get currentLocation async {
-    if (_currentLocation != null) {
-      return _currentLocation;
-    }
-
-    final loc = await _loadCurrentLocation();
-    _currentLocation = loc;
-    return loc;
-  }
-
-  static Future<LocationData> _loadCurrentLocation() async {
-    // return await Geolocator()
-    //     .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     return await Location().getLocation();
   }
 
@@ -33,13 +18,8 @@ class LocationService {
         .toStringAsFixed(2)); // to miles
   }
 
-  static Future<double> getDistanceFromStop(Stop stop,
-      {LocationData loc}) async {
-    LocationData currLoc = loc;
-    if (currLoc == null) {
-      currLoc = await LocationService.currentLocation;
-    }
+  static double getDistanceFromStop(Stop stop, LocationData loc) {
     return LocationService.getDistance(
-        stop.latitude, stop.longitude, currLoc.latitude, currLoc.longitude);
+        stop.latitude, stop.longitude, loc.latitude, loc.longitude);
   }
 }

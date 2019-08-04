@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:mbta_companion/src/screens/CommuteScreen/commute_screen.dart';
+import 'package:mbta_companion/src/screens/ExploreScreen/explore_screen.dart';
+import 'package:mbta_companion/src/screens/NearbyScreen/nearby_screen.dart';
+import 'package:mbta_companion/src/screens/SavedStopsScreen/saved_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:mbta_companion/src/screens/states/commute_state.dart';
-import 'package:mbta_companion/src/screens/states/explore_state.dart';
-import 'package:mbta_companion/src/screens/states/nearby_state.dart';
-import 'package:mbta_companion/src/screens/states/saved_state.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:mbta_companion/src/widgets/onboarding.dart';
 import 'screens/stateless_screens/settings_view.dart';
