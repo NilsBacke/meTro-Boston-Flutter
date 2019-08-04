@@ -34,12 +34,12 @@ dependencies:
     geolocator: 4.0.3
     eventsource: 0.2.1
     shared_preferences: 0.5.2
-    firebase_core: ^0.4.0+1
+    firebase_core: 0.4.0+8
     flutter_udid: 1.0.0
     # firebase_performance: ^0.2.0
     # firebase_analytics: ^3.0.1
     # firebase_crashlytics: ^0.0.4+3
-    cloud_firestore: ^0.12.8
+    cloud_firestore: 0.12.9
     redux: 3.0.0
     flutter_redux: 0.5.3
     redux_thunk: ^0.2.1
