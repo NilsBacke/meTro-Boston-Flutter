@@ -13,7 +13,7 @@ ThunkAction fetchAllStops(LocationData locationData) {
         store.dispatch(AllStopsFetchSuccess(allStops));
       } catch (e) {
         print("$e");
-        store.dispatch(AllStopsFetchFailure(e.message));
+        store.dispatch(AllStopsFetchFailure(e.toString()));
       }
     });
   };

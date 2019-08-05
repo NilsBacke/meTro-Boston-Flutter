@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/screens/stateless_screens/about_screen.dart';
 import 'package:mbta_companion/src/screens/stateless_screens/map_image_screen.dart';
+import 'package:mbta_companion/src/utils/send_feedback.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -37,6 +38,12 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           Divider(),
+          ListTile(
+            title: Text('Send Feedback'),
+            onTap: () {
+              sendFeedback(context);
+            },
+          ),
         ],
       ),
     );
