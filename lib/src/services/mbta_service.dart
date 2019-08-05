@@ -2,23 +2,23 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/alert.dart';
+import 'package:mbta_companion/src/services/config.dart';
 import 'package:mbta_companion/src/services/utils/makeRequest.dart';
 import '../models/stop.dart';
 import 'dart:convert';
 import 'utils/executeCall.dart';
-import 'dart:io' show Platform;
 
 class MBTAService {
-  static final newAPIURL = Platform.environment["AWS_API_URL"];
+  static final newAPIURL = AWS_API_URL;
   // static final awsAPIKey = "q9sdm8YIPS2M8wf3frWic56cqZ4WSIuM4NNnYoKf"; // develop
-  static final awsAPIKey = Platform.environment["AWS_API_KEY"]; // prod
+  static final awsAPIKey = AWS_API_KEY; // prod
   static final nearestStopRoute = "/stops/nearest";
   static final nearbyStopsRoute = "/stops/allnearby";
   static final stopsAtSameLocationRoute = "/stops/location";
   static final alertsRoute = "/stops/alerts";
   static final rangeInMiles = 100;
-  static final apiKey = Platform.environment["MBTA_API_KEY"];
-  static final baseURL = Platform.environment["MBTA_API_URL"];
+  static final apiKey = MBTA_API_KEY;
+  static final baseURL = MBTA_API_URL;
 
   // returns a list of the 2 stops that is closest to the given location data
   // will be the same stop, but both directions

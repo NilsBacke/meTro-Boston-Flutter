@@ -1,15 +1,15 @@
 import 'dart:async';
-import 'dart:io' show Platform;
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mbta_companion/src/services/config.dart';
 
 class CommuteService {
   static Future<Commute> getCommute() async {
     try {
       String udid = await FlutterUdid.udid;
 
-      final stage = Platform.environment["FIREBASE_STAGE"];
+      final stage = FIREBASE_STAGE;
 
       var docRef = Firestore.instance
           .collection(stage)
@@ -37,7 +37,7 @@ class CommuteService {
     try {
       String udid = await FlutterUdid.udid;
 
-      final stage = Platform.environment["FIREBASE_STAGE"];
+      final stage = FIREBASE_STAGE;
 
       var docRef = Firestore.instance
           .collection(stage)
@@ -54,7 +54,7 @@ class CommuteService {
     try {
       String udid = await FlutterUdid.udid;
 
-      final stage = Platform.environment["FIREBASE_STAGE"];
+      final stage = FIREBASE_STAGE;
 
       var docRef = Firestore.instance
           .collection(stage)

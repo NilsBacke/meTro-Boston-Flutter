@@ -1,6 +1,7 @@
 # Private
 android/key.properties
 android/app/key.jks
+lib/src/services/config.dart
 
 # Miscellaneous
 *.class
