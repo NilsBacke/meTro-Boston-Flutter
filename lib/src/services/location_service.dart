@@ -11,9 +11,6 @@ class LocationService {
 
   static double getDistance(
       double lat1, double long1, double lat2, double long2) {
-    // return num.parse((gcd.sphericalLawOfCosinesDistance() * 0.000621371)
-    //     .toStringAsFixed(2)); // to miles
-
     return num.parse(_calculateDistance(lat1, long1, lat2, long2)
         .toStringAsFixed(2)); // to miles
   }

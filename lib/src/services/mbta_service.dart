@@ -6,18 +6,19 @@ import 'package:mbta_companion/src/services/utils/makeRequest.dart';
 import '../models/stop.dart';
 import 'dart:convert';
 import 'utils/executeCall.dart';
+import 'dart:io' show Platform;
 
 class MBTAService {
-  static const newAPIURL =
-      "https://ad3zbfaf1i.execute-api.us-east-1.amazonaws.com/develop";
-  static const awsAPIKey = "q9sdm8YIPS2M8wf3frWic56cqZ4WSIuM4NNnYoKf";
-  static const nearestStopRoute = "/stops/nearest";
-  static const nearbyStopsRoute = "/stops/allnearby";
-  static const stopsAtSameLocationRoute = "/stops/location";
-  static const alertsRoute = "/stops/alerts";
-  static const rangeInMiles = 100;
-  static const apiKey = 'dc44b30101114e88b45041a4a9b65e06';
-  static const baseURL = 'https://api-v3.mbta.com';
+  static final newAPIURL = Platform.environment["AWS_API_URL"];
+  // static final awsAPIKey = "q9sdm8YIPS2M8wf3frWic56cqZ4WSIuM4NNnYoKf"; // develop
+  static final awsAPIKey = Platform.environment["AWS_API_KEY"]; // prod
+  static final nearestStopRoute = "/stops/nearest";
+  static final nearbyStopsRoute = "/stops/allnearby";
+  static final stopsAtSameLocationRoute = "/stops/location";
+  static final alertsRoute = "/stops/alerts";
+  static final rangeInMiles = 100;
+  static final apiKey = Platform.environment["MBTA_API_KEY"];
+  static final baseURL = Platform.environment["MBTA_API_URL"];
 
   // returns a list of the 2 stops that is closest to the given location data
   // will be the same stop, but both directions

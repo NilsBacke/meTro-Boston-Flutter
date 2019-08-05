@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,9 +8,12 @@ class CommuteService {
   static Future<Commute> getCommute() async {
     try {
       String udid = await FlutterUdid.udid;
+
+      final stage = Platform.environment["FIREBASE_STAGE"];
+
       var docRef = Firestore.instance
-          .collection("staging")
-          .document("staging")
+          .collection(stage)
+          .document(stage)
           .collection("users")
           .document(udid);
       // TODO: change staging
@@ -32,9 +36,12 @@ class CommuteService {
   static Future<void> saveCommute(Commute commute) async {
     try {
       String udid = await FlutterUdid.udid;
+
+      final stage = Platform.environment["FIREBASE_STAGE"];
+
       var docRef = Firestore.instance
-          .collection("staging")
-          .document("staging")
+          .collection(stage)
+          .document(stage)
           .collection("users")
           .document(udid);
       await docRef.setData(commute.toJson());
@@ -46,9 +53,12 @@ class CommuteService {
   static Future<void> deleteCommute(Commute commute) async {
     try {
       String udid = await FlutterUdid.udid;
+
+      final stage = Platform.environment["FIREBASE_STAGE"];
+
       var docRef = Firestore.instance
-          .collection("staging")
-          .document("staging")
+          .collection(stage)
+          .document(stage)
           .collection("users")
           .document(udid);
       await docRef.delete();

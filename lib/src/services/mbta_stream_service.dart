@@ -8,8 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:mbta_companion/src/utils/api_request_counter.dart';
 
 class MBTAStreamService {
-  static const baseURL = MBTAService.baseURL;
-  static const apiKey = MBTAService.apiKey;
+  static final baseURL = MBTAService.baseURL;
+  static final apiKey = MBTAService.apiKey;
 
   // two element list, one datetime for each stop
   static Future<Stream<PredictionEvent>> streamPredictionsForStopId(
