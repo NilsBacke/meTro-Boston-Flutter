@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mbta_companion/src/models/stop.dart';
@@ -7,9 +8,12 @@ class SavedStopsService {
   static Future<List<Stop>> getSavedStops() async {
     try {
       String udid = await FlutterUdid.udid;
+
+      final stage = Platform.environment["FIREBASE_STAGE"];
+
       var docRef = Firestore.instance
-          .collection("staging")
-          .document("staging")
+          .collection(stage)
+          .document(stage)
           .collection("users")
           .document(udid)
           .collection("saved_stops");
@@ -28,9 +32,12 @@ class SavedStopsService {
   static Future<void> saveStop(Stop stop) async {
     try {
       String udid = await FlutterUdid.udid;
+
+      final stage = Platform.environment["FIREBASE_STAGE"];
+
       var docRef = Firestore.instance
-          .collection("staging")
-          .document("staging")
+          .collection(stage)
+          .document(stage)
           .collection("users")
           .document(udid)
           .collection("saved_stops")
@@ -44,9 +51,12 @@ class SavedStopsService {
   static Future<void> removeStop(Stop stop) async {
     try {
       String udid = await FlutterUdid.udid;
+
+      final stage = Platform.environment["FIREBASE_STAGE"];
+
       var docRef = Firestore.instance
-          .collection("staging")
-          .document("staging")
+          .collection(stage)
+          .document(stage)
           .collection("users")
           .document(udid)
           .collection("saved_stops")
