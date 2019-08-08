@@ -22,36 +22,49 @@ class _CommuteScreenState extends State<CommuteScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: ListView(
-        children: <Widget>[
-          NearestStopCard(),
-          StoreConnector<AppState, _CommuteViewModel>(
-            converter: (store) => _CommuteViewModel.create(store),
-            builder: (context, _CommuteViewModel viewModel) {
-              if (viewModel.commute == null &&
-                  !viewModel.isCommuteLoading &&
-                  viewModel.commuteErrorMessage.length == 0 &&
-                  (viewModel.commuteExists == null ||
-                      viewModel.commuteExists == true)) {
-                viewModel.getCommute();
-              }
+      child: RefreshIndicator(
+        onRefresh: () async {
+          final viewModel = _CommuteViewModel.create(StoreProvider.of(context));
+          viewModel.getCommute();
+          final nearestViewModel =
+              NearestStopViewModel.create(StoreProvider.of(context));
+          if (nearestViewModel.location != null) {
+            nearestViewModel.getNearestStop(nearestViewModel.location);
+          }
+          await Future.delayed(Duration(seconds: 1));
+        },
+        child: ListView(
+          children: <Widget>[
+            NearestStopCard(),
+            StoreConnector<AppState, _CommuteViewModel>(
+              converter: (store) => _CommuteViewModel.create(store),
+              builder: (context, _CommuteViewModel viewModel) {
+                if (viewModel.commute == null &&
+                    !viewModel.isCommuteLoading &&
+                    viewModel.commuteErrorMessage.length == 0 &&
+                    (viewModel.commuteExists == null ||
+                        viewModel.commuteExists == true)) {
+                  viewModel.getCommute();
+                }
 
-              if (viewModel.commuteErrorMessage.length != 0) {
-                return commuteCardWithText(viewModel.commuteErrorMessage);
-              }
+                if (viewModel.commuteErrorMessage.length != 0) {
+                  return commuteCardWithText(viewModel.commuteErrorMessage);
+                }
 
-              if (viewModel.isCommuteLoading) {
-                return loadingCommuteCard();
-              }
-              if (viewModel.commute == null &&
-                  viewModel.commuteErrorMessage == '') {
-                return emptyCommuteCard(context, viewModel);
-              }
+                if (viewModel.isCommuteLoading) {
+                  return loadingCommuteCard();
+                }
 
-              return commuteCard(context, viewModel);
-            },
-          ),
-        ],
+                if (viewModel.commute == null &&
+                    viewModel.commuteErrorMessage == '') {
+                  return emptyCommuteCard(context, viewModel);
+                }
+
+                return commuteCard(context, viewModel);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -168,7 +181,6 @@ class _CommuteScreenState extends State<CommuteScreen> {
         builder: (context) => CreateCommuteScreen(),
       ),
     );
-    // .then((val) => viewModel.getCommute());
   }
 
   void showDeleteDialog(context, _CommuteViewModel viewModel) {

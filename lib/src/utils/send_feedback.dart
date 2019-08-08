@@ -8,17 +8,18 @@ sendFeedback(BuildContext context) async {
     await launch(url);
   } else {
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text("Could not open email client"),
-            actions: <Widget>[
-              FlatButton(
-                child: Text("Close"),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            ],
-          );
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text("Could not open email client"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Close"),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          ],
+        );
+      },
+    );
   }
 }
