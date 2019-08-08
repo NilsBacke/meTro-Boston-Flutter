@@ -21,8 +21,8 @@ class NearestStopCard extends StatefulWidget {
 class _NearestStopCardState extends State<NearestStopCard> {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, _NearestStopViewModel>(
-      converter: (store) => _NearestStopViewModel.create(store),
+    return StoreConnector<AppState, NearestStopViewModel>(
+      converter: (store) => NearestStopViewModel.create(store),
       builder: (context, viewModel) {
         if (viewModel.location == null &&
             !viewModel.isLocationLoading &&
@@ -99,7 +99,7 @@ class _NearestStopCardState extends State<NearestStopCard> {
     );
   }
 
-  nearestStopCard(context, _NearestStopViewModel viewModel) {
+  nearestStopCard(context, NearestStopViewModel viewModel) {
     return ThreePartCard(
       'Nearest Stop',
       GestureDetector(
@@ -153,7 +153,7 @@ class _NearestStopCardState extends State<NearestStopCard> {
   }
 }
 
-class _NearestStopViewModel {
+class NearestStopViewModel {
   final LocationData location;
   final bool isLocationLoading;
   final LocationStatus locationErrorStatus;
@@ -164,7 +164,7 @@ class _NearestStopViewModel {
   final Function() getLocation;
   final Function(LocationData) getNearestStop;
 
-  _NearestStopViewModel({
+  NearestStopViewModel({
     this.location,
     this.isLocationLoading,
     this.locationErrorStatus,
@@ -175,9 +175,9 @@ class _NearestStopViewModel {
     this.getNearestStop,
   });
 
-  factory _NearestStopViewModel.create(Store<AppState> store) {
+  factory NearestStopViewModel.create(Store<AppState> store) {
     final state = store.state;
-    return _NearestStopViewModel(
+    return NearestStopViewModel(
       location: state.locationState.locationData,
       isLocationLoading: state.locationState.isLocationLoading,
       locationErrorStatus: state.locationState.locationErrorStatus,

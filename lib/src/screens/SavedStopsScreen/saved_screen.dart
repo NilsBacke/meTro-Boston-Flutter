@@ -56,18 +56,25 @@ class _SavedScreenState extends State<SavedScreen> {
           );
         }
 
-        return WillPopScope(
-          onWillPop: () async {
-            viewModel.clearError();
-            return true;
+        return RefreshIndicator(
+          onRefresh: () async {
+            final viewModel = _SavedViewModel.create(StoreProvider.of(context));
+            viewModel.getSavedStops();
+            await Future.delayed(Duration(seconds: 1));
           },
-          child: Scaffold(
-            body: SafeArea(
-              child: bodyWidget,
-            ),
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () => goToAddStop(viewModel.addStop),
+          child: WillPopScope(
+            onWillPop: () async {
+              viewModel.clearError();
+              return true;
+            },
+            child: Scaffold(
+              body: SafeArea(
+                child: bodyWidget,
+              ),
+              floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () => goToAddStop(viewModel.addStop),
+              ),
             ),
           ),
         );
@@ -97,6 +104,7 @@ class _SavedViewModel {
 
   factory _SavedViewModel.create(Store<AppState> store) {
     final state = store.state;
+
     return _SavedViewModel(
         savedStops: state.savedStopsState.savedStops,
         isSavedStopsLoading: state.savedStopsState.isSavedStopsLoading,

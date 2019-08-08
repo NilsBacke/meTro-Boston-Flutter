@@ -117,7 +117,19 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               searchText, viewModel.allStops, this.mounted);
                         });
                       })),
-              Expanded(child: bodyWidget),
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    final viewModel =
+                        _ExploreViewModel.create(StoreProvider.of(context));
+                    if (viewModel.location != null) {
+                      viewModel.getAllStops(viewModel.location);
+                    }
+                    await Future.delayed(Duration(seconds: 1));
+                  },
+                  child: bodyWidget,
+                ),
+              ),
             ],
           );
         },
