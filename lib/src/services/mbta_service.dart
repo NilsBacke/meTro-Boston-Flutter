@@ -29,7 +29,13 @@ class MBTAService {
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
     if (result.hasError) {
-      throw new Exception(result.error);
+      if (result.payload.error != null) {
+        print(result.payload.error);
+        throw new Exception(result.payload.userError);
+      } else {
+        print(result.error);
+        throw new Exception(result.error);
+      }
     }
 
     return _jsonToListOfStops(result.payload);
@@ -45,7 +51,13 @@ class MBTAService {
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
     if (result.hasError) {
-      throw new Exception(result.error);
+      if (result.payload.error != null) {
+        print(result.payload.error);
+        throw new Exception(result.payload.userError);
+      } else {
+        print(result.error);
+        throw new Exception(result.error);
+      }
     }
 
     return _jsonToListOfStops(result.payload);
@@ -61,7 +73,13 @@ class MBTAService {
         headers: {"x-api-key": awsAPIKey}, body: json.encode(stop));
 
     if (result.hasError) {
-      throw new Exception(result.error);
+      if (result.payload.error != null) {
+        print(result.payload.error);
+        throw new Exception(result.payload.userError);
+      } else {
+        print(result.error);
+        throw new Exception(result.error);
+      }
     }
 
     return _jsonToListOfStops(result.payload);
@@ -74,7 +92,13 @@ class MBTAService {
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
     if (result.hasError) {
-      throw new Exception(result.error);
+      if (result.payload.error != null) {
+        print(result.payload.error);
+        throw new Exception(result.payload.userError);
+      } else {
+        print(result.error);
+        throw new Exception(result.error);
+      }
     }
 
     List<Alert> alerts = List();
@@ -90,7 +114,13 @@ class MBTAService {
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
     if (result.hasError) {
-      throw new Exception(result.error);
+      if (result.payload.error != null) {
+        print(result.payload.error);
+        throw new Exception(result.payload.userError);
+      } else {
+        print(result.error);
+        throw new Exception(result.error);
+      }
     }
 
     return Stop.from(result.payload);

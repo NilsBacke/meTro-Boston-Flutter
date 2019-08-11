@@ -22,16 +22,18 @@ Future<Result> makeRequest(Method method, String route,
     result = await executeCall(
         new GenericRequest(method, route, headers: headers, body: body));
   } catch (e) {
+    final jsonResult = json.decode(result.body);
     print(
         'Error making $method request to $route: ${result.statusCode}, ${result.reasonPhrase}');
-    return new Result(null, true,
+    return new Result(jsonResult, true,
         'Error making $method request to $route: ${result.statusCode}, ${result.reasonPhrase}');
   }
 
   if (result.statusCode != 200) {
+    final jsonResult = json.decode(result.body);
     print(
         'Error making $method request to $route: ${result.statusCode}, ${result.reasonPhrase}');
-    return new Result(null, true,
+    return new Result(jsonResult, true,
         'Error making $method request to $route: ${result.statusCode}, ${result.reasonPhrase}');
   }
 

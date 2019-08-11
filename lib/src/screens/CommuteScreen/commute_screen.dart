@@ -8,6 +8,7 @@ import 'package:mbta_companion/src/screens/CreateCommuteScreen/create_commute_sc
 import 'package:mbta_companion/src/state/operations/commuteOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
 import 'package:mbta_companion/src/utils/navigation_utils.dart';
+import 'package:mbta_companion/src/utils/show_error_dialog.dart';
 import 'package:mbta_companion/src/utils/timeofday_helper.dart';
 import 'package:mbta_companion/src/widgets/commute_time_circle_combo.dart';
 import 'package:redux/redux.dart';
@@ -48,6 +49,7 @@ class _CommuteScreenState extends State<CommuteScreen> {
                 }
 
                 if (viewModel.commuteErrorMessage.length != 0) {
+                  showErrorDialog(context, viewModel.commuteErrorMessage);
                   return commuteCardWithText(viewModel.commuteErrorMessage);
                 }
 

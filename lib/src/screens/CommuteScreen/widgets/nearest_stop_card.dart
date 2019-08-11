@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/utils/stop_distance.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/widgets/three_part_card.dart';
@@ -10,6 +11,7 @@ import 'package:mbta_companion/src/state/operations/locationOperations.dart';
 import 'package:mbta_companion/src/state/operations/nearestStopOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
 import 'package:mbta_companion/src/utils/navigation_utils.dart';
+import 'package:mbta_companion/src/utils/show_error_dialog.dart';
 import 'package:mbta_companion/src/widgets/stop_details_tile.dart';
 import 'package:redux/redux.dart';
 
@@ -40,6 +42,12 @@ class _NearestStopCardState extends State<NearestStopCard> {
         if (viewModel.isLocationLoading || viewModel.isNearestStopLoading) {
           return nearestStopLoadingIndicator();
         }
+        if (viewModel.nearestStopErrorMessage != null &&
+            viewModel.nearestStopErrorMessage.length != 0) {
+          showErrorDialog(context, viewModel.nearestStopErrorMessage);
+          return errorMessageCard(context, viewModel.nearestStopErrorMessage);
+        }
+
         if (viewModel.locationErrorStatus == LocationStatus.noPermission) {
           return locationPermissionsNotEnabled(context);
         }
@@ -69,10 +77,20 @@ class _NearestStopCardState extends State<NearestStopCard> {
     );
   }
 
+  Widget errorMessageCard(context, String error) {
+    return blankNearestStopCard(
+      child: Text(
+        error,
+        style: Theme.of(context).textTheme.body2,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   Widget locationPermissionsNotEnabled(context) {
     return blankNearestStopCard(
       child: Text(
-        'Location permissions are required to view the nearest stop and distances to stops\n\nGo to settings to enable permissions',
+        locationPermissionText,
         style: Theme.of(context).textTheme.body2,
         textAlign: TextAlign.center,
       ),
@@ -82,7 +100,7 @@ class _NearestStopCardState extends State<NearestStopCard> {
   Widget locationServicesNotEnabled(context) {
     return blankNearestStopCard(
       child: Text(
-        'Location services are not enabled',
+        locationServicesText,
         style: Theme.of(context).textTheme.body2,
         textAlign: TextAlign.center,
       ),
