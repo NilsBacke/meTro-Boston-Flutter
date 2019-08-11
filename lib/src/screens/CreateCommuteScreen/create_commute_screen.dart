@@ -3,12 +3,16 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/CreateCommuteScreen/utils/choose_stop.dart';
+import 'package:mbta_companion/src/screens/CreateCommuteScreen/utils/showUnableDialog.dart';
 import 'package:mbta_companion/src/screens/CreateCommuteScreen/widgets/create_button.dart';
 import 'package:mbta_companion/src/screens/CreateCommuteScreen/widgets/info_text.dart';
 import 'package:mbta_companion/src/screens/CreateCommuteScreen/widgets/stop_container.dart';
 import 'package:mbta_companion/src/screens/CreateCommuteScreen/widgets/time_selection_row.dart';
+import 'package:mbta_companion/src/services/google_api_service.dart';
+import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/state/operations/commuteOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
+import 'package:mbta_companion/src/utils/stops_list_helpers.dart';
 import 'package:redux/redux.dart';
 
 class CreateCommuteScreen extends StatefulWidget {
@@ -101,6 +105,44 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
     });
   }
 
+  Future<void> createCommute(
+      BuildContext context,
+      CreateCommuteViewModel viewModel,
+      Stop stop1,
+      Stop stop2,
+      TimeOfDay arrivalTime,
+      TimeOfDay departureTime) async {
+    if (stop1 == null || stop2 == null) {
+      showUnableToCreateDialog(context);
+      return;
+    }
+
+    final direction1 =
+        await GoogleAPIService.getDirectionFromRoute(stop1, stop2);
+    final direction2 =
+        await GoogleAPIService.getDirectionFromRoute(stop2, stop1);
+
+    var changedStop1, changedStop2;
+
+    if (!stop1.directionDestination.contains(direction1)) {
+      changedStop1 = await MBTAService.getAssociatedStop(stopId: stop1.id);
+    } else {
+      changedStop1 = stop1;
+    }
+
+    if (!stop2.directionDestination.contains(direction2)) {
+      changedStop2 = await MBTAService.getAssociatedStop(stopId: stop2.id);
+    } else {
+      changedStop2 = stop2;
+    }
+
+    final newCommute =
+        Commute(changedStop1, changedStop2, arrivalTime, departureTime);
+
+    viewModel.saveCommute(newCommute);
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, CreateCommuteViewModel>(
@@ -139,8 +181,11 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
                     ),
                   ),
                   infoText(context),
-                  createButton(context, appBarText, viewModel, this.stop1,
-                      this.stop2, this.arrivalTime, this.departureTime),
+                  createButton(
+                    appBarText,
+                    () => createCommute(context, viewModel, stop1, stop2,
+                        arrivalTime, departureTime),
+                  ),
                   Container(
                     height: 12.0,
                   ),

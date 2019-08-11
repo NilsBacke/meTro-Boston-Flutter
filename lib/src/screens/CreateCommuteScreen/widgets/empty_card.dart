@@ -7,7 +7,7 @@ Widget emptyCard(BuildContext context, bool homeStop, String text,
       onSelectStop(homeStop);
     },
     child: Container(
-      height: 100.0,
+      height: 75.0,
       child: Card(
         child: Center(
           child: Text(

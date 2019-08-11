@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import 'package:mbta_companion/src/screens/CreateCommuteScreen/utils/choose_stop.dart';
 import 'package:mbta_companion/src/screens/CreateCommuteScreen/widgets/empty_card.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
 
@@ -26,6 +25,7 @@ Widget stopContainer(BuildContext context, bool homeStop, String title,
                 onTap: (_) {
                   onSelectStop(homeStop);
                 },
+                includeOtherInfo: false,
               ),
       ],
     ),

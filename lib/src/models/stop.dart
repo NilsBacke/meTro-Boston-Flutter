@@ -15,7 +15,12 @@ class Stop {
   String directionDescription;
 
   Color get lineColor {
-    return Color(int.parse(lineColorHex));
+    try {
+      return Color(int.parse(lineColorHex));
+    } on Exception catch (e) {
+      print(id);
+      print(lineColorHex);
+    }
   }
 
   Color get textColor {

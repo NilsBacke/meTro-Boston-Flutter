@@ -12,6 +12,7 @@ class StopCard extends StatelessWidget {
   final Function(Stop) onTap;
   final bool timeCircles;
   final LocationData location; // required if includeDistance is true
+  final bool includeOtherInfo;
 
   StopCard(
       {@required this.stop,
@@ -19,7 +20,8 @@ class StopCard extends StatelessWidget {
       this.includeDistance = false,
       this.onTap,
       this.timeCircles = true,
-      this.location}) {
+      this.location,
+      this.includeOtherInfo = true}) {
     if (includeDistance) {
       assert(this.location != null);
     }
@@ -41,7 +43,12 @@ class StopCard extends StatelessWidget {
   }
 
   Widget stopCard(bool includeDistance, LocationData location) {
-    final otherInfo = [stop.directionDescription];
+    final List<String> otherInfo = [];
+    if (!stop.directionDescription.startsWith("bound")) {
+      // end of line stop
+      otherInfo.add(stop.directionDescription);
+    }
+
     if (includeDistance) {
       otherInfo
           .add('${LocationService.getDistanceFromStop(stop, location)} mi');
@@ -51,7 +58,7 @@ class StopCard extends StatelessWidget {
       stop.id,
       title: stop.name,
       subtitle1: stop.lineName,
-      otherInfo: otherInfo,
+      otherInfo: this.includeOtherInfo ? otherInfo : [],
       lineInitials: stop.lineInitials,
       lineColor: stop.lineColor,
       overflow: this.overflow,
