@@ -70,6 +70,12 @@ class _CommuteScreenState extends State<CommuteScreen> {
   }
 
   Widget commuteCard(context, _CommuteViewModel viewModel) {
+    final List<String> otherInfo = [];
+
+    if (!viewModel.commute.stop1.directionDescription.startsWith("bound")) {
+      otherInfo.add(viewModel.commute.stop1.directionDescription);
+    }
+
     return ThreePartCard(
       'Work Commute',
       GestureDetector(
@@ -82,7 +88,7 @@ class _CommuteScreenState extends State<CommuteScreen> {
             viewModel.commute.stop1.id,
             title: viewModel.commute.stop1.name,
             subtitle1: viewModel.commute.stop1.lineName,
-            otherInfo: [viewModel.commute.stop1.directionDescription],
+            otherInfo: otherInfo,
             lineInitials: viewModel.commute.stop1.lineInitials,
             lineColor: viewModel.commute.stop1.lineColor,
             onTap: () {

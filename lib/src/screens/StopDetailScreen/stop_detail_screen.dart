@@ -10,6 +10,7 @@ import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/details_widg
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/no_alerts_widget.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/single_timer.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/two_lines_timer_row.dart';
+import 'package:mbta_companion/src/services/config.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/state/operations/locationOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
@@ -59,7 +60,10 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(widget.stop.name),
+        title: Text(
+          widget.stop.name +
+              (FIREBASE_STAGE == "staging" ? " " + widget.stop.id : ""),
+        ),
       ),
       body: Container(
         child: Column(

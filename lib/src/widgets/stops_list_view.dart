@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/state/state.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
 import 'package:redux/redux.dart';
@@ -13,12 +12,14 @@ class StopsListView extends StatelessWidget {
   final bool dismissable;
   final Function(Stop) onDismiss;
   final bool timeCircles;
+  final bool includeOtherInfo;
 
   StopsListView(this.stops,
       {this.onTap,
       this.dismissable = false,
       this.onDismiss,
-      this.timeCircles = true})
+      this.timeCircles = true,
+      this.includeOtherInfo = true})
       : assert(dismissable ? onDismiss != null : true);
 
   @override
@@ -32,26 +33,27 @@ class StopsListView extends StatelessWidget {
           itemBuilder: (context, int index) {
             if (this.dismissable) {
               return Dismissible(
-                  direction: DismissDirection.endToStart,
-                  key: Key(stops[index].id),
-                  onDismissed: (direction) {
-                    onDismiss(stops[index]);
-                  },
-                  background: Container(
-                    margin: EdgeInsets.only(top: 6.0, bottom: 6.0),
-                    color: Colors.red,
-                    child: Container(
-                      padding: EdgeInsets.all(12.0),
-                      child: Align(
-                        child: Icon(
-                          Icons.delete,
-                          size: 30.0,
-                        ),
-                        alignment: Alignment.centerRight,
+                direction: DismissDirection.endToStart,
+                key: Key(stops[index].id),
+                onDismissed: (direction) {
+                  onDismiss(stops[index]);
+                },
+                background: Container(
+                  margin: EdgeInsets.only(top: 6.0, bottom: 6.0),
+                  color: Colors.red,
+                  child: Container(
+                    padding: EdgeInsets.all(12.0),
+                    child: Align(
+                      child: Icon(
+                        Icons.delete,
+                        size: 30.0,
                       ),
+                      alignment: Alignment.centerRight,
                     ),
                   ),
-                  child: stopCard(index, viewModel.locationData));
+                ),
+                child: stopCard(index, viewModel.locationData),
+              );
             }
             return stopCard(index, viewModel.locationData);
           },
@@ -62,12 +64,12 @@ class StopsListView extends StatelessWidget {
 
   Widget stopCard(int index, LocationData locationData) {
     return StopCard(
-      stop: stops[index],
-      includeDistance: locationData != null,
-      location: locationData,
-      onTap: onTap,
-      timeCircles: this.timeCircles,
-    );
+        stop: stops[index],
+        includeDistance: locationData != null,
+        location: locationData,
+        onTap: onTap,
+        timeCircles: this.timeCircles,
+        includeOtherInfo: this.includeOtherInfo);
   }
 }
 

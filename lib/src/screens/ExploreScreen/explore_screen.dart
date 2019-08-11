@@ -7,6 +7,7 @@ import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/state/operations/allStopsOperations.dart';
 import 'package:mbta_companion/src/state/operations/locationOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
+import 'package:mbta_companion/src/utils/stops_list_helpers.dart';
 import 'package:mbta_companion/src/widgets/error_text_widget.dart';
 import 'package:mbta_companion/src/widgets/stops_list_view.dart';
 import 'package:redux/redux.dart';
@@ -19,8 +20,15 @@ class ExploreScreen extends StatefulWidget {
   final Function(Stop) onTap;
   final String topMessage;
   final bool timeCircles;
+  final bool consolidated;
+  final bool includeOtherInfo;
 
-  ExploreScreen({this.onTap, this.topMessage, this.timeCircles = true});
+  ExploreScreen(
+      {this.onTap,
+      this.topMessage,
+      this.timeCircles = true,
+      this.consolidated = false,
+      this.includeOtherInfo = true});
 
   @override
   _ExploreScreenState createState() => _ExploreScreenState();
@@ -61,14 +69,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
     }
 
     return StopsListView(filteredStops,
-        onTap: widget.onTap, timeCircles: widget.timeCircles);
+        onTap: widget.onTap,
+        timeCircles: widget.timeCircles,
+        includeOtherInfo: widget.includeOtherInfo);
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: StoreConnector<AppState, _ExploreViewModel>(
-        converter: (store) => _ExploreViewModel.create(store),
+        converter: (store) =>
+            _ExploreViewModel.create(store, widget.consolidated),
         builder: (context, _ExploreViewModel viewModel) {
           var bodyWidget = getBodyWidget(viewModel);
 
@@ -120,8 +131,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    final viewModel =
-                        _ExploreViewModel.create(StoreProvider.of(context));
+                    final viewModel = _ExploreViewModel.create(
+                        StoreProvider.of(context), widget.consolidated);
                     if (viewModel.location != null) {
                       viewModel.getAllStops(viewModel.location);
                     }
@@ -159,13 +170,16 @@ class _ExploreViewModel {
       this.getLocation,
       this.getAllStops});
 
-  factory _ExploreViewModel.create(Store<AppState> store) {
+  factory _ExploreViewModel.create(Store<AppState> store, bool consolidated) {
     final state = store.state;
     return _ExploreViewModel(
         location: state.locationState.locationData,
         isLocationLoading: state.locationState.isLocationLoading,
         locationErrorStatus: state.locationState.locationErrorStatus,
-        allStops: state.allStopsState.allStops,
+        allStops: consolidated
+            ? consolidate(
+                state.allStopsState.allStops, state.locationState.locationData)
+            : state.allStopsState.allStops,
         isAllStopsLoading: state.allStopsState.isAllStopsLoading,
         allStopsErrorMessage: state.allStopsState.allStopsErrorMessage,
         getLocation: () => store.dispatch(fetchLocation()),

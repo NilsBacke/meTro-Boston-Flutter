@@ -4,7 +4,6 @@ import 'package:mbta_companion/src/models/prediction.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import 'package:mbta_companion/src/utils/api_request_counter.dart';
 
 class MBTAStreamService {
@@ -51,24 +50,34 @@ class MBTAStreamService {
   static PredictionEvent _getResetPredictionEvent(jsonData) {
     Prediction pred1, pred2;
     try {
-      pred1 = Prediction(jsonData[0]['id'],
-          DateTime.parse(jsonData[0]['attributes']['arrival_time']));
-      // for end of line stops
-      if (pred1 == null) {
-        pred1 = Prediction(jsonData[0]['id'],
-            DateTime.parse(jsonData[0]['attributes']['departure_time']));
+      if (jsonData.length > 0) {
+        if (jsonData[0]['attributes']['arrival_time'] != null) {
+          pred1 = Prediction(jsonData[0]['id'],
+              DateTime.parse(jsonData[0]['attributes']['arrival_time']));
+        } else {
+          // for end of line stops
+          pred1 = Prediction(jsonData[0]['id'],
+              DateTime.parse(jsonData[0]['attributes']['departure_time']));
+        }
+      } else {
+        pred1 = null;
       }
-    } on Exception catch (e) {
+    } catch (e) {
       pred1 = null;
       print("Exception: " + e.toString());
     }
     try {
-      pred2 = Prediction(jsonData[1]['id'],
-          DateTime.parse(jsonData[1]['attributes']['arrival_time']));
-      // for end of line stops
-      if (pred2 == null) {
-        pred2 = Prediction(jsonData[1]['id'],
-            DateTime.parse(jsonData[1]['attributes']['departure_time']));
+      if (jsonData.length > 1) {
+        if (jsonData[1]['attributes']['arrival_time'] != null) {
+          pred2 = Prediction(jsonData[1]['id'],
+              DateTime.parse(jsonData[1]['attributes']['arrival_time']));
+        } else {
+          // for end of line stops
+          pred2 = Prediction(jsonData[1]['id'],
+              DateTime.parse(jsonData[1]['attributes']['departure_time']));
+        }
+      } else {
+        pred2 = null;
       }
     } on Exception catch (e) {
       pred2 = null;

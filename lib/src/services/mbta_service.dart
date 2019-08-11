@@ -10,12 +10,12 @@ import 'utils/executeCall.dart';
 
 class MBTAService {
   static final newAPIURL = AWS_API_URL;
-  // static final awsAPIKey = "q9sdm8YIPS2M8wf3frWic56cqZ4WSIuM4NNnYoKf"; // develop
-  static final awsAPIKey = AWS_API_KEY; // prod
+  static final awsAPIKey = AWS_API_KEY;
   static final nearestStopRoute = "/stops/nearest";
   static final nearbyStopsRoute = "/stops/allnearby";
   static final stopsAtSameLocationRoute = "/stops/location";
   static final alertsRoute = "/stops/alerts";
+  static final neighborStopRoute = "/stops/neighbor";
   static final rangeInMiles = 100;
   static final apiKey = MBTA_API_KEY;
   static final baseURL = MBTA_API_URL;
@@ -82,6 +82,18 @@ class MBTAService {
       alerts.add(Alert.fromJson(alert));
     }
     return alerts;
+  }
+
+  static Future<Stop> getAssociatedStop({@required String stopId}) async {
+    final route = "$newAPIURL/$neighborStopRoute?stopId=$stopId";
+    final result =
+        await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
+
+    if (result.hasError) {
+      throw new Exception(result.error);
+    }
+
+    return Stop.from(result.payload);
   }
 
   static List<Stop> _jsonToListOfStops(dynamic jsonData) {
