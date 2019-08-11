@@ -1,9 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
@@ -11,14 +11,11 @@ import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/state/operations/allStopsOperations.dart';
 import 'package:mbta_companion/src/state/operations/locationOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
+import 'package:mbta_companion/src/utils/show_error_dialog.dart';
 import 'package:mbta_companion/src/widgets/error_text_widget.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
 import 'package:mbta_companion/src/widgets/stops_list_view.dart';
 import 'package:redux/redux.dart';
-
-const locationPermissionText =
-    'Location permissions are required to view the nearest stop and distances to stops\n\nGo to settings to enable permissions';
-const locationServicesText = 'Location services are not enabled';
 
 class NearbyScreen extends StatefulWidget {
   @override
@@ -46,6 +43,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
     }
 
     if (viewModel.allStopsErrorMessage.isNotEmpty) {
+      showErrorDialog(context, viewModel.allStopsErrorMessage);
       return errorTextWidget(context, text: viewModel.allStopsErrorMessage);
     }
 

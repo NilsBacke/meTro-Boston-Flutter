@@ -7,6 +7,7 @@ import 'package:mbta_companion/src/screens/SavedStopsScreen/widgets/error_list.d
 import 'package:mbta_companion/src/state/actions/savedStopsActions.dart';
 import 'package:mbta_companion/src/state/operations/savedStopsOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
+import 'package:mbta_companion/src/utils/show_error_dialog.dart';
 import 'package:mbta_companion/src/widgets/stops_list_view.dart';
 import 'package:redux/redux.dart';
 
@@ -44,6 +45,7 @@ class _SavedScreenState extends State<SavedScreen> {
         if (viewModel.isSavedStopsLoading) {
           bodyWidget = StopsLoadingIndicator();
         } else if (viewModel.savedStopsError.isNotEmpty) {
+          showErrorDialog(context, viewModel.savedStopsError);
           bodyWidget = errorSavedList(context, viewModel.savedStopsError);
         } else if (viewModel.savedStops == null ||
             viewModel.savedStops.length == 0) {
