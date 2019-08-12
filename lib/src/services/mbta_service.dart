@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/alert.dart';
 import 'package:mbta_companion/src/services/config.dart';
 import 'package:mbta_companion/src/services/utils/makeRequest.dart';
@@ -29,12 +30,12 @@ class MBTAService {
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
     if (result.hasError) {
-      if (result.payload.error != null) {
-        print(result.payload.error);
+      if (result.payload['error'] != null) {
+        print(result.payload['error']);
         throw new Exception(result.payload.userError);
       } else {
         print(result.error);
-        throw new Exception(result.error);
+        throw new Exception(nearestStopErrorMessage);
       }
     }
 
@@ -51,12 +52,12 @@ class MBTAService {
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
     if (result.hasError) {
-      if (result.payload.error != null) {
-        print(result.payload.error);
+      if (result.payload['error'] != null) {
+        print(result.payload['error']);
         throw new Exception(result.payload.userError);
       } else {
         print(result.error);
-        throw new Exception(result.error);
+        throw new Exception(nearbyStopsErrorMessage);
       }
     }
 
@@ -73,12 +74,12 @@ class MBTAService {
         headers: {"x-api-key": awsAPIKey}, body: json.encode(stop));
 
     if (result.hasError) {
-      if (result.payload.error != null) {
-        print(result.payload.error);
+      if (result.payload['error'] != null) {
+        print(result.payload['error']);
         throw new Exception(result.payload.userError);
       } else {
         print(result.error);
-        throw new Exception(result.error);
+        throw new Exception(allStopsAtSameLocationErrorMessage);
       }
     }
 
@@ -92,12 +93,12 @@ class MBTAService {
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
     if (result.hasError) {
-      if (result.payload.error != null) {
-        print(result.payload.error);
+      if (result.payload['error'] != null) {
+        print(result.payload['error']);
         throw new Exception(result.payload.userError);
       } else {
         print(result.error);
-        throw new Exception(result.error);
+        throw new Exception(alertsErrorMessage);
       }
     }
 
@@ -114,12 +115,12 @@ class MBTAService {
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
     if (result.hasError) {
-      if (result.payload.error != null) {
-        print(result.payload.error);
+      if (result.payload['error'] != null) {
+        print(result.payload['error']);
         throw new Exception(result.payload.userError);
       } else {
         print(result.error);
-        throw new Exception(result.error);
+        throw new Exception(associatedStopErrorMessage);
       }
     }
 

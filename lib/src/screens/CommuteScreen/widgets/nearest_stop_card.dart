@@ -44,7 +44,10 @@ class _NearestStopCardState extends State<NearestStopCard> {
         }
         if (viewModel.nearestStopErrorMessage != null &&
             viewModel.nearestStopErrorMessage.length != 0) {
-          showErrorDialog(context, viewModel.nearestStopErrorMessage);
+          Future.delayed(
+              Duration.zero,
+              () =>
+                  showErrorDialog(context, viewModel.nearestStopErrorMessage));
           return errorMessageCard(context, viewModel.nearestStopErrorMessage);
         }
 

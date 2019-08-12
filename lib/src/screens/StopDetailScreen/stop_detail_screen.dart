@@ -7,6 +7,7 @@ import 'package:mbta_companion/src/models/alert.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/alert_card.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/details_widget.dart';
+import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/direction_timer_column.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/no_alerts_widget.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/single_timer.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/two_lines_timer_row.dart';
@@ -53,6 +54,16 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
         this.alerts = alerts;
       });
     }
+  }
+
+  bool lastStopOfLineInList(List<Stop> stopsAtLocation, int i) {
+    return (i % 2 == 0 &&
+        ((i == stopsAtLocation.length - 1 &&
+                stopsAtLocation[i].lineName !=
+                    stopsAtLocation[i - 1].lineName) ||
+            (i != stopsAtLocation.length - 1 &&
+                stopsAtLocation[i].lineName !=
+                    stopsAtLocation[i + 1].lineName)));
   }
 
   @override
@@ -121,11 +132,12 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: stopsAtLocation.length,
                 itemBuilder: (context, int i) {
-                  // end of line stop
-                  if (stopsAtLocation.length == 1) {
-                    return singleTimer(stopsAtLocation[i]);
-                  }
                   print("i: $i length: ${stopsAtLocation.length}");
+                  // end of line stop or last stop in list (park st has 5 green line stops)
+                  if (stopsAtLocation.length == 1 ||
+                      lastStopOfLineInList(stopsAtLocation, i)) {
+                    return singleTimer(context, stopsAtLocation[i]);
+                  }
                   if (i % 2 == 0) {
                     return twoLinesTimerRow(
                         context, stopsAtLocation[i], stopsAtLocation[i + 1]);
