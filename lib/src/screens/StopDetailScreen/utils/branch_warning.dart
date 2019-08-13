@@ -5,7 +5,7 @@ import 'package:mbta_companion/src/models/stop.dart';
 Widget branchWarning(BuildContext context, Stop stop, {Widget fallback}) {
   return shouldWarn(stop)
       ? Container(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(12.0),
           child: Text(
             branchWarningMessage,
             style: Theme.of(context).textTheme.caption,
