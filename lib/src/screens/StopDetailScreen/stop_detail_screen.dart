@@ -66,6 +66,31 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
                     stopsAtLocation[i + 1].lineName)));
   }
 
+  List<List<Stop>> getStopRows(List<Stop> stopsAtLocation) {
+    final List<List<Stop>> result = [];
+    for (int i = 0; i < stopsAtLocation.length; i++) {
+      final stop = stopsAtLocation[i];
+      if (i < stopsAtLocation.length - 1) {
+        if (stop.lineName != stopsAtLocation[i + 1].lineName) {
+          result.add(List.from([stop]));
+        } else {
+          result.add(List.from([stop, stopsAtLocation[i + 1]]));
+          i++;
+        }
+      } else {
+        result.add(List.from([stop]));
+      }
+    }
+    return result;
+  }
+
+  Widget buildStopRow(List<Stop> stopsInRow) {
+    if (stopsInRow.length == 1) {
+      return singleTimer(context, stopsInRow[0]);
+    }
+    return twoLinesTimerRow(context, stopsInRow[0], stopsInRow[1]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,6 +147,8 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
           viewModel.getLocation();
         }
 
+        final List<List<Stop>> stopRows = getStopRows(stopsAtLocation);
+
         return Container(
           padding: EdgeInsets.all(12.0),
           child: ListView(
@@ -130,19 +157,9 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: stopsAtLocation.length,
+                itemCount: stopRows.length,
                 itemBuilder: (context, int i) {
-                  print("i: $i length: ${stopsAtLocation.length}");
-                  // end of line stop or last stop in list (park st has 5 green line stops)
-                  if (stopsAtLocation.length == 1 ||
-                      lastStopOfLineInList(stopsAtLocation, i)) {
-                    return singleTimer(context, stopsAtLocation[i]);
-                  }
-                  if (i % 2 == 0) {
-                    return twoLinesTimerRow(
-                        context, stopsAtLocation[i], stopsAtLocation[i + 1]);
-                  }
-                  return Container();
+                  return buildStopRow(stopRows[i]);
                 },
               ),
               Container(

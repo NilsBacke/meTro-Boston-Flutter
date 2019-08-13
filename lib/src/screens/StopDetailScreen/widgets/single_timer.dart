@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/stop.dart';
+import 'package:mbta_companion/src/screens/StopDetailScreen/utils/branch_warning.dart';
 import 'package:mbta_companion/src/widgets/time_circle.dart';
 
 Widget singleTimer(BuildContext context, Stop stop) {
@@ -30,6 +31,13 @@ Widget singleTimer(BuildContext context, Stop stop) {
         ),
       ),
       TimeCircleCombo(stop.id),
+      branchWarning(
+        context,
+        stop,
+        fallback: Container(
+          height: 30,
+        ),
+      )
     ],
   );
 }

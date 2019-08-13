@@ -13,3 +13,6 @@ const alertsErrorMessage =
     'Error getting alerts for this stop. Please try again';
 const associatedStopErrorMessage =
     'Error getting sister stop. Please try again';
+
+const branchWarningMessage =
+    "Unfortunately the MBTA does not provide specific branch predictions for this stop";
