@@ -32,7 +32,7 @@ class MBTAService {
     if (result.hasError) {
       if (result.payload['error'] != null) {
         print(result.payload['error']);
-        throw new Exception(result.payload.userError);
+        throw new Exception(result.payload['userError']);
       } else {
         print(result.error);
         throw new Exception(nearestStopErrorMessage);
@@ -54,7 +54,7 @@ class MBTAService {
     if (result.hasError) {
       if (result.payload['error'] != null) {
         print(result.payload['error']);
-        throw new Exception(result.payload.userError);
+        throw new Exception(result.payload['userError']);
       } else {
         print(result.error);
         throw new Exception(nearbyStopsErrorMessage);
@@ -76,7 +76,7 @@ class MBTAService {
     if (result.hasError) {
       if (result.payload['error'] != null) {
         print(result.payload['error']);
-        throw new Exception(result.payload.userError);
+        throw new Exception(result.payload['userError']);
       } else {
         print(result.error);
         throw new Exception(allStopsAtSameLocationErrorMessage);
@@ -95,7 +95,7 @@ class MBTAService {
     if (result.hasError) {
       if (result.payload['error'] != null) {
         print(result.payload['error']);
-        throw new Exception(result.payload.userError);
+        throw new Exception(result.payload['userError']);
       } else {
         print(result.error);
         throw new Exception(alertsErrorMessage);
@@ -117,7 +117,7 @@ class MBTAService {
     if (result.hasError) {
       if (result.payload['error'] != null) {
         print(result.payload['error']);
-        throw new Exception(result.payload.userError);
+        throw new Exception(result.payload['userError']);
       } else {
         print(result.error);
         throw new Exception(associatedStopErrorMessage);

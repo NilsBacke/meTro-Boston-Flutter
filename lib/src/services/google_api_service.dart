@@ -22,7 +22,7 @@ class GoogleAPIService {
     if (result.hasError) {
       if (result.payload['error'] != null) {
         print(result.payload['error']);
-        throw new Exception(result.payload.userError);
+        throw new Exception(result.payload['userError']);
       } else {
         print(result.error);
         throw new Exception(timeBetweenStopsErrorMessage);
@@ -50,14 +50,14 @@ class GoogleAPIService {
     if (result.hasError) {
       if (result.payload['error'] != null) {
         print(result.payload['error']);
-        throw new Exception(result.payload.userError);
+        throw new Exception(result.payload['userError']);
       } else {
         print(result.error);
         throw new Exception(directionErrorMessage);
       }
     }
 
-    final String payload = result.payload;
+    final payload = result.payload;
 
     if (payload.isEmpty) return null;
     return payload;
