@@ -7,6 +7,7 @@ import 'package:mbta_companion/src/models/alert.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/alert_card.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/details_widget.dart';
+import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/direction_timer_column.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/no_alerts_widget.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/single_timer.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/two_lines_timer_row.dart';
@@ -53,6 +54,41 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
         this.alerts = alerts;
       });
     }
+  }
+
+  bool lastStopOfLineInList(List<Stop> stopsAtLocation, int i) {
+    return (i % 2 == 0 &&
+        ((i == stopsAtLocation.length - 1 &&
+                stopsAtLocation[i].lineName !=
+                    stopsAtLocation[i - 1].lineName) ||
+            (i != stopsAtLocation.length - 1 &&
+                stopsAtLocation[i].lineName !=
+                    stopsAtLocation[i + 1].lineName)));
+  }
+
+  List<List<Stop>> getStopRows(List<Stop> stopsAtLocation) {
+    final List<List<Stop>> result = [];
+    for (int i = 0; i < stopsAtLocation.length; i++) {
+      final stop = stopsAtLocation[i];
+      if (i < stopsAtLocation.length - 1) {
+        if (stop.lineName != stopsAtLocation[i + 1].lineName) {
+          result.add(List.from([stop]));
+        } else {
+          result.add(List.from([stop, stopsAtLocation[i + 1]]));
+          i++;
+        }
+      } else {
+        result.add(List.from([stop]));
+      }
+    }
+    return result;
+  }
+
+  Widget buildStopRow(List<Stop> stopsInRow) {
+    if (stopsInRow.length == 1) {
+      return singleTimer(context, stopsInRow[0]);
+    }
+    return twoLinesTimerRow(context, stopsInRow[0], stopsInRow[1]);
   }
 
   @override
@@ -111,6 +147,8 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
           viewModel.getLocation();
         }
 
+        final List<List<Stop>> stopRows = getStopRows(stopsAtLocation);
+
         return Container(
           padding: EdgeInsets.all(12.0),
           child: ListView(
@@ -119,18 +157,9 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: stopsAtLocation.length,
+                itemCount: stopRows.length,
                 itemBuilder: (context, int i) {
-                  // end of line stop
-                  if (stopsAtLocation.length == 1) {
-                    return singleTimer(stopsAtLocation[i]);
-                  }
-                  print("i: $i length: ${stopsAtLocation.length}");
-                  if (i % 2 == 0) {
-                    return twoLinesTimerRow(
-                        context, stopsAtLocation[i], stopsAtLocation[i + 1]);
-                  }
-                  return Container();
+                  return buildStopRow(stopRows[i]);
                 },
               ),
               Container(

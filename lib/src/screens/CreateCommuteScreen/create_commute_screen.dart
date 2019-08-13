@@ -117,6 +117,7 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
       return;
     }
 
+    // TODO: error handling
     final direction1 =
         await GoogleAPIService.getDirectionFromRoute(stop1, stop2);
     final direction2 =
@@ -124,13 +125,15 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
 
     var changedStop1, changedStop2;
 
-    if (!stop1.directionDestination.contains(direction1)) {
+    if (direction1 != null &&
+        !stop1.directionDestination.contains(direction1)) {
       changedStop1 = await MBTAService.getAssociatedStop(stopId: stop1.id);
     } else {
       changedStop1 = stop1;
     }
 
-    if (!stop2.directionDestination.contains(direction2)) {
+    if (direction2 != null &&
+        !stop2.directionDestination.contains(direction2)) {
       changedStop2 = await MBTAService.getAssociatedStop(stopId: stop2.id);
     } else {
       changedStop2 = stop2;

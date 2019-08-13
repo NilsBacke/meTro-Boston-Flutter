@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/config.dart';
 import 'package:mbta_companion/src/services/utils/executeCall.dart';
@@ -19,12 +20,12 @@ class GoogleAPIService {
         headers: {"x-api-key": awsAPIKey});
 
     if (result.hasError) {
-      if (result.payload.error != null) {
-        print(result.payload.error);
-        throw new Exception(result.payload.userError);
+      if (result.payload['error'] != null) {
+        print(result.payload['error']);
+        throw new Exception(result.payload['userError']);
       } else {
         print(result.error);
-        throw new Exception(result.error);
+        throw new Exception(timeBetweenStopsErrorMessage);
       }
     }
 
@@ -47,16 +48,16 @@ class GoogleAPIService {
         headers: {"x-api-key": awsAPIKey});
 
     if (result.hasError) {
-      if (result.payload.error != null) {
-        print(result.payload.error);
-        throw new Exception(result.payload.userError);
+      if (result.payload['error'] != null) {
+        print(result.payload['error']);
+        throw new Exception(result.payload['userError']);
       } else {
         print(result.error);
-        throw new Exception(result.error);
+        throw new Exception(directionErrorMessage);
       }
     }
 
-    final String payload = result.payload;
+    final payload = result.payload;
 
     if (payload.isEmpty) return null;
     return payload;
