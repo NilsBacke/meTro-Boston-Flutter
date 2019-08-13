@@ -3,8 +3,7 @@ import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 
 Widget branchWarning(BuildContext context, Stop stop, {Widget fallback}) {
-  return stop.lineName == "Green Line" &&
-          stop.directionDestination.contains("&")
+  return shouldWarn(stop)
       ? Container(
           padding: EdgeInsets.all(8.0),
           child: Text(
@@ -15,3 +14,10 @@ Widget branchWarning(BuildContext context, Stop stop, {Widget fallback}) {
         )
       : fallback != null ? fallback : Container();
 }
+
+bool shouldWarn(Stop stop) {
+  return (stop.lineName == "Red Line" || multiBranchStopList.contains(stop.name)) &&
+          stop.directionDestination.contains("&");
+}
+
+List<String> multiBranchStopList = ["Kenmore", "Hynes Convention Ctr", "Copley", "Arlington", "Boylston", "Park Street", "Government Center", "Haymarket", "North Station", "Science Park", "Lechmere"];
