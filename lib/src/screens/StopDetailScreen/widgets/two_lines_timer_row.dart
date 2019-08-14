@@ -27,7 +27,7 @@ Widget twoLinesTimerRow(BuildContext context, Stop stop1, Stop stop2) {
       Container(
         padding: EdgeInsets.all(16.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             directionAndTimerColumn(context, firstStop),

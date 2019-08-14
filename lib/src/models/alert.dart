@@ -34,7 +34,11 @@ class Alert {
     this.stopId = parsedJson[stopIdKey].toString();
     this.id = parsedJson[idKey];
     this.startDate = DateTime.parse(parsedJson[startDateKey]);
-    this.endDate = DateTime.parse(parsedJson[endDateKey]);
+    if (parsedJson[endDateKey] != null) {
+      this.endDate = DateTime.parse(parsedJson[endDateKey]);
+    } else {
+      this.endDate = null;
+    }
     this.timeframe = parsedJson[timeframeKey];
     this.title = parsedJson[titleKey];
     this.subtitle = parsedJson[subtitleKey];

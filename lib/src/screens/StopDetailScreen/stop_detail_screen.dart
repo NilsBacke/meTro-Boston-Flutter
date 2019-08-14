@@ -56,16 +56,6 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
     }
   }
 
-  bool lastStopOfLineInList(List<Stop> stopsAtLocation, int i) {
-    return (i % 2 == 0 &&
-        ((i == stopsAtLocation.length - 1 &&
-                stopsAtLocation[i].lineName !=
-                    stopsAtLocation[i - 1].lineName) ||
-            (i != stopsAtLocation.length - 1 &&
-                stopsAtLocation[i].lineName !=
-                    stopsAtLocation[i + 1].lineName)));
-  }
-
   List<List<Stop>> getStopRows(List<Stop> stopsAtLocation) {
     final List<List<Stop>> result = [];
     for (int i = 0; i < stopsAtLocation.length; i++) {

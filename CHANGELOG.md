@@ -1,9 +1,15 @@
 # 1.1.0
 
+HUGE improvements!!!
+
 Improved search results on explore page
 Improved network security
-Improved scalability (to allow for bus stops in the future!)
-Improved commute creation (you no longer have to choose the correct direction of each stop)
+Improved scalability (to allow for bus and commuter rail support in the future!)
+Improved commute creation experience (you no longer have to choose the correct direction of each stop)
+Fixed bug where stops that serve multiple green line branches were not showing up correctly
+Fixed bug where end of line stops were not showing up correctly
+All around better error handling
+Added disclaimer text to stops that do not have specific branch arrival time countdowns
 
 # 1.0.1
 

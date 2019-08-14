@@ -24,8 +24,10 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
   String appBarText;
   Stop stop1, stop2;
   TimeOfDay arrivalTime, departureTime;
+  bool isLoading;
 
   initVariables(Commute commute) {
+    isLoading = false;
     if (commute != null) {
       if (isCommuteSwapped(commute)) {
         this.stop1 = commute.stop2;
@@ -117,6 +119,10 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
       return;
     }
 
+    setState(() {
+      isLoading = true;
+    });
+
     // TODO: error handling
     final direction1 =
         await GoogleAPIService.getDirectionFromRoute(stop1, stop2);
@@ -143,6 +149,11 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
         Commute(changedStop1, changedStop2, arrivalTime, departureTime);
 
     viewModel.saveCommute(newCommute);
+
+    setState(() {
+      isLoading = false;
+    });
+
     Navigator.of(context).pop();
   }
 
@@ -180,6 +191,14 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
                             this.onSelectStop),
                         timeSelectionRow(context, this.arrivalTime,
                             this.departureTime, pickTime),
+                        isLoading
+                            ? Container(
+                                padding: EdgeInsets.all(12.0),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )
+                            : Container()
                       ],
                     ),
                   ),

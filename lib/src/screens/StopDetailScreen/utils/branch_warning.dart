@@ -16,8 +16,20 @@ Widget branchWarning(BuildContext context, Stop stop, {Widget fallback}) {
 }
 
 bool shouldWarn(Stop stop) {
-  return (stop.lineName == "Red Line" || multiBranchStopList.contains(stop.name)) &&
-          stop.directionDestination.contains("&");
+  return (stop.lineName == "Red Line" ||
+          multiBranchStopList.contains(stop.name)) &&
+      (stop.directionDestination.contains("&") ||
+          stop.directionDestination.contains("/"));
 }
 
-List<String> multiBranchStopList = ["Kenmore", "Hynes Convention Ctr", "Copley", "Arlington", "Boylston", "Park Street", "Government Center", "Haymarket", "North Station", "Science Park", "Lechmere"];
+List<String> multiBranchStopList = [
+  "Kenmore",
+  "Hynes Convention Center",
+  "Copley",
+  "Arlington",
+  "Boylston",
+  "Park Street",
+  "Government Center",
+  "Haymarket",
+  "North Station"
+];
