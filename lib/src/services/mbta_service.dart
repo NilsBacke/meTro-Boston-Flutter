@@ -88,7 +88,7 @@ class MBTAService {
 
   static Future<List<Alert>> fetchAlertsForStop(
       {@required String stopId}) async {
-    final route = "$newAPIURL/$alertsRoute?stopId=$stopId";
+    final route = "$newAPIURL$alertsRoute?stopId=$stopId";
     final result =
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 

@@ -20,20 +20,23 @@ class CommuteScreen extends StatefulWidget {
 }
 
 class _CommuteScreenState extends State<CommuteScreen> {
+  void onRefresh() async {
+    final viewModel = _CommuteViewModel.create(StoreProvider.of(context));
+    viewModel.getCommute();
+    final nearestViewModel =
+        NearestStopViewModel.create(StoreProvider.of(context));
+    nearestViewModel.getLocation();
+    if (nearestViewModel.location != null) {
+      nearestViewModel.getNearestStop(nearestViewModel.location);
+    }
+    await Future.delayed(Duration(seconds: 1));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: RefreshIndicator(
-        onRefresh: () async {
-          final viewModel = _CommuteViewModel.create(StoreProvider.of(context));
-          viewModel.getCommute();
-          final nearestViewModel =
-              NearestStopViewModel.create(StoreProvider.of(context));
-          if (nearestViewModel.location != null) {
-            nearestViewModel.getNearestStop(nearestViewModel.location);
-          }
-          await Future.delayed(Duration(seconds: 1));
-        },
+        onRefresh: onRefresh,
         child: ListView(
           children: <Widget>[
             NearestStopCard(),

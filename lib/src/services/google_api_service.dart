@@ -29,7 +29,7 @@ class GoogleAPIService {
       }
     }
 
-    return result.payload;
+    return int.parse(result.payload['minutes']);
   }
 
   static String getArrivalTime(DateTime time, int minutes) {
@@ -57,9 +57,6 @@ class GoogleAPIService {
       }
     }
 
-    final payload = result.payload;
-
-    if (payload.isEmpty) return null;
-    return payload;
+    return result.payload['direction'];
   }
 }
