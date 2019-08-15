@@ -1,3 +1,4 @@
+import 'package:floating_search_bar/floating_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:location/location.dart';
@@ -73,6 +74,78 @@ class _ExploreScreenState extends State<ExploreScreen> {
         includeOtherInfo: widget.includeOtherInfo);
   }
 
+  void onSearchChange(_ExploreViewModel viewModel, String searchText) {
+    this.setState(() {
+      this.filteredStops =
+          filterSearchResults(searchText, viewModel.allStops, this.mounted);
+    });
+  }
+
+  Widget originalSearchBar(_ExploreViewModel viewModel) {
+    return Container(
+      padding: EdgeInsets.all(12.0),
+      child: TextField(
+        controller: searchBarController,
+        decoration: InputDecoration(
+          hintText: "Search...",
+          prefixIcon: Icon(Icons.search),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(25.0),
+            ),
+          ),
+        ),
+        onChanged: (searchText) {
+          onSearchChange(viewModel, searchText);
+        },
+      ),
+    );
+  }
+
+  Widget searchBar(_ExploreViewModel viewModel) {
+    return Container(
+      height: 70.0,
+      margin: EdgeInsets.all(12.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8.0),
+          ),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                child: Icon(Icons.search),
+              ),
+              Flexible(
+                child: Container(
+                  padding: EdgeInsets.only(left: 12.0),
+                  margin: EdgeInsets.only(top: 21.0),
+                  child: TextField(
+                    controller: searchBarController,
+                    onChanged: (searchText) {
+                      onSearchChange(viewModel, searchText);
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Park St...",
+                    ),
+                    textCapitalization: TextCapitalization.sentences,
+                    cursorColor: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -108,30 +181,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
-              Container(
-                  padding: EdgeInsets.all(12.0),
-                  child: TextField(
-                      controller: searchBarController,
-                      decoration: InputDecoration(
-                        hintText: "Search...",
-                        prefixIcon: Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(25.0),
-                          ),
-                        ),
-                      ),
-                      onChanged: (searchText) {
-                        this.setState(() {
-                          this.filteredStops = filterSearchResults(
-                              searchText, viewModel.allStops, this.mounted);
-                        });
-                      })),
+              searchBar(viewModel),
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
                     final viewModel = _ExploreViewModel.create(
                         StoreProvider.of(context), widget.consolidated);
+                    viewModel.getLocation();
                     if (viewModel.location != null) {
                       viewModel.getAllStops(viewModel.location);
                     }

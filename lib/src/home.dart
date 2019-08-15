@@ -146,7 +146,7 @@ class _HomeState extends State<Home> {
       case 4:
         return 'Settings';
       default:
-        return 'Boston Subway Companion';
+        return 'meTro Boston';
     }
   }
 }

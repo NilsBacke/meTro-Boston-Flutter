@@ -21,7 +21,7 @@ class App extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
-        title: "Boston Subway Companion",
+        title: "meTro",
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.dark,

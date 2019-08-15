@@ -37,7 +37,6 @@ ThunkAction addSavedStop(Stop stop) {
 ThunkAction removeSavedStop(Stop stop) {
   return (Store store) async {
     Future(() async {
-      store.dispatch(SavedStopsRemovePending());
       try {
         await SavedStopsService.removeStop(stop);
         store.dispatch(SavedStopsRemoveSuccess(stop));

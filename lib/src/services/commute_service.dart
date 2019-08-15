@@ -16,7 +16,6 @@ class CommuteService {
           .document(stage)
           .collection("users")
           .document(udid);
-      // TODO: change staging
 
       var doc = await docRef.get();
       if (!doc.exists) {
