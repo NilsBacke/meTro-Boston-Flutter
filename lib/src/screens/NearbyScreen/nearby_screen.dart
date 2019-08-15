@@ -12,6 +12,7 @@ import 'package:mbta_companion/src/state/operations/allStopsOperations.dart';
 import 'package:mbta_companion/src/state/operations/locationOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
 import 'package:mbta_companion/src/utils/show_error_dialog.dart';
+import 'package:mbta_companion/src/utils/stops_list_helpers.dart';
 import 'package:mbta_companion/src/widgets/error_text_widget.dart';
 import 'package:mbta_companion/src/widgets/stop_card.dart';
 import 'package:mbta_companion/src/widgets/stops_list_view.dart';
@@ -168,7 +169,9 @@ class _NearbyScreenViewModel {
     if (state.allStopsState.allStops != null &&
         state.allStopsState.allStops.length != 0 &&
         state.locationState.locationData != null) {
-      for (final Stop stop in state.allStopsState.allStops) {
+      final consolidatedStops = consolidate(
+          state.allStopsState.allStops, state.locationState.locationData);
+      for (final Stop stop in consolidatedStops) {
         final double dist = LocationService.getDistanceFromStop(
             stop, state.locationState.locationData);
         markers.add(

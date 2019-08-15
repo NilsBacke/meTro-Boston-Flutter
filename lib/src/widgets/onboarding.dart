@@ -20,7 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Boston Subway Companion"),
+        title: Text("meTro Boston"),
         centerTitle: true,
       ),
       body: Container(
@@ -81,7 +81,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 child: Material(
                   color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(30.0),
+                  borderRadius: BorderRadius.circular(20.0),
                   child: MaterialButton(
                     child: Text(_currentIndex == 3 ? "Continue" : "Skip"),
                     onPressed: () {

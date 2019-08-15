@@ -20,7 +20,7 @@ class CommuteScreen extends StatefulWidget {
 }
 
 class _CommuteScreenState extends State<CommuteScreen> {
-  void onRefresh() async {
+  Future onRefresh() async {
     final viewModel = _CommuteViewModel.create(StoreProvider.of(context));
     viewModel.getCommute();
     final nearestViewModel =

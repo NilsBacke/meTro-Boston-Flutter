@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 sendFeedback(BuildContext context) async {
   const url =
-      'mailto:metrobostonapp@gmail.com?subject=Boston Subway Companion Feedback&body=<body>';
+      'mailto:metrobostonapp@gmail.com?subject=meTro Boston Feedback&body=<body>';
   if (await canLaunch(url)) {
     await launch(url);
   } else {

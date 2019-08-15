@@ -17,7 +17,6 @@ class SavedStopsService {
           .collection("users")
           .document(udid)
           .collection("saved_stops");
-      // TODO: change staging
       var docs = await docRef.getDocuments();
       List<Stop> stops = [];
       for (int i = 0; i < docs.documents.length; i++) {

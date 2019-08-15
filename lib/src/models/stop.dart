@@ -41,8 +41,6 @@ class Stop {
         return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
       default:
         return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
-        // TODO: revisit
-        throw Exception('Cannot find a color for line: ' + this.lineName);
     }
   }
 
