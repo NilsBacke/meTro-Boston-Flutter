@@ -56,9 +56,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
     }
 
     // loading
-    if (viewModel.isAllStopsLoading ||
-        viewModel.isLocationLoading ||
-        viewModel.isVehiclesLoading) {
+    if (viewModel.isAllStopsLoading || viewModel.isLocationLoading) {
       return StopsLoadingIndicator();
     }
 
@@ -99,8 +97,7 @@ class _NearbyScreenState extends State<NearbyScreen> {
             if (viewModel.vehicles != null &&
                 viewModel.vehicles.length == 0 &&
                 !viewModel.isVehiclesLoading &&
-                viewModel.vehiclesErrorMessage.isEmpty &&
-                viewModel.location != null) {
+                viewModel.vehiclesErrorMessage.isEmpty) {
               viewModel.getVehicles();
             }
             return bodyWidget;

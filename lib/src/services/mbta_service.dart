@@ -112,7 +112,7 @@ class MBTAService {
   }
 
   static Future<Stop> getAssociatedStop({@required String stopId}) async {
-    final route = "$newAPIURL/$neighborStopRoute?stopId=$stopId";
+    final route = "$newAPIURL$neighborStopRoute?stopId=$stopId";
     final result =
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
@@ -130,7 +130,7 @@ class MBTAService {
   }
 
   static Future<List<Vehicle>> fetchVehicles() async {
-    final route = "$newAPIURL/$vehiclesRoute";
+    final route = "$newAPIURL$vehiclesRoute";
     final result =
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 

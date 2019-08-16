@@ -1,6 +1,6 @@
 class Vehicle {
   String id;
-  double bearing;
+  int bearing;
   double latitude;
   double longitude;
   double speed;
