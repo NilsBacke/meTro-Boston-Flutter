@@ -5,6 +5,7 @@ import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:mbta_companion/src/utils/api_request_counter.dart';
+import 'package:mbta_companion/src/utils/report_error.dart';
 
 class MBTAStreamService {
   static final baseURL = MBTAService.baseURL;
@@ -13,27 +14,36 @@ class MBTAStreamService {
   // two element list, one datetime for each stop
   static Future<Stream<PredictionEvent>> streamPredictionsForStopId(
       String stopId) async {
-    final stream = await EventSource.connect(
-        "$baseURL/predictions?api_key=$apiKey&filter[stop]=$stopId&page[limit]=2");
+    try {
+      final stream = await EventSource.connect(
+          "$baseURL/predictions?api_key=$apiKey&filter[stop]=$stopId&page[limit]=2");
 
-    if (APIRequestCounter.debug) {
-      APIRequestCounter.incrementCalls('prediction stream');
-    }
-
-    return stream.transform(StreamTransformer.fromHandlers(
-        handleData: (Event event, EventSink sink) {
-      // print("event type: ${event.event}");
-      // print("event data: ${event.data}");
-      if (event.event != "remove") {
-        sink.add(_formulatePredictionEvent(event));
+      if (APIRequestCounter.debug) {
+        APIRequestCounter.incrementCalls('prediction stream');
       }
-    }));
+
+      return stream.transform(StreamTransformer.fromHandlers(
+          handleData: (Event event, EventSink sink) {
+        // print("event type: ${event.event}");
+        // print("event data: ${event.data}");
+        if (event.event != "remove") {
+          sink.add(_formulatePredictionEvent(event));
+        }
+      }));
+    } catch (e, stackTrace) {
+      print("Error: $e");
+      reportError(e, stackTrace);
+    }
   }
 
   // two element list, one timeofday for each stop
   static PredictionEvent _formulatePredictionEvent(Event eventObj) {
     final event = eventObj.event;
     final jsonData = json.decode(eventObj.data);
+
+    if (jsonData == null) {
+      return null;
+    }
 
     switch (event) {
       case "reset":
@@ -97,12 +107,15 @@ class MBTAStreamService {
   static Prediction _getSinglePrediction(jsonData) {
     Prediction pred;
     try {
-      pred = Prediction(jsonData['id'],
-          DateTime.parse(jsonData['attributes']['arrival_time']));
-      // for end of line stops
-      if (pred == null || pred.time.hour - DateTime.now().hour > 1) {
-        pred = Prediction(jsonData[0]['id'],
-            DateTime.parse(jsonData[0]['attributes']['departure_time']));
+      if (jsonData != null && jsonData['attributes'] != null) {
+        pred = Prediction(jsonData['id'],
+            DateTime.parse(jsonData['attributes']['arrival_time']));
+        // for end of line stops
+        if ((pred == null || pred.time.hour - DateTime.now().hour > 1) &&
+            jsonData[0] != null) {
+          pred = Prediction(jsonData[0]['id'],
+              DateTime.parse(jsonData[0]['attributes']['departure_time']));
+        }
       }
     } on Exception catch (e) {
       pred = null;

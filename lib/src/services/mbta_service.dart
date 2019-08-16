@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/alert.dart';
+import 'package:mbta_companion/src/models/vehicle.dart';
 import 'package:mbta_companion/src/services/config.dart';
 import 'package:mbta_companion/src/services/utils/makeRequest.dart';
 import '../models/stop.dart';
@@ -17,6 +18,7 @@ class MBTAService {
   static final stopsAtSameLocationRoute = "/stops/location";
   static final alertsRoute = "/stops/alerts";
   static final neighborStopRoute = "/stops/neighbor";
+  static final vehiclesRoute = "/vehicles";
   static final rangeInMiles = 100;
   static final apiKey = MBTA_API_KEY;
   static final baseURL = MBTA_API_URL;
@@ -125,6 +127,28 @@ class MBTAService {
     }
 
     return Stop.from(result.payload);
+  }
+
+  static Future<List<Vehicle>> fetchVehicles() async {
+    final route = "$newAPIURL/$vehiclesRoute";
+    final result =
+        await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
+
+    if (result.hasError) {
+      if (result.payload['error'] != null) {
+        print(result.payload['error']);
+        throw new Exception(result.payload['userError']);
+      } else {
+        print(result.error);
+        throw new Exception(vehiclesErrorMessage);
+      }
+    }
+
+    List<Vehicle> vehicles = List();
+    for (final vehicle in result.payload) {
+      vehicles.add(Vehicle.fromJson(vehicle));
+    }
+    return vehicles;
   }
 
   static List<Stop> _jsonToListOfStops(dynamic jsonData) {

@@ -1,6 +1,7 @@
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/saved_stops_service.dart';
 import 'package:mbta_companion/src/state/actions/savedStopsActions.dart';
+import 'package:mbta_companion/src/utils/report_error.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -40,9 +41,10 @@ ThunkAction removeSavedStop(Stop stop) {
       try {
         await SavedStopsService.removeStop(stop);
         store.dispatch(SavedStopsRemoveSuccess(stop));
-      } catch (e) {
+      } catch (e, stackTrace) {
         print("$e");
         store.dispatch(SavedStopsRemoveFailure(e.message));
+        reportError(e, stackTrace);
       }
     });
   };

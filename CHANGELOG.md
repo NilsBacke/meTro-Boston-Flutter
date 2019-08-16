@@ -2,6 +2,8 @@
 
 HUGE improvements!!!
 
+Changed name from "Boston Subway Companion" to "meTro Boston"
+Updated app icon
 Improved search results on explore page
 Improved look and feel of search bars
 Improved scalability (to allow for bus and commuter rail support in the future!)

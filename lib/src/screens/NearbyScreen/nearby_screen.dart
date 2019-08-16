@@ -5,11 +5,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
+import 'package:mbta_companion/src/models/vehicle.dart';
 import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/state/operations/allStopsOperations.dart';
 import 'package:mbta_companion/src/state/operations/locationOperations.dart';
+import 'package:mbta_companion/src/state/operations/vehiclesOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
 import 'package:mbta_companion/src/utils/show_error_dialog.dart';
 import 'package:mbta_companion/src/utils/stops_list_helpers.dart';
@@ -48,8 +50,15 @@ class _NearbyScreenState extends State<NearbyScreen> {
       return errorTextWidget(context, text: viewModel.allStopsErrorMessage);
     }
 
+    if (viewModel.vehiclesErrorMessage.isNotEmpty) {
+      showErrorDialog(context, viewModel.vehiclesErrorMessage);
+      return errorTextWidget(context, text: viewModel.vehiclesErrorMessage);
+    }
+
     // loading
-    if (viewModel.isAllStopsLoading || viewModel.isLocationLoading) {
+    if (viewModel.isAllStopsLoading ||
+        viewModel.isLocationLoading ||
+        viewModel.isVehiclesLoading) {
       return StopsLoadingIndicator();
     }
 
@@ -58,9 +67,9 @@ class _NearbyScreenState extends State<NearbyScreen> {
         Expanded(
           child: topHalf(viewModel.markers),
         ),
-        Expanded(
-          child: bottomHalf(viewModel.allStops, viewModel.location),
-        ),
+        // Expanded(
+        //   child: bottomHalf(viewModel.allStops, viewModel.location),
+        // ),
       ],
     );
   }
@@ -85,6 +94,14 @@ class _NearbyScreenState extends State<NearbyScreen> {
                 viewModel.allStopsErrorMessage.isEmpty &&
                 viewModel.location != null) {
               viewModel.getAllStops(viewModel.location);
+            }
+
+            if (viewModel.vehicles != null &&
+                viewModel.vehicles.length == 0 &&
+                !viewModel.isVehiclesLoading &&
+                viewModel.vehiclesErrorMessage.isEmpty &&
+                viewModel.location != null) {
+              viewModel.getVehicles();
             }
             return bodyWidget;
           }),
@@ -145,10 +162,14 @@ class _NearbyScreenViewModel {
   final List<Stop> allStops;
   final bool isAllStopsLoading;
   final String allStopsErrorMessage;
+  final List<Vehicle> vehicles;
+  final bool isVehiclesLoading;
+  final String vehiclesErrorMessage;
   final List<Marker> markers;
 
   final Function() getLocation;
   final Function(LocationData) getAllStops;
+  final Function() getVehicles;
 
   _NearbyScreenViewModel(
       {this.location,
@@ -157,8 +178,12 @@ class _NearbyScreenViewModel {
       this.allStops,
       this.isAllStopsLoading,
       this.allStopsErrorMessage,
+      this.vehicles,
+      this.isVehiclesLoading,
+      this.vehiclesErrorMessage,
       this.getLocation,
       this.getAllStops,
+      this.getVehicles,
       this.markers});
 
   factory _NearbyScreenViewModel.create(Store<AppState> store) {
@@ -193,9 +218,13 @@ class _NearbyScreenViewModel {
         allStops: state.allStopsState.allStops,
         isAllStopsLoading: state.allStopsState.isAllStopsLoading,
         allStopsErrorMessage: state.allStopsState.allStopsErrorMessage,
+        vehicles: state.vehiclesState.vehicles,
+        isVehiclesLoading: state.vehiclesState.isVehiclesLoading,
+        vehiclesErrorMessage: state.vehiclesState.vehiclesErrorMessage,
         getLocation: () => store.dispatch(fetchLocation()),
         getAllStops: (LocationData locationData) =>
             store.dispatch(fetchAllStops(locationData)),
+        getVehicles: () => store.dispatch(fetchVehicles()),
         markers: markers);
   }
 }

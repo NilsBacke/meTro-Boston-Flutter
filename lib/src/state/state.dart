@@ -2,6 +2,7 @@ import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/alert.dart';
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/models/stop.dart';
+import 'package:mbta_companion/src/models/vehicle.dart';
 import 'package:mbta_companion/src/services/permission_service.dart';
 
 class AppState {
@@ -12,6 +13,7 @@ class AppState {
   final AllStopsState allStopsState;
   final AlertsState alertsState;
   final SelectedStopState selectedStopState;
+  final VehiclesState vehiclesState;
 
   AppState(
       this.locationState,
@@ -20,7 +22,8 @@ class AppState {
       this.savedStopsState,
       this.allStopsState,
       this.alertsState,
-      this.selectedStopState);
+      this.selectedStopState,
+      this.vehiclesState);
 
   factory AppState.initial() => AppState(
       LocationState.initial(),
@@ -29,11 +32,12 @@ class AppState {
       SavedStopsState.initial(),
       AllStopsState.initial(),
       AlertsState.initial(),
-      SelectedStopState.initial());
+      SelectedStopState.initial(),
+      VehiclesState.initial());
 
   @override
   String toString() {
-    return "\n{ \nlocationState: ${this.locationState.toString()}, \nnearestStopState: ${this.nearestStopState.toString()} \ncommuteState: ${this.commuteState.toString()}, \nsavedStopsState: ${this.savedStopsState.toString()}, \nallStopsState: ${this.allStopsState.toString()}, \nalertsState: ${this.alertsState.toString()}, \nselectedStopState: ${this.selectedStopState.toString()} \n}\n";
+    return "\n{ \nlocationState: ${this.locationState.toString()}, \nnearestStopState: ${this.nearestStopState.toString()} \ncommuteState: ${this.commuteState.toString()}, \nsavedStopsState: ${this.savedStopsState.toString()}, \nallStopsState: ${this.allStopsState.toString()}, \nalertsState: ${this.alertsState.toString()}, \nselectedStopState: ${this.selectedStopState.toString()} \n} vehiclesState: ${this.vehiclesState.toString()}, \n";
   }
 }
 
@@ -145,5 +149,22 @@ class SelectedStopState {
   @override
   String toString() {
     return "{ selectedStop: ${this.stop.toString()} }";
+  }
+}
+
+class VehiclesState {
+  final List<Vehicle> vehicles;
+  final bool isVehiclesLoading;
+  final String vehiclesErrorMessage;
+
+  VehiclesState(
+      this.vehicles, this.isVehiclesLoading, this.vehiclesErrorMessage);
+
+  factory VehiclesState.initial() =>
+      VehiclesState(List.unmodifiable([]), false, '');
+
+  @override
+  String toString() {
+    return "{ vehicles: ${this.vehicles.toString()}, isVehiclesLoading: ${this.isVehiclesLoading}, vehiclesErrorMessage: ${this.vehiclesErrorMessage} }";
   }
 }
