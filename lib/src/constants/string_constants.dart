@@ -13,6 +13,6 @@ const alertsErrorMessage =
     'Error getting alerts for this stop. Please try again';
 const associatedStopErrorMessage =
     'Error getting sister stop. Please try again';
-
+const vehiclesErrorMessage = 'Error getting locations of all trains';
 const branchWarningMessage =
     "Unfortunately the MBTA does not provide specific branch arrival times for this stop";

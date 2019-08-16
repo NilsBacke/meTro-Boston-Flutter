@@ -10,9 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatelessWidget {
   shareApp() {
-    Share.share(Platform.isIOS
-        ? "https://apps.apple.com/pg/app/boston-subway-companion/id1464397684"
-        : "https://play.google.com/store/apps/details?id=com.plushundred.boston_t_companion&hl=en_US");
+    Share.share(
+        "meTro: MBTA Subway and Companion App\niOS: https://apps.apple.com/pg/app/boston-subway-companion/id1464397684 \n Android: https://play.google.com/store/apps/details?id=com.plushundred.boston_t_companion&hl=en_US");
   }
 
   launchTwitter() async {

@@ -104,42 +104,32 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   Widget searchBar(_ExploreViewModel viewModel) {
     return Container(
-      height: 70.0,
       margin: EdgeInsets.all(12.0),
+      height: 70,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(8.0),
           ),
         ),
-        child: Container(
-          padding: EdgeInsets.all(12.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                child: Icon(Icons.search),
-              ),
-              Flexible(
-                child: Container(
-                  padding: EdgeInsets.only(left: 12.0),
-                  margin: EdgeInsets.only(top: 21.0),
-                  child: TextField(
-                    controller: searchBarController,
-                    onChanged: (searchText) {
-                      onSearchChange(viewModel, searchText);
-                    },
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Park St...",
-                    ),
-                    textCapitalization: TextCapitalization.sentences,
-                    cursorColor: Colors.white,
-                  ),
+        child: Center(
+          child: ListTile(
+            dense: true,
+            leading: Icon(Icons.search),
+            title: Container(
+              child: TextField(
+                controller: searchBarController,
+                onChanged: (searchText) {
+                  onSearchChange(viewModel, searchText);
+                },
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Park St...",
                 ),
+                textCapitalization: TextCapitalization.sentences,
+                cursorColor: Colors.white,
               ),
-            ],
+            ),
           ),
         ),
       ),

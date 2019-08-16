@@ -1,6 +1,7 @@
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/services/commute_service.dart';
 import 'package:mbta_companion/src/state/actions/commuteActions.dart';
+import 'package:mbta_companion/src/utils/report_error.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -11,7 +12,7 @@ ThunkAction fetchCommute() {
       try {
         final commute = await CommuteService.getCommute();
         store.dispatch(CommuteFetchSuccess(commute));
-      } catch (e) {
+      } catch (e, stackTrace) {
         print("$e");
         if (e.message == "Doc does not exist") {
           store.dispatch(CommuteSetExists(false));
@@ -19,6 +20,7 @@ ThunkAction fetchCommute() {
           return;
         }
         store.dispatch(CommuteFetchFailure(e.message));
+        reportError(e, stackTrace);
       }
     });
   };
@@ -31,9 +33,10 @@ ThunkAction saveCommuteOp(Commute commute) {
       try {
         await CommuteService.saveCommute(commute);
         store.dispatch(CommuteFetchSuccess(commute));
-      } catch (e) {
+      } catch (e, stackTrace) {
         print("$e");
         store.dispatch(CommuteSaveFailure(e.message));
+        reportError(e, stackTrace);
       }
     });
   };
@@ -46,9 +49,10 @@ ThunkAction deleteCommuteOp(Commute commute) {
       try {
         await CommuteService.deleteCommute(commute);
         store.dispatch(CommuteDeleteSuccess(commute));
-      } catch (e) {
+      } catch (e, stackTrace) {
         print("$e");
         store.dispatch(CommuteDeleteFailure(e.message));
+        reportError(e, stackTrace);
       }
     });
   };

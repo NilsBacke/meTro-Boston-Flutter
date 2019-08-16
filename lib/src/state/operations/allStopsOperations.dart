@@ -1,6 +1,7 @@
 import 'package:location/location.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/state/actions/allStopsActions.dart';
+import 'package:mbta_companion/src/utils/report_error.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
@@ -11,9 +12,10 @@ ThunkAction fetchAllStops(LocationData locationData) {
       try {
         var allStops = await MBTAService.fetchAllStops(locationData);
         store.dispatch(AllStopsFetchSuccess(allStops));
-      } catch (e) {
+      } catch (e, stackTrace) {
         print("$e");
         store.dispatch(AllStopsFetchFailure(e.toString()));
+        reportError(e, stackTrace);
       }
     });
   };

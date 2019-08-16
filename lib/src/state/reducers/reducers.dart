@@ -1,5 +1,6 @@
 import 'package:mbta_companion/src/state/reducers/nearestStopReducer.dart';
 import 'package:mbta_companion/src/state/reducers/selectedStopReducer.dart';
+import 'package:mbta_companion/src/state/reducers/vehiclesReducer.dart';
 import '../state.dart';
 import 'alertsReducer.dart';
 import 'allStopsReducer.dart';
@@ -14,4 +15,5 @@ AppState appReducer(AppState state, action) => AppState(
     savedStopsReducer(state.savedStopsState, action),
     allStopsReducer(state.allStopsState, action),
     alertsReducer(state.alertsState, action),
-    selectedStopReducer(state.selectedStopState, action));
+    selectedStopReducer(state.selectedStopState, action),
+    vehiclesReducer(state.vehiclesState, action));
