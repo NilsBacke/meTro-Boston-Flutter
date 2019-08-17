@@ -55,14 +55,6 @@ class _NearbyScreenState extends State<NearbyScreen> {
       return errorTextWidget(context, text: viewModel.vehiclesErrorMessage);
     }
 
-    // loading
-    // if (viewModel.isAllStopsLoading ||
-    //     viewModel.isVehiclesLoading ||
-    //     viewModel.allStops.length == 0 ||
-    //     viewModel.vehicles.length == 0) {
-    //   return StopsLoadingIndicator();
-    // }
-
     if (viewModel.isAllStopsLoading || viewModel.allStops.length == 0) {
       return StopsLoadingIndicator();
     }
