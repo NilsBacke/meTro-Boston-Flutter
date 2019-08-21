@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>7</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
@@ -38,6 +38,10 @@
 	<string>Motion is not  used in this application</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Speech is not used in this application</string>
+	<key>NSAppleMusicUsageDescription</key>	
+	<string>Apple Music is not used in this application</string>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>Music is not used in this application</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
