@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mbta_companion/src/models/prediction.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import 'package:mbta_companion/src/services/google_distance_service.dart';
+import 'package:mbta_companion/src/services/google_api_service.dart';
 import 'package:mbta_companion/src/services/mbta_stream_service.dart';
 
 class CommuteTimeCircleCombo extends StatefulWidget {
@@ -30,8 +30,12 @@ class _CommuteTimeCircleComboState extends State<CommuteTimeCircleCombo> {
   Future<void> getStream() async {
     final stream =
         await MBTAStreamService.streamPredictionsForStopId(widget.startStop.id);
-    this.minutes = await GoogleDistanceService.getTimeBetweenStops(
-        widget.startStop, widget.endStop);
+    try {
+      this.minutes = await GoogleAPIService.getTimeBetweenStops(
+          widget.startStop, widget.endStop);
+    } catch (e) {
+      this.minutes = null;
+    }
 
     this.subscription = stream.listen((PredictionEvent event) {
       if (!this.mounted) {
@@ -128,8 +132,7 @@ class _CommuteTimeCircleComboState extends State<CommuteTimeCircleCombo> {
               child: Text(
                 (pred == null || this.minutes == null)
                     ? "---"
-                    : GoogleDistanceService.getArrivalTime(
-                        pred.time, this.minutes),
+                    : GoogleAPIService.getArrivalTime(pred.time, this.minutes),
                 style: TextStyle(fontSize: width / 3),
               ),
             ),

@@ -1,6 +1,6 @@
 import 'package:location/location.dart';
 
-enum LocationStatus { noPermission, noService, granted }
+enum LocationStatus { noPermission, noService, granted, unknown }
 
 class PermissionService {
   static Future<LocationStatus> getLocationPermissions() async {

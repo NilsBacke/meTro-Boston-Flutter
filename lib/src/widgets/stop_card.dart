@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:mbta_companion/src/models/stop.dart';
-import 'package:mbta_companion/src/screens/states/stop_detail_state.dart';
-import 'package:mbta_companion/src/services/permission_service.dart';
+import 'package:mbta_companion/src/screens/StopDetailScreen/stop_detail_screen.dart';
+import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/widgets/stop_details_tile.dart';
 
 class StopCard extends StatelessWidget {
@@ -10,19 +11,19 @@ class StopCard extends StatelessWidget {
   final bool includeDistance;
   final Function(Stop) onTap;
   final bool timeCircles;
-
-  /// required if [includeDistance] is true
-  final Future<dynamic> distanceFuture;
+  final LocationData location; // required if includeDistance is true
+  final bool includeOtherInfo;
 
   StopCard(
       {@required this.stop,
       this.overflow,
       this.includeDistance = false,
-      this.distanceFuture,
       this.onTap,
-      this.timeCircles = true}) {
-    if (this.includeDistance) {
-      assert(this.distanceFuture != null);
+      this.timeCircles = true,
+      this.location,
+      this.includeOtherInfo = true}) {
+    if (includeDistance) {
+      assert(this.location != null);
     }
   }
 
@@ -35,40 +36,29 @@ class StopCard extends StatelessWidget {
       child: Card(
         child: Container(
           padding: EdgeInsets.all(12.0),
-          child:
-              this.includeDistance ? distanceStopCard() : noDistanceStopCard(),
+          child: stopCard(includeDistance, location),
         ),
       ),
     );
   }
 
-  Widget distanceStopCard() {
-    return FutureBuilder(
-      future: distanceFuture,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Container();
-        }
-        return VariablePartTile(
-          stop.id,
-          title: stop.name,
-          subtitle1: stop.lineName,
-          otherInfo: [stop.directionDescription, '${snapshot.data} mi'],
-          lineInitials: stop.lineInitials,
-          lineColor: stop.lineColor,
-          overflow: this.overflow,
-          timeCircles: this.timeCircles,
-        );
-      },
-    );
-  }
+  Widget stopCard(bool includeDistance, LocationData location) {
+    final List<String> otherInfo = [];
+    if (!stop.directionDescription.startsWith("bound")) {
+      // end of line stop
+      otherInfo.add(stop.directionDescription);
+    }
 
-  Widget noDistanceStopCard() {
+    if (includeDistance) {
+      otherInfo
+          .add('${LocationService.getDistanceFromStop(stop, location)} mi');
+    }
+
     return VariablePartTile(
       stop.id,
       title: stop.name,
       subtitle1: stop.lineName,
-      otherInfo: [stop.directionDescription],
+      otherInfo: this.includeOtherInfo ? otherInfo : [],
       lineInitials: stop.lineInitials,
       lineColor: stop.lineColor,
       overflow: this.overflow,

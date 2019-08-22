@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../utils/mbta_colors.dart';
 
 class Stop {
   String id;
@@ -10,45 +9,22 @@ class Stop {
   String directionDestination;
   String directionName;
   String lineName;
+  String textColorHex;
+  String lineColorHex;
+  String lineInitials;
+  String directionDescription;
 
-  String get directionDescription =>
-      this.directionName + "bound towards " + this.directionDestination;
-  String get lineInitials => this.lineName == "Mattapan"
-      ? "M"
-      : this.lineName[0].toUpperCase() +
-          this.lineName[this.lineName.indexOf(" ") + 1].toUpperCase();
   Color get lineColor {
-    switch (this.lineName) {
-      case "Orange Line":
-        return MBTAColors.orange;
-      case "Green Line":
-        return MBTAColors.green;
-      case "Blue Line":
-        return MBTAColors.blue;
-      case "Red Line":
-      case "Mattapan":
-      case "Mattapan Trolley":
-        return MBTAColors.red;
-      default:
-        throw Exception('Cannot find a color for line: ' + this.lineName);
+    try {
+      return Color(int.parse(lineColorHex));
+    } on Exception catch (e) {
+      print(id);
+      print(lineColorHex);
     }
   }
 
   Color get textColor {
-    switch (this.lineName) {
-      case "Orange Line":
-        return Colors.orange;
-      case "Green Line":
-        return Colors.green;
-      case "Blue Line":
-        return Colors.blue;
-      case "Red Line":
-      case "Mattapan":
-      case "Mattapan Trolley":
-        return Colors.red;
-      default:
-        throw Exception('Cannot find a color for line: ' + this.lineName);
-    }
+    return Color(int.parse(textColorHex));
   }
 
   BitmapDescriptor get marker {
@@ -64,7 +40,7 @@ class Stop {
       case "Mattapan Trolley":
         return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
       default:
-        throw Exception('Cannot find a color for line: ' + this.lineName);
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed);
     }
   }
 
@@ -72,110 +48,52 @@ class Stop {
   static const nameKey = "name";
   static const latitudeKey = "latitude";
   static const longitudeKey = "longitude";
-  static const directionKey = "platform_name";
-  static const attributesKey = "attributes";
-  static const lineNameKey = "description";
-  static const directionNameKey = "direction_name";
+  static const directionDestinationKey = "directionDestination";
+  static const directionNameKey = "directionName";
+  static const lineNameKey = "lineName";
+  static const textColorHexKey = "textColorHex";
+  static const lineColorHexKey = "lineColorHex";
+  static const lineInitialsKey = "lineInitials";
+  static const directionDescriptionKey = "directionDescription";
 
-  static const List<String> northList = ["Alewife", "Oak Grove"];
-  static const List<String> southList = [
-    "Ashmont/Braintree",
-    "Ashmont",
-    "Braintree",
-    "Forest Hills",
-    "Mattapan"
-  ];
-  static const List<String> westList = [
-    "Bowdoin",
-    "Boston College",
-    "Cleveland Circle",
-    "Riverside",
-    "Heath Street",
-    "Cleveland Circle/Riverside"
-  ];
-  static const List<String> eastList = [
-    "Wonderland",
-    "Park Street",
-    "North Station",
-    "Government Center",
-    "Lechmere"
-  ];
+  Stop(
+      this.id,
+      this.name,
+      this.latitude,
+      this.longitude,
+      this.directionDestination,
+      this.directionName,
+      this.lineName,
+      this.textColorHex,
+      this.lineColorHex,
+      this.lineInitials,
+      this.directionDescription);
 
-  Stop(this.id, this.name, this.latitude, this.longitude,
-      this.directionDestination, this.directionName, this.lineName);
-
-  Stop.fromJson(Map<String, dynamic> parsedJson) {
-    final attributes = parsedJson[attributesKey];
-    this.id = parsedJson[idKey];
-    this.name = attributes[nameKey];
-    this.latitude = attributes[latitudeKey];
-    this.longitude = attributes[longitudeKey];
-    this.directionDestination = attributes[directionKey];
-    this.directionName =
-        _convertDirectionToName(this.directionDestination, this.id);
-    final String desc = attributes[lineNameKey];
-
-    // formulate line name
-    try {
-      this.lineName =
-          desc.substring(desc.indexOf("- ") + 2, desc.lastIndexOf(" -"));
-    } on Error catch (e) {
-      try {
-        this.lineName = desc.substring(desc.indexOf("- ") + 2);
-      } on Error catch (e) {
-        throw Exception('Could not formulate line name from: $desc. Error: $e');
-      }
-    }
-  }
-
-  Stop.fromDb(Map<String, dynamic> parsedJson) {
+  Stop.from(Map<String, dynamic> parsedJson) {
     this.id = parsedJson[idKey].toString();
     this.name = parsedJson[nameKey];
-    this.latitude = double.parse(parsedJson[latitudeKey]);
-    this.longitude = double.parse(parsedJson[longitudeKey]);
-    this.directionDestination = parsedJson[directionKey];
+    this.latitude = parsedJson[latitudeKey];
+    this.longitude = parsedJson[longitudeKey];
+    this.directionDestination = parsedJson[directionDestinationKey];
     this.directionName = parsedJson[directionNameKey];
     this.lineName = parsedJson[lineNameKey];
+    this.textColorHex = parsedJson[textColorHexKey];
+    this.lineColorHex = parsedJson[lineColorHexKey];
+    this.lineInitials = parsedJson[lineInitialsKey];
+    this.directionDescription = parsedJson[directionDescriptionKey];
   }
 
   Map<String, dynamic> toJson() => {
         idKey: id,
         nameKey: name,
-        longitudeKey: longitude.toString(),
-        latitudeKey: latitude.toString(),
-        directionKey: directionDestination,
+        longitudeKey: longitude,
+        latitudeKey: latitude,
+        directionDestinationKey: directionDestination,
         directionNameKey: directionName,
         lineNameKey: lineName,
+        textColorHexKey: textColorHex,
+        lineColorHexKey: lineColorHex,
+        lineInitialsKey: lineInitials,
+        directionDescriptionKey: directionDescription,
       };
-
-  String _convertDirectionToName(String direction, String id) {
-    if (direction == "Park Street & North") {
-      return "East";
-    }
-
-    if (northList.contains(direction) ||
-        direction.toLowerCase().contains("north") ||
-        direction.toLowerCase().contains(
-            northList.fold("", (t1, t2) => t1.toString() + t2.toString()))) {
-      return "North";
-    } else if (southList.contains(direction) ||
-        direction.toLowerCase().contains("south") ||
-        direction.toLowerCase().contains(
-            southList.fold("", (t1, t2) => t1.toString() + t2.toString()))) {
-      return "South";
-    } else if (eastList.contains(direction) ||
-        direction.toLowerCase().contains("east") ||
-        direction.toLowerCase().contains(
-            eastList.fold("", (t1, t2) => t1.toString() + t2.toString()))) {
-      return "East";
-    } else if (westList.contains(direction) ||
-        direction.toLowerCase().contains("west") ||
-        direction.toLowerCase().contains(
-            westList.fold("", (t1, t2) => t1.toString() + t2.toString()))) {
-      return "West";
-    } else {
-      // TODO will need to do something with these weird stops
-      return "";
-    }
-  }
 }
