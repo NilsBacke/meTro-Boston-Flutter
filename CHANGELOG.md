@@ -1,3 +1,10 @@
+# 1.1.1
+
+Minor bug fixes and improvements
+
+Showing a message if the search did not find any stops on explore screen
+Adjusting button in onboarding
+
 # 1.1.0
 
 HUGE improvements!!!
