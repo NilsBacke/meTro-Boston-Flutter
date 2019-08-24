@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/analytics_widget.dart';
+import 'package:mbta_companion/src/constants/amplitude_constants.dart';
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/widgets/nearest_stop_card.dart';
@@ -25,6 +27,10 @@ class CommuteScreen extends StatefulWidget {
 
 class _CommuteScreenState extends State<CommuteScreen> {
   void onInit(_CommuteViewModel viewModel) {
+    AnalyticsWidget.of(context)
+        .analytics
+        .logEvent(name: commuteScreenLoadAmplitude);
+
     if (viewModel.location == null &&
         !viewModel.isLocationLoading &&
         viewModel.locationErrorStatus == null) {
@@ -115,6 +121,7 @@ class _CommuteScreenState extends State<CommuteScreen> {
             onTap: () {
               showDetailForStop(context, viewModel.commute.stop1);
             },
+            refreshOnScroll: false,
           ),
         ),
       ),
@@ -148,6 +155,7 @@ class _CommuteScreenState extends State<CommuteScreen> {
                     viewModel.commute.stop1, viewModel.commute.stop2),
               ],
             ),
+            refreshOnScroll: false,
           ),
         ),
       ),

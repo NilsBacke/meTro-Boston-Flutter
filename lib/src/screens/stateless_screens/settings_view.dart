@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mbta_companion/src/analytics_widget.dart';
+import 'package:mbta_companion/src/constants/amplitude_constants.dart';
 import 'package:mbta_companion/src/screens/stateless_screens/about_screen.dart';
 import 'package:mbta_companion/src/screens/stateless_screens/map_image_screen.dart';
 import 'package:mbta_companion/src/utils/send_feedback.dart';
@@ -21,6 +23,10 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AnalyticsWidget.of(context)
+        .analytics
+        .logEvent(name: settingsScreenLoadAmplitude);
+
     return Container(
       child: ListView(
         children: <Widget>[

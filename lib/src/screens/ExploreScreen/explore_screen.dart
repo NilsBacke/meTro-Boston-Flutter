@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/analytics_widget.dart';
+import 'package:mbta_companion/src/constants/amplitude_constants.dart';
 import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/ExploreScreen/utils/filter_search_results.dart';
@@ -38,6 +40,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
   List<Stop> filteredStops;
 
   void onInit(_ExploreViewModel viewModel) {
+    AnalyticsWidget.of(context)
+        .analytics
+        .logEvent(name: exploreScreenLoadAmplitude);
+
     if (viewModel.location == null &&
         !viewModel.isLocationLoading &&
         viewModel.locationErrorStatus == null) {

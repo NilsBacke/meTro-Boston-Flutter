@@ -140,6 +140,7 @@ class _NearestStopCardState extends State<NearestStopCard> {
             onTap: () {
               showDetailForStop(context, viewModel.nearestStop[0]);
             },
+            refreshOnScroll: false,
           ),
         ),
       ),
@@ -159,6 +160,7 @@ class _NearestStopCardState extends State<NearestStopCard> {
             onTap: () {
               showDetailForStop(context, viewModel.nearestStop[1]);
             },
+            refreshOnScroll: false,
           ),
         ),
       ),

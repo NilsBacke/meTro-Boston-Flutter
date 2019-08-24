@@ -13,6 +13,7 @@ class StopCard extends StatelessWidget {
   final bool timeCircles;
   final LocationData location; // required if includeDistance is true
   final bool includeOtherInfo;
+  final bool refreshOnScroll;
 
   StopCard(
       {@required this.stop,
@@ -21,7 +22,8 @@ class StopCard extends StatelessWidget {
       this.onTap,
       this.timeCircles = true,
       this.location,
-      this.includeOtherInfo = true}) {
+      this.includeOtherInfo = true,
+      this.refreshOnScroll = true}) {
     if (includeDistance) {
       assert(this.location != null);
     }
@@ -54,16 +56,15 @@ class StopCard extends StatelessWidget {
           .add('${LocationService.getDistanceFromStop(stop, location)} mi');
     }
 
-    return VariablePartTile(
-      stop.id,
-      title: stop.name,
-      subtitle1: stop.lineName,
-      otherInfo: this.includeOtherInfo ? otherInfo : [],
-      lineInitials: stop.lineInitials,
-      lineColor: stop.lineColor,
-      overflow: this.overflow,
-      timeCircles: this.timeCircles,
-    );
+    return VariablePartTile(stop.id,
+        title: stop.name,
+        subtitle1: stop.lineName,
+        otherInfo: this.includeOtherInfo ? otherInfo : [],
+        lineInitials: stop.lineInitials,
+        lineColor: stop.lineColor,
+        overflow: this.overflow,
+        timeCircles: this.timeCircles,
+        refreshOnScroll: this.refreshOnScroll);
   }
 
   void showDetail(BuildContext context) {
