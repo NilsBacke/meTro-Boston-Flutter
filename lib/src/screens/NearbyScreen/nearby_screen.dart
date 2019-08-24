@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/analytics_widget.dart';
+import 'package:mbta_companion/src/constants/amplitude_constants.dart';
 import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/models/vehicle.dart';
@@ -28,6 +30,10 @@ class NearbyScreen extends StatefulWidget {
 
 class _NearbyScreenState extends State<NearbyScreen> {
   void onInit(_NearbyScreenViewModel viewModel) {
+    AnalyticsWidget.of(context)
+        .analytics
+        .logEvent(name: nearbyScreenLoadAmplitude);
+
     if (viewModel.bitmapmap == null || viewModel.bitmapmap.length == 0) {
       viewModel.getBitmap();
     }

@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/analytics_widget.dart';
+import 'package:mbta_companion/src/constants/amplitude_constants.dart';
 import 'package:mbta_companion/src/models/alert.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/models/vehicle.dart';
@@ -12,7 +14,6 @@ import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/details_widg
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/no_alerts_widget.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/single_timer.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/two_lines_timer_row.dart';
-import 'package:mbta_companion/src/services/config.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/state/actions/polylinesActions.dart';
 import 'package:mbta_companion/src/state/actions/vehiclesActions.dart';
@@ -44,6 +45,10 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
   }
 
   void onInit(_StopDetailScreenViewModel viewModel) {
+    AnalyticsWidget.of(context)
+        .analytics
+        .logEvent(name: stopDetailScreenLoadAmplitude);
+
     if (viewModel.location == null) {
       viewModel.getLocation();
     }

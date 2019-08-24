@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:mbta_companion/src/analytics_widget.dart';
+import 'package:mbta_companion/src/constants/amplitude_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/AddSavedScreen/add_saved_screen.dart';
 import 'package:mbta_companion/src/screens/SavedStopsScreen/widgets/empty_saved_list.dart';
@@ -18,6 +20,10 @@ class SavedScreen extends StatefulWidget {
 
 class _SavedScreenState extends State<SavedScreen> {
   void onInit(_SavedViewModel viewModel) {
+    AnalyticsWidget.of(context)
+        .analytics
+        .logEvent(name: savedScreenLoadAmplitude);
+
     if (viewModel.savedStops == null &&
         !viewModel.isSavedStopsLoading &&
         viewModel.savedStopsError.length == 0) {
