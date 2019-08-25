@@ -4,7 +4,8 @@ import 'package:location/location.dart';
 import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/utils/stop_distance.dart';
-import 'package:mbta_companion/src/screens/CommuteScreen/widgets/three_part_card.dart';
+import 'package:mbta_companion/src/screens/CommuteScreen/widgets/empty_nearest_stop_card.dart';
+import 'package:mbta_companion/src/screens/CommuteScreen/widgets/four_part_card.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/state/operations/locationOperations.dart';
@@ -13,6 +14,7 @@ import 'package:mbta_companion/src/state/state.dart';
 import 'package:mbta_companion/src/utils/navigation_utils.dart';
 import 'package:mbta_companion/src/utils/show_error_dialog.dart';
 import 'package:mbta_companion/src/widgets/stop_details_tile.dart';
+import 'package:mbta_companion/src/widgets/time_to_walk_text.dart';
 import 'package:redux/redux.dart';
 
 class NearestStopCard extends StatefulWidget {
@@ -121,7 +123,7 @@ class _NearestStopCardState extends State<NearestStopCard> {
   }
 
   nearestStopCard(context, NearestStopViewModel viewModel) {
-    return ThreePartCard(
+    return FourPartCard(
       'Nearest Stop',
       GestureDetector(
         onTap: () {
@@ -139,28 +141,33 @@ class _NearestStopCardState extends State<NearestStopCard> {
             onTap: () {
               showDetailForStop(context, viewModel.nearestStop[0]);
             },
+            refreshOnScroll: false,
           ),
         ),
       ),
-      GestureDetector(
-        onTap: () {
-          showDetailForStop(context, viewModel.nearestStop[1]);
-        },
-        child: Card(
-          elevation: 0.0,
-          child: VariablePartTile(
-            viewModel.nearestStop[1].id,
-            title: viewModel.nearestStop[1].name,
-            subtitle1: viewModel.nearestStop[1].lineName,
-            otherInfo: [viewModel.nearestStop[1].directionDescription],
-            lineInitials: viewModel.nearestStop[1].lineInitials,
-            lineColor: viewModel.nearestStop[1].lineColor,
-            onTap: () {
-              showDetailForStop(context, viewModel.nearestStop[1]);
-            },
-          ),
-        ),
-      ),
+      viewModel.nearestStop.length == 2
+          ? GestureDetector(
+              onTap: () {
+                showDetailForStop(context, viewModel.nearestStop[1]);
+              },
+              child: Card(
+                elevation: 0.0,
+                child: VariablePartTile(
+                  viewModel.nearestStop[1].id,
+                  title: viewModel.nearestStop[1].name,
+                  subtitle1: viewModel.nearestStop[1].lineName,
+                  otherInfo: [viewModel.nearestStop[1].directionDescription],
+                  lineInitials: viewModel.nearestStop[1].lineInitials,
+                  lineColor: viewModel.nearestStop[1].lineColor,
+                  onTap: () {
+                    showDetailForStop(context, viewModel.nearestStop[1]);
+                  },
+                  refreshOnScroll: false,
+                ),
+              ),
+            )
+          : emptyNearestStopCard(context),
+      timeToWalkText(context, viewModel.nearestStop[0], viewModel.location),
       trailing: FutureBuilder(
           future: getDistanceFromNearestStop(
               viewModel.location, viewModel.nearestStop),

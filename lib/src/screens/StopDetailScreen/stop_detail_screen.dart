@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/analytics_widget.dart';
+import 'package:mbta_companion/src/constants/amplitude_constants.dart';
 import 'package:mbta_companion/src/models/alert.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/models/vehicle.dart';
@@ -12,7 +14,6 @@ import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/details_widg
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/no_alerts_widget.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/single_timer.dart';
 import 'package:mbta_companion/src/screens/StopDetailScreen/widgets/two_lines_timer_row.dart';
-import 'package:mbta_companion/src/services/config.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/state/actions/polylinesActions.dart';
 import 'package:mbta_companion/src/state/actions/vehiclesActions.dart';
@@ -20,6 +21,7 @@ import 'package:mbta_companion/src/state/operations/locationOperations.dart';
 import 'package:mbta_companion/src/state/operations/polylinesOperations.dart';
 import 'package:mbta_companion/src/state/operations/vehiclesOperations.dart';
 import 'package:mbta_companion/src/state/state.dart';
+import 'package:mbta_companion/src/widgets/map_widget.dart';
 import 'package:redux/redux.dart';
 
 class StopDetailScreen extends StatefulWidget {
@@ -40,6 +42,34 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
     super.initState();
     getAssociatedStops();
     getAlerts(widget.stop);
+  }
+
+  void onInit(_StopDetailScreenViewModel viewModel) {
+    AnalyticsWidget.of(context)
+        .analytics
+        .logEvent(name: stopDetailScreenLoadAmplitude);
+
+    if (viewModel.location == null) {
+      viewModel.getLocation();
+    }
+
+    if (viewModel.bitmapmap == null || viewModel.bitmapmap.length == 0) {
+      viewModel.getBitmap();
+    }
+
+    if (viewModel.vehicles != null &&
+        viewModel.vehicles.length == 0 &&
+        !viewModel.isVehiclesLoading &&
+        viewModel.vehiclesErrorMessage.isEmpty) {
+      viewModel.getVehicles(true);
+    }
+
+    if (viewModel.polylines != null &&
+        viewModel.polylines.length == 0 &&
+        !viewModel.isPolylinesLoading &&
+        viewModel.polylinesErrorMessage.isEmpty) {
+      viewModel.getPolylines();
+    }
   }
 
   Future<void> getAssociatedStops() async {
@@ -96,40 +126,25 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
         ),
       ),
       body: StoreConnector<AppState, _StopDetailScreenViewModel>(
+        // onInit: (store) => this.onInit(
+        //     _StopDetailScreenViewModel.create(store, this.stopsAtLocation)),
         converter: (store) =>
             _StopDetailScreenViewModel.create(store, this.stopsAtLocation),
         builder: (context, _StopDetailScreenViewModel viewModel) {
-          if (viewModel.location == null) {
-            viewModel.getLocation();
-          }
+          this.onInit(viewModel);
 
-          if (viewModel.bitmapmap == null || viewModel.bitmapmap.length == 0) {
-            viewModel.getBitmap();
-          }
-
-          if (viewModel.vehicles != null &&
-              viewModel.vehicles.length == 0 &&
-              !viewModel.isVehiclesLoading &&
-              viewModel.vehiclesErrorMessage.isEmpty) {
-            viewModel.getVehicles(true);
-          }
-
-          if (viewModel.polylines != null &&
-              viewModel.polylines.length == 0 &&
-              !viewModel.isPolylinesLoading &&
-              viewModel.polylinesErrorMessage.isEmpty) {
-            viewModel.getPolylines();
-          }
-
-          Widget topHalfWidget = topHalf(viewModel);
-
-          if (viewModel.isVehiclesLoading) {
-            topHalfWidget = Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            print("else");
-          }
+          final coords = LatLng(widget.stop.latitude, widget.stop.longitude);
+          final markers = [
+            Marker(
+              markerId: MarkerId(widget.stop.id),
+              icon: widget.stop.marker,
+              position: coords,
+              infoWindow: InfoWindow(
+                title: widget.stop.name,
+              ),
+            ),
+            ...viewModel.markers
+          ];
 
           return WillPopScope(
             onWillPop: () async {
@@ -141,7 +156,12 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
               child: Column(
                 children: <Widget>[
                   Expanded(
-                    child: topHalfWidget,
+                    child: mapWidget(
+                        markers: markers,
+                        latlng: coords,
+                        polylines: viewModel.polylines,
+                        isVehiclesLoading: viewModel.isVehiclesLoading,
+                        getVehicles: viewModel.getVehicles),
                   ),
                   Expanded(
                     child: bottomHalf(viewModel),
@@ -151,33 +171,6 @@ class _StopDetailScreenState extends State<StopDetailScreen> {
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget topHalf(_StopDetailScreenViewModel viewModel) {
-    final coords = LatLng(widget.stop.latitude, widget.stop.longitude);
-    return Container(
-      child: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: coords,
-          zoom: 14.4746,
-        ),
-        myLocationEnabled: true,
-        markers: [
-          ...[
-            Marker(
-              markerId: MarkerId(widget.stop.id),
-              icon: widget.stop.marker,
-              position: coords,
-              infoWindow: InfoWindow(
-                title: widget.stop.name,
-              ),
-            )
-          ],
-          ...viewModel.markers
-        ].toSet(),
-        polylines: viewModel.polylines.toSet(),
       ),
     );
   }

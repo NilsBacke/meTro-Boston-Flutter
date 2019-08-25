@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/analytics_widget.dart';
+import 'package:mbta_companion/src/constants/amplitude_constants.dart';
 import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/ExploreScreen/utils/filter_search_results.dart';
@@ -36,6 +38,26 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   TextEditingController searchBarController = TextEditingController();
   List<Stop> filteredStops;
+
+  void onInit(_ExploreViewModel viewModel) {
+    AnalyticsWidget.of(context)
+        .analytics
+        .logEvent(name: exploreScreenLoadAmplitude);
+
+    if (viewModel.location == null &&
+        !viewModel.isLocationLoading &&
+        viewModel.locationErrorStatus == null) {
+      viewModel.getLocation();
+    }
+
+    if (viewModel.allStops != null &&
+        viewModel.allStops.length == 0 &&
+        !viewModel.isAllStopsLoading &&
+        viewModel.allStopsErrorMessage.isEmpty &&
+        viewModel.location != null) {
+      viewModel.getAllStops(viewModel.location);
+    }
+  }
 
   Widget getBodyWidget(_ExploreViewModel viewModel) {
     // error handling
@@ -148,6 +170,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: StoreConnector<AppState, _ExploreViewModel>(
+        onInit: (store) =>
+            this.onInit(_ExploreViewModel.create(store, widget.consolidated)),
         converter: (store) =>
             _ExploreViewModel.create(store, widget.consolidated),
         builder: (context, _ExploreViewModel viewModel) {
@@ -158,20 +182,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
           }
 
           final bodyWidget = getBodyWidget(viewModel);
-
-          if (viewModel.location == null &&
-              !viewModel.isLocationLoading &&
-              viewModel.locationErrorStatus == null) {
-            viewModel.getLocation();
-          }
-
-          if (viewModel.allStops != null &&
-              viewModel.allStops.length == 0 &&
-              !viewModel.isAllStopsLoading &&
-              viewModel.allStopsErrorMessage.isEmpty &&
-              viewModel.location != null) {
-            viewModel.getAllStops(viewModel.location);
-          }
 
           return Column(
             children: <Widget>[

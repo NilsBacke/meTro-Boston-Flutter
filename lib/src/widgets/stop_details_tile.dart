@@ -13,20 +13,20 @@ class VariablePartTile extends StatelessWidget {
   final bool timeCircles;
   final Widget trailing;
   final VoidCallback onTap;
+  final bool refreshOnScroll;
 
-  VariablePartTile(
-    this.stopId, {
-    @required this.title,
-    @required this.subtitle1,
-    @required this.lineInitials,
-    @required this.lineColor,
-    this.otherInfo = const [],
-    this.overflow = TextOverflow.ellipsis,
-    this.otherWidgets = const [],
-    this.timeCircles = true,
-    this.trailing,
-    this.onTap,
-  });
+  VariablePartTile(this.stopId,
+      {@required this.title,
+      @required this.subtitle1,
+      @required this.lineInitials,
+      @required this.lineColor,
+      this.otherInfo = const [],
+      this.overflow = TextOverflow.ellipsis,
+      this.otherWidgets = const [],
+      this.timeCircles = true,
+      this.trailing,
+      this.onTap,
+      this.refreshOnScroll = true});
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,8 @@ class VariablePartTile extends StatelessWidget {
                 ),
               ),
               this.timeCircles
-                  ? TimeCircleCombo(this.stopId)
+                  ? TimeCircleCombo(this.stopId,
+                      refreshOnScroll: this.refreshOnScroll)
                   : (this.trailing != null ? this.trailing : Container()),
             ],
           ),

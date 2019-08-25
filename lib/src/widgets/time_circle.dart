@@ -6,8 +6,9 @@ import 'package:mbta_companion/src/utils/timeofday_helper.dart';
 
 class TimeCircleCombo extends StatefulWidget {
   final String stopId;
+  final bool refreshOnScroll;
 
-  TimeCircleCombo(this.stopId);
+  TimeCircleCombo(this.stopId, {this.refreshOnScroll = true});
 
   @override
   _TimeCircleComboState createState() => _TimeCircleComboState();
@@ -26,12 +27,14 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
 
   @override
   void didUpdateWidget(Widget oldWidget) {
-    predictions = [null, null];
-    if (subscription != null) {
-      subscription.cancel();
+    if (widget.refreshOnScroll) {
+      predictions = [null, null];
+      if (subscription != null) {
+        subscription.cancel();
+      }
+      manualPredictionTextOverride = "---";
+      getStream();
     }
-    manualPredictionTextOverride = "---";
-    getStream();
     super.didUpdateWidget(oldWidget);
   }
 
