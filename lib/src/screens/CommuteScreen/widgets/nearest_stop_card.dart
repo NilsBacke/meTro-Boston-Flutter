@@ -4,6 +4,7 @@ import 'package:location/location.dart';
 import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/utils/stop_distance.dart';
+import 'package:mbta_companion/src/screens/CommuteScreen/widgets/empty_nearest_stop_card.dart';
 import 'package:mbta_companion/src/screens/CommuteScreen/widgets/four_part_card.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/services/permission_service.dart';
@@ -144,26 +145,28 @@ class _NearestStopCardState extends State<NearestStopCard> {
           ),
         ),
       ),
-      GestureDetector(
-        onTap: () {
-          showDetailForStop(context, viewModel.nearestStop[1]);
-        },
-        child: Card(
-          elevation: 0.0,
-          child: VariablePartTile(
-            viewModel.nearestStop[1].id,
-            title: viewModel.nearestStop[1].name,
-            subtitle1: viewModel.nearestStop[1].lineName,
-            otherInfo: [viewModel.nearestStop[1].directionDescription],
-            lineInitials: viewModel.nearestStop[1].lineInitials,
-            lineColor: viewModel.nearestStop[1].lineColor,
-            onTap: () {
-              showDetailForStop(context, viewModel.nearestStop[1]);
-            },
-            refreshOnScroll: false,
-          ),
-        ),
-      ),
+      viewModel.nearestStop.length == 2
+          ? GestureDetector(
+              onTap: () {
+                showDetailForStop(context, viewModel.nearestStop[1]);
+              },
+              child: Card(
+                elevation: 0.0,
+                child: VariablePartTile(
+                  viewModel.nearestStop[1].id,
+                  title: viewModel.nearestStop[1].name,
+                  subtitle1: viewModel.nearestStop[1].lineName,
+                  otherInfo: [viewModel.nearestStop[1].directionDescription],
+                  lineInitials: viewModel.nearestStop[1].lineInitials,
+                  lineColor: viewModel.nearestStop[1].lineColor,
+                  onTap: () {
+                    showDetailForStop(context, viewModel.nearestStop[1]);
+                  },
+                  refreshOnScroll: false,
+                ),
+              ),
+            )
+          : emptyNearestStopCard(context),
       timeToWalkText(context, viewModel.nearestStop[0], viewModel.location),
       trailing: FutureBuilder(
           future: getDistanceFromNearestStop(
