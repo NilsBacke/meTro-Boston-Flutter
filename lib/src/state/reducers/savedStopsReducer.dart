@@ -32,15 +32,19 @@ SavedStopsState savedStopsFetchPending(
 
 SavedStopsState savedStopsFetchFailure(
     SavedStopsState savedStopsState, SavedStopsFetchFailure action) {
-  return SavedStopsState(List.unmodifiable(savedStopsState.savedStops), false,
+  return SavedStopsState(
+      savedStopsState.savedStops == null
+          ? null
+          : List.unmodifiable(savedStopsState.savedStops),
+      false,
       action.savedStopsErrorMessage);
 }
 
 SavedStopsState savedStopsAddSuccess(
     SavedStopsState savedStopsState, SavedStopsAddSuccess action) {
   return SavedStopsState(
-      List.unmodifiable(
-          List.from(savedStopsState.savedStops)..add(action.stop)),
+      (savedStopsState.savedStops == null ? [] : savedStopsState.savedStops)
+        ..add(action.stop),
       false,
       '');
 }
@@ -48,20 +52,29 @@ SavedStopsState savedStopsAddSuccess(
 SavedStopsState savedStopsAddPending(
     SavedStopsState savedStopsState, SavedStopsAddPending action) {
   return SavedStopsState(
-      List.unmodifiable(savedStopsState.savedStops), true, '');
+      savedStopsState.savedStops == null
+          ? null
+          : List.unmodifiable(savedStopsState.savedStops),
+      true,
+      '');
 }
 
 SavedStopsState savedStopsAddFailure(
     SavedStopsState savedStopsState, SavedStopsAddFailure action) {
-  return SavedStopsState(List.unmodifiable(savedStopsState.savedStops), false,
+  return SavedStopsState(
+      savedStopsState.savedStops == null
+          ? null
+          : List.unmodifiable(savedStopsState.savedStops),
+      false,
       action.savedStopsAddErrorMessage);
 }
 
 SavedStopsState savedStopsRemoveSuccess(
     SavedStopsState savedStopsState, SavedStopsRemoveSuccess action) {
   return SavedStopsState(
-      List.unmodifiable(
-          List.from(savedStopsState.savedStops)..remove(action.stop)),
+      List.unmodifiable(List.from(
+          savedStopsState.savedStops == null ? [] : savedStopsState.savedStops)
+        ..remove(action.stop)),
       false,
       '');
 }
@@ -69,17 +82,29 @@ SavedStopsState savedStopsRemoveSuccess(
 SavedStopsState savedStopsRemovePending(
     SavedStopsState savedStopsState, SavedStopsRemovePending action) {
   return SavedStopsState(
-      List.unmodifiable(savedStopsState.savedStops), true, '');
+      savedStopsState.savedStops == null
+          ? null
+          : List.unmodifiable(savedStopsState.savedStops),
+      true,
+      '');
 }
 
 SavedStopsState savedStopsRemoveFailure(
     SavedStopsState savedStopsState, SavedStopsRemoveFailure action) {
-  return SavedStopsState(List.unmodifiable(savedStopsState.savedStops), false,
+  return SavedStopsState(
+      savedStopsState.savedStops == null
+          ? null
+          : List.unmodifiable(savedStopsState.savedStops),
+      false,
       action.savedStopsRemoveErrorMessage);
 }
 
 SavedStopsState clearSavedStopsError(
     SavedStopsState savedStopsState, SavedStopsClearError action) {
-  return SavedStopsState(List.unmodifiable(savedStopsState.savedStops),
-      savedStopsState.isSavedStopsLoading, '');
+  return SavedStopsState(
+      savedStopsState.savedStops == null
+          ? null
+          : List.unmodifiable(savedStopsState.savedStops),
+      savedStopsState.isSavedStopsLoading,
+      '');
 }

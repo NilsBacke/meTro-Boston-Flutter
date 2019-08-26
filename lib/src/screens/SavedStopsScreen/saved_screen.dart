@@ -31,7 +31,8 @@ class _SavedScreenState extends State<SavedScreen> {
     }
   }
 
-  Function(Stop) addStopFullFunction(Function(Stop) addStop) {
+  Function(Stop) addStopFullFunction(
+      BuildContext context, Function(Stop) addStop) {
     return (Stop stop) {
       addStop(stop);
       Navigator.of(context).pop();
@@ -41,7 +42,7 @@ class _SavedScreenState extends State<SavedScreen> {
   void goToAddStop(Function(Stop) addStop) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) =>
-            AddSavedScreen(this.addStopFullFunction(addStop))));
+            AddSavedScreen(this.addStopFullFunction(context, addStop))));
   }
 
   @override
