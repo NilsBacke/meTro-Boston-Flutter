@@ -145,7 +145,7 @@ class _NearestStopCardState extends State<NearestStopCard> {
           ),
         ),
       ),
-      viewModel.nearestStop.length == 2
+      viewModel.nearestStop.length == 2 && viewModel.nearestStop[1] != null
           ? GestureDetector(
               onTap: () {
                 showDetailForStop(context, viewModel.nearestStop[1]);

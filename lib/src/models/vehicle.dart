@@ -3,7 +3,7 @@ class Vehicle {
   int bearing;
   double latitude;
   double longitude;
-  double speed;
+  num speed;
   String updatedAt;
   String lineName;
   String directionDestination;

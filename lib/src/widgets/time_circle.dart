@@ -71,11 +71,12 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
   }
 
   void _updatePredictions(Prediction pred) {
-    if (this.predictions[0].id == pred.id) {
+    if (this.predictions.length > 0 && this.predictions[0].id == pred.id) {
       setState(() {
         this.predictions = [pred, this.predictions[1]];
       });
-    } else if (this.predictions[1].id == pred.id) {
+    } else if (this.predictions.length > 1 &&
+        this.predictions[1].id == pred.id) {
       setState(() {
         this.predictions = [this.predictions[0], pred];
       });

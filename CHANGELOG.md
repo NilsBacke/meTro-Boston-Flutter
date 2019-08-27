@@ -1,3 +1,7 @@
+# 1.1.3
+
+Various bug fixes and improvements
+
 # 1.1.2
 
 Added the time it will take to walk to stops on commute page
