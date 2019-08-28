@@ -1,4 +1,5 @@
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/state/actions/nearestStopActions.dart';
 import 'package:mbta_companion/src/utils/report_error.dart';
@@ -14,7 +15,7 @@ ThunkAction fetchNearestStop(LocationData locationData) {
         store.dispatch(NearestStopFetchSuccess(nearestStop));
       } catch (e, stackTrace) {
         print("$e");
-        store.dispatch(NearestStopFetchFailure(e.toString()));
+        store.dispatch(NearestStopFetchFailure(nearestStopErrorMessage));
         reportError(e, stackTrace);
       }
     });

@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
-import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/config.dart';
 import 'package:mbta_companion/src/services/utils/executeCall.dart';
+import 'package:mbta_companion/src/services/utils/handleError.dart';
 import 'package:mbta_companion/src/services/utils/makeRequest.dart';
 import 'package:mbta_companion/src/utils/timeofday_helper.dart';
 
@@ -21,15 +21,7 @@ class GoogleAPIService {
         "$newAPIURL$distanceMatrixRoute?stop1Name=${stop1.name.replaceAll(" ", "%20")}&stop2Name=${stop2.name.replaceAll(" ", "%20")}",
         headers: {"x-api-key": awsAPIKey});
 
-    if (result.hasError) {
-      if (result.payload['error'] != null) {
-        print(result.payload['error']);
-        throw new Exception(result.payload['userError']);
-      } else {
-        print(result.error);
-        throw new Exception(timeBetweenStopsErrorMessage);
-      }
-    }
+    handleError(result);
 
     return int.parse(result.payload['minutes']);
   }
@@ -60,15 +52,7 @@ class GoogleAPIService {
         "$newAPIURL$directionRoute?stop1Name=${stop1.name.replaceAll(" ", "%20")}&stop2Name=${stop2.name.replaceAll(" ", "%20")}",
         headers: {"x-api-key": awsAPIKey});
 
-    if (result.hasError) {
-      if (result.payload['error'] != null) {
-        print(result.payload['error']);
-        throw new Exception(result.payload['userError']);
-      } else {
-        print(result.error);
-        throw new Exception(directionErrorMessage);
-      }
-    }
+    handleError(result);
 
     return result.payload['direction'];
   }

@@ -1,3 +1,4 @@
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/state/actions/alertsActions.dart';
@@ -14,7 +15,7 @@ ThunkAction fetchAlertsForStop(Stop stop) {
         store.dispatch(AlertsFetchSuccess(alerts));
       } catch (e, stackTrace) {
         print("$e");
-        store.dispatch(AlertsFetchFailure(e.message));
+        store.dispatch(AlertsFetchFailure(alertsErrorMessage));
         reportError(e, stackTrace);
       }
     });

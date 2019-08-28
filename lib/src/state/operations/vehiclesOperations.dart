@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/state/actions/vehiclesActions.dart';
 import 'package:mbta_companion/src/utils/report_error.dart';
@@ -18,7 +19,7 @@ ThunkAction fetchVehicles(bool activatePending) {
         store.dispatch(VehiclesFetchSuccess(vehicles));
       } catch (e, stackTrace) {
         print("$e");
-        store.dispatch(VehiclesFetchFailure(e.toString()));
+        store.dispatch(VehiclesFetchFailure(vehiclesErrorMessage));
         reportError(e, stackTrace);
       }
     });
