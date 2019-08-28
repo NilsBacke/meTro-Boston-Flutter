@@ -1,3 +1,4 @@
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/state/actions/polylinesActions.dart';
 import 'package:mbta_companion/src/utils/report_error.dart';
@@ -13,7 +14,7 @@ ThunkAction fetchPolylines() {
         store.dispatch(PolylinesFetchSuccess(polylines));
       } catch (e, stackTrace) {
         print("$e");
-        store.dispatch(PolylinesFetchFailure(e.toString()));
+        store.dispatch(PolylinesFetchFailure(polylinesErrorMessage));
         reportError(e, stackTrace);
       }
     });

@@ -1,3 +1,4 @@
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/commute.dart';
 import 'package:mbta_companion/src/services/commute_service.dart';
 import 'package:mbta_companion/src/state/actions/commuteActions.dart';
@@ -20,7 +21,7 @@ ThunkAction fetchCommute() {
         }
       } catch (e, stackTrace) {
         print("$e");
-        store.dispatch(CommuteFetchFailure(e.message));
+        store.dispatch(CommuteFetchFailure(commuteGetErrorMessage));
         reportError(e, stackTrace);
       }
     });
@@ -36,7 +37,7 @@ ThunkAction saveCommuteOp(Commute commute) {
         store.dispatch(CommuteFetchSuccess(commute));
       } catch (e, stackTrace) {
         print("$e");
-        store.dispatch(CommuteSaveFailure(e.message));
+        store.dispatch(CommuteSaveFailure(commuteSaveErrorMessage));
         reportError(e, stackTrace);
       }
     });
@@ -52,7 +53,7 @@ ThunkAction deleteCommuteOp(Commute commute) {
         store.dispatch(CommuteDeleteSuccess(commute));
       } catch (e, stackTrace) {
         print("$e");
-        store.dispatch(CommuteDeleteFailure(e.message));
+        store.dispatch(CommuteDeleteFailure(commuteDeleteErrorMessage));
         reportError(e, stackTrace);
       }
     });

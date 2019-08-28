@@ -1,3 +1,4 @@
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/services/saved_stops_service.dart';
 import 'package:mbta_companion/src/state/actions/savedStopsActions.dart';
@@ -29,7 +30,7 @@ ThunkAction addSavedStop(Stop stop) {
         store.dispatch(SavedStopsAddSuccess(stop));
       } catch (e) {
         print("$e");
-        store.dispatch(SavedStopsAddFailure(e.message));
+        store.dispatch(SavedStopsAddFailure(savedStopsAddErrorMessage));
       }
     });
   };
@@ -43,7 +44,7 @@ ThunkAction removeSavedStop(Stop stop) {
         store.dispatch(SavedStopsRemoveSuccess(stop));
       } catch (e, stackTrace) {
         print("$e");
-        store.dispatch(SavedStopsRemoveFailure(e.message));
+        store.dispatch(SavedStopsRemoveFailure(savedStopsRemoveErrorMessage));
         reportError(e, stackTrace);
       }
     });

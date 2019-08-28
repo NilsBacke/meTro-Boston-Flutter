@@ -1,5 +1,7 @@
 # 1.1.3
 
+Fixed bug with end-of-line stops on the Red line
+Improved error handling
 Various bug fixes and improvements
 
 # 1.1.2

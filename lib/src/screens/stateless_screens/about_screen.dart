@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mbta_companion/src/services/config.dart';
 import 'package:package_info/package_info.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -37,6 +38,17 @@ class AboutScreen extends StatelessWidget {
                   ),
                   Divider(),
                   acknowledgements(context),
+                  Divider(),
+                  ListTile(
+                    title: Text("API Version"),
+                    subtitle: Text(AWS_API_URL
+                        .substring(AWS_API_URL.lastIndexOf("/") + 1)),
+                  ),
+                  Divider(),
+                  ListTile(
+                    title: Text("Database endpoint"),
+                    subtitle: Text(FIREBASE_STAGE),
+                  ),
                 ],
               );
             }),

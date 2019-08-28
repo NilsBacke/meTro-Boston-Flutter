@@ -7,6 +7,7 @@ import 'package:mbta_companion/src/models/polyline.dart';
 import 'package:mbta_companion/src/models/polylineData.dart';
 import 'package:mbta_companion/src/models/vehicle.dart';
 import 'package:mbta_companion/src/services/config.dart';
+import 'package:mbta_companion/src/services/utils/handleError.dart';
 import 'package:mbta_companion/src/services/utils/makeRequest.dart';
 import '../models/stop.dart';
 import 'dart:convert';
@@ -34,15 +35,7 @@ class MBTAService {
     final result =
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
-    if (result.hasError) {
-      if (result.payload['error'] != null) {
-        print(result.payload['error']);
-        throw new Exception(result.payload['userError']);
-      } else {
-        print(result.error);
-        throw new Exception(nearestStopErrorMessage);
-      }
-    }
+    handleError(result);
 
     return _jsonToListOfStops(result.payload);
   }
@@ -56,15 +49,7 @@ class MBTAService {
     final result =
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
-    if (result.hasError) {
-      if (result.payload['error'] != null) {
-        print(result.payload['error']);
-        throw new Exception(result.payload['userError']);
-      } else {
-        print(result.error);
-        throw new Exception(nearbyStopsErrorMessage);
-      }
-    }
+    handleError(result);
 
     return _jsonToListOfStops(result.payload);
   }
@@ -78,15 +63,7 @@ class MBTAService {
     final result = await makeRequest(Method.POST, route,
         headers: {"x-api-key": awsAPIKey}, body: json.encode(stop));
 
-    if (result.hasError) {
-      if (result.payload['error'] != null) {
-        print(result.payload['error']);
-        throw new Exception(result.payload['userError']);
-      } else {
-        print(result.error);
-        throw new Exception(allStopsAtSameLocationErrorMessage);
-      }
-    }
+    handleError(result);
 
     return _jsonToListOfStops(result.payload);
   }
@@ -97,15 +74,7 @@ class MBTAService {
     final result =
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
-    if (result.hasError) {
-      if (result.payload['error'] != null) {
-        print(result.payload['error']);
-        throw new Exception(result.payload['userError']);
-      } else {
-        print(result.error);
-        throw new Exception(alertsErrorMessage);
-      }
-    }
+    handleError(result);
 
     List<Alert> alerts = List();
     for (final alert in result.payload) {
@@ -119,15 +88,7 @@ class MBTAService {
     final result =
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
-    if (result.hasError) {
-      if (result.payload['error'] != null) {
-        print(result.payload['error']);
-        throw new Exception(result.payload['userError']);
-      } else {
-        print(result.error);
-        throw new Exception(associatedStopErrorMessage);
-      }
-    }
+    handleError(result);
 
     return Stop.from(result.payload);
   }
@@ -137,15 +98,7 @@ class MBTAService {
     final result =
         await makeRequest(Method.GET, route, headers: {"x-api-key": awsAPIKey});
 
-    if (result.hasError) {
-      if (result.payload['error'] != null) {
-        print(result.payload['error']);
-        throw new Exception(result.payload['userError']);
-      } else {
-        print(result.error);
-        throw new Exception(vehiclesErrorMessage);
-      }
-    }
+    handleError(result);
 
     List<Vehicle> vehicles = List();
     for (final vehicle in result.payload) {
