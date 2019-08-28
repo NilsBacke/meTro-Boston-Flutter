@@ -251,7 +251,11 @@ class _NearbyScreenViewModel {
           position: LatLng(vehicle.latitude, vehicle.longitude),
           icon: icon,
           infoWindow: InfoWindow(
-              title: "Approaching " + vehicle.nextStop,
+              title: "Approaching " +
+                  vehicle.nextStop +
+                  (vehicle.speed != null
+                      ? (vehicle.speed * 2.23694).toString()
+                      : ""),
               snippet: vehicle.lineName +
                   " - Last Updated: " +
                   vehicle.updatedAtTime),

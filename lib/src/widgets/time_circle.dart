@@ -18,6 +18,7 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
   List<Prediction> predictions = [null, null];
   StreamSubscription subscription;
   String manualPredictionTextOverride = "---";
+  bool isWeirdEndOfLineStop = false;
 
   @override
   void initState() {
@@ -39,8 +40,19 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
   }
 
   Future<void> getStream() async {
-    final stream =
-        await MBTAStreamService.streamPredictionsForStopId(widget.stopId);
+    var stream;
+    this.isWeirdEndOfLineStop = true;
+    if (widget.stopId == "70061") {
+      // alewife
+      stream = await MBTAStreamService.streamPredictionsForStopId("70063");
+    } else if (widget.stopId == "70105") {
+      // braintree
+      stream = await MBTAStreamService.streamPredictionsForStopId("70104");
+    } else {
+      this.isWeirdEndOfLineStop = false;
+      stream =
+          await MBTAStreamService.streamPredictionsForStopId(widget.stopId);
+    }
 
     if (stream == null) {
       return;
@@ -71,11 +83,12 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
   }
 
   void _updatePredictions(Prediction pred) {
-    if (this.predictions[0].id == pred.id) {
+    if (this.predictions.length > 0 && this.predictions[0].id == pred.id) {
       setState(() {
         this.predictions = [pred, this.predictions[1]];
       });
-    } else if (this.predictions[1].id == pred.id) {
+    } else if (this.predictions.length > 1 &&
+        this.predictions[1].id == pred.id) {
       setState(() {
         this.predictions = [this.predictions[0], pred];
       });
@@ -111,10 +124,12 @@ class _TimeCircleComboState extends State<TimeCircleCombo> {
 
     return Row(
       children: <Widget>[
-        TimeCircle(predictions[0], manualPredictionTextOverride),
+        TimeCircle(predictions[0], manualPredictionTextOverride,
+            this.isWeirdEndOfLineStop),
         TimeCircle(
           predictions[1],
           manualPredictionTextOverride,
+          this.isWeirdEndOfLineStop,
           height: 40.0,
           width: 40.0,
         ),
@@ -128,8 +143,9 @@ class TimeCircle extends StatelessWidget {
   final String overrideText;
   final double height;
   final double width;
+  final bool isWeirdEndOfLineStop;
 
-  TimeCircle(this.prediction, this.overrideText,
+  TimeCircle(this.prediction, this.overrideText, this.isWeirdEndOfLineStop,
       {this.height = 55.0, this.width = 55.0});
 
   Widget emptyTimeCircle() {
@@ -175,30 +191,41 @@ class TimeCircle extends StatelessWidget {
           compute,
         ),
         builder: (context, snapshot) {
+          var data;
+          if (snapshot.hasData) {
+            data = snapshot.data;
+            if (this.isWeirdEndOfLineStop) {
+              data = snapshot.data - 120;
+            }
+          }
           Color color = Colors.white;
-          if (snapshot.hasData && snapshot.data != null) {
-            if (snapshot.data < 60) {
+          if (snapshot.hasData && data != null) {
+            if (data < 60) {
               color = Colors.red;
-            } else if (snapshot.data < 180) {
+            } else if (data < 180) {
               color = Colors.yellow;
             }
           }
 
           String timeText = "---";
           double fontSize = this.width / 2.75;
-          if (snapshot.hasData && snapshot.data != null) {
-            if (snapshot.data <= 0) {
+          if (snapshot.hasData && data != null) {
+            if (data <= -30) {
+              // 30 seconds
+              timeText = "---";
+              color = Colors.white;
+            } else if (data <= 0) {
               timeText = "BOARD";
               fontSize = this.width / 4;
             } else {
-              timeText = TimeOfDayHelper.formatSeconds(snapshot.data);
+              timeText = TimeOfDayHelper.formatSeconds(data);
             }
           }
 
           double value = 1.0;
-          if (snapshot.hasData && snapshot.data != null) {
-            if (snapshot.data < 60) {
-              value = (1 - snapshot.data / 60);
+          if (snapshot.hasData && data != null) {
+            if (data < 60) {
+              value = (1 - data / 60);
             }
           }
           return Stack(

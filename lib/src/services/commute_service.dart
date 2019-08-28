@@ -3,6 +3,7 @@ import 'package:mbta_companion/src/models/commute.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mbta_companion/src/services/config.dart';
+import 'package:mbta_companion/src/utils/report_error.dart';
 
 class CommuteService {
   static Future<Commute> getCommute() async {
@@ -22,8 +23,9 @@ class CommuteService {
         return null;
       }
       return Commute.fromJson(Map<String, dynamic>.from(doc.data));
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('$e');
+      reportError(e, stackTrace);
       throw new Exception("Could not load commute");
     }
   }
@@ -40,7 +42,8 @@ class CommuteService {
           .collection("users")
           .document(udid);
       await docRef.setData(commute.toJson());
-    } catch (e) {
+    } catch (e, stackTrace) {
+      reportError(e, stackTrace);
       throw new Exception("Could not save commute");
     }
   }
@@ -57,7 +60,8 @@ class CommuteService {
           .collection("users")
           .document(udid);
       await docRef.delete();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      reportError(e, stackTrace);
       throw new Exception("Could not delete commute");
     }
   }

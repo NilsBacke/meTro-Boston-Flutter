@@ -151,7 +151,7 @@ class _CreateCommuteScreenState extends State<CreateCommuteScreen> {
         isLoading = false;
       });
 
-      showErrorDialog(context, saveCommuteError);
+      showErrorDialog(context, commuteSaveErrorMessage);
     }
   }
 

@@ -107,7 +107,9 @@ class MBTAStreamService {
   static Prediction _getSinglePrediction(jsonData) {
     Prediction pred;
     try {
-      if (jsonData != null && jsonData['attributes'] != null) {
+      if (jsonData != null &&
+          jsonData['attributes'] != null &&
+          jsonData['attributes']['arrival_time'] != null) {
         pred = Prediction(jsonData['id'],
             DateTime.parse(jsonData['attributes']['arrival_time']));
         // for end of line stops

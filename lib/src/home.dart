@@ -93,7 +93,9 @@ class _HomeState extends State<Home> {
   @override
   dispose() {
     super.dispose();
-    _connectionSubscription.cancel();
+    if (_connectionSubscription != null) {
+      _connectionSubscription.cancel();
+    }
   }
 
   @override

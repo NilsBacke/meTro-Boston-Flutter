@@ -1,4 +1,5 @@
 import 'package:location/location.dart';
+import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/services/mbta_service.dart';
 import 'package:mbta_companion/src/state/actions/allStopsActions.dart';
 import 'package:mbta_companion/src/utils/report_error.dart';
@@ -14,7 +15,8 @@ ThunkAction fetchAllStops(LocationData locationData) {
         store.dispatch(AllStopsFetchSuccess(allStops));
       } catch (e, stackTrace) {
         print("$e");
-        store.dispatch(AllStopsFetchFailure(e.toString()));
+        store
+            .dispatch(AllStopsFetchFailure(allStopsAtSameLocationErrorMessage));
         reportError(e, stackTrace);
       }
     });
