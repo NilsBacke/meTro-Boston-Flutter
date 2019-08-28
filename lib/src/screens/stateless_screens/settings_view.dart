@@ -3,7 +3,6 @@ import 'package:mbta_companion/src/analytics_widget.dart';
 import 'package:mbta_companion/src/constants/amplitude_constants.dart';
 import 'package:mbta_companion/src/screens/stateless_screens/about_screen.dart';
 import 'package:mbta_companion/src/screens/stateless_screens/map_image_screen.dart';
-import 'package:mbta_companion/src/services/config.dart';
 import 'package:mbta_companion/src/utils/send_feedback.dart';
 // import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
