@@ -13,6 +13,7 @@ class Stop {
   String lineColorHex;
   String lineInitials;
   String directionDescription;
+  int routeType;
 
   Color get lineColor {
     try {
@@ -55,6 +56,7 @@ class Stop {
   static const lineColorHexKey = "lineColorHex";
   static const lineInitialsKey = "lineInitials";
   static const directionDescriptionKey = "directionDescription";
+  static const routeTypeKey = "routeType";
 
   Stop(
       this.id,
@@ -67,7 +69,8 @@ class Stop {
       this.textColorHex,
       this.lineColorHex,
       this.lineInitials,
-      this.directionDescription);
+      this.directionDescription,
+      this.routeType);
 
   Stop.from(Map<String, dynamic> parsedJson) {
     this.id = parsedJson[idKey].toString();
@@ -81,6 +84,7 @@ class Stop {
     this.lineColorHex = parsedJson[lineColorHexKey];
     this.lineInitials = parsedJson[lineInitialsKey];
     this.directionDescription = parsedJson[directionDescriptionKey];
+    this.routeType = parsedJson[routeTypeKey];
   }
 
   Map<String, dynamic> toJson() => {
@@ -95,5 +99,6 @@ class Stop {
         lineColorHexKey: lineColorHex,
         lineInitialsKey: lineInitials,
         directionDescriptionKey: directionDescription,
+        routeTypeKey: routeType
       };
 }

@@ -210,7 +210,7 @@ class TimeCircle extends StatelessWidget {
           String timeText = "---";
           double fontSize = this.width / 2.75;
           if (snapshot.hasData && data != null) {
-            if (data <= -30) {
+            if (data <= -30 && this.isWeirdEndOfLineStop) {
               // 30 seconds
               timeText = "---";
               color = Colors.white;

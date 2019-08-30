@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:location/location.dart';
@@ -16,6 +17,12 @@ import 'package:mbta_companion/src/utils/stops_list_helpers.dart';
 import 'package:mbta_companion/src/widgets/error_text_widget.dart';
 import 'package:mbta_companion/src/widgets/stops_list_view.dart';
 import 'package:redux/redux.dart';
+
+enum FilterType {
+  All,
+  Subway,
+  Bus,
+}
 
 class ExploreScreen extends StatefulWidget {
   final Function(Stop) onTap;
@@ -38,6 +45,7 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   TextEditingController searchBarController = TextEditingController();
   List<Stop> filteredStops;
+  FilterType currentFilter = FilterType.Subway;
 
   void onInit(_ExploreViewModel viewModel) {
     AnalyticsWidget.of(context)
@@ -104,32 +112,21 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  void onSearchChange(_ExploreViewModel viewModel, String searchText) {
-    this.setState(() {
-      this.filteredStops =
-          filterSearchResults(searchText, viewModel.allStops, this.mounted);
-    });
-  }
+  void filter(_ExploreViewModel viewModel, String searchText) {
+    this.filteredStops = viewModel.allStops;
 
-  Widget originalSearchBar(_ExploreViewModel viewModel) {
-    return Container(
-      padding: EdgeInsets.all(12.0),
-      child: TextField(
-        controller: searchBarController,
-        decoration: InputDecoration(
-          hintText: "Search...",
-          prefixIcon: Icon(Icons.search),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(25.0),
-            ),
-          ),
-        ),
-        onChanged: (searchText) {
-          onSearchChange(viewModel, searchText);
-        },
-      ),
-    );
+    if (this.currentFilter == FilterType.Subway) {
+      this.filteredStops = this
+          .filteredStops
+          .where((stop) => stop.vehicleType == 0 || stop.vehicleType == 1);
+    } else if (this.currentFilter == FilterType.Bus) {
+      this.filteredStops =
+          this.filteredStops.where((stop) => stop.vehicleType == 3);
+    }
+
+    this.filteredStops =
+        filterSearchResults(searchText, viewModel.allStops, this.mounted);
+    this.setState(() {});
   }
 
   Widget searchBar(_ExploreViewModel viewModel) {
@@ -166,6 +163,58 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
+  Widget filterSelector() {
+    return Container(
+      margin: EdgeInsets.only(left: 1.0, right: 1.0, bottom: 16.0, top: 2.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: CupertinoSegmentedControl(
+          unselectedColor: Theme.of(context).backgroundColor,
+          selectedColor: Colors.white,
+          borderColor: Colors.grey,
+          children: <FilterType, Widget>{
+            FilterType.All: Text(
+              'All',
+              style: TextStyle(
+                fontSize: 15.0,
+                fontFamily: 'Hind',
+                color: this.currentFilter == FilterType.All
+                    ? Colors.black87
+                    : Colors.white,
+              ),
+            ),
+            FilterType.Subway: Text(
+              'Subway',
+              style: TextStyle(
+                fontSize: 15.0,
+                fontFamily: 'Hind',
+                color: this.currentFilter == FilterType.Subway
+                    ? Colors.black87
+                    : Colors.white,
+              ),
+            ),
+            FilterType.Bus: Text(
+              'Bus',
+              style: TextStyle(
+                fontSize: 15.0,
+                fontFamily: 'Hind',
+                color: this.currentFilter == FilterType.Bus
+                    ? Colors.black87
+                    : Colors.white,
+              ),
+            ),
+          },
+          onValueChanged: (FilterType newFilterType) {
+            setState(() {
+              this.currentFilter = newFilterType;
+            });
+          },
+          groupValue: this.currentFilter,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -196,6 +245,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       ),
                     ),
               searchBar(viewModel),
+              filterSelector(),
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
