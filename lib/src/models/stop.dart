@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+enum RouteType { tram, subway, bus, rail }
+
 class Stop {
   String id;
   String name;
@@ -13,6 +15,7 @@ class Stop {
   String lineColorHex;
   String lineInitials;
   String directionDescription;
+  RouteType routeType;
 
   Color get lineColor {
     try {
@@ -55,6 +58,7 @@ class Stop {
   static const lineColorHexKey = "lineColorHex";
   static const lineInitialsKey = "lineInitials";
   static const directionDescriptionKey = "directionDescription";
+  static const routeTypeKey = "routeType";
 
   Stop(
       this.id,
@@ -67,7 +71,8 @@ class Stop {
       this.textColorHex,
       this.lineColorHex,
       this.lineInitials,
-      this.directionDescription);
+      this.directionDescription,
+      this.routeType);
 
   Stop.from(Map<String, dynamic> parsedJson) {
     this.id = parsedJson[idKey].toString();
@@ -81,6 +86,20 @@ class Stop {
     this.lineColorHex = parsedJson[lineColorHexKey];
     this.lineInitials = parsedJson[lineInitialsKey];
     this.directionDescription = parsedJson[directionDescriptionKey];
+    switch (parsedJson[routeTypeKey]) {
+      case 0:
+        this.routeType = RouteType.tram;
+        break;
+      case 1:
+        this.routeType = RouteType.subway;
+        break;
+      case 2:
+        this.routeType = RouteType.rail;
+        break;
+      case 3:
+        this.routeType = RouteType.bus;
+        break;
+    }
   }
 
   Map<String, dynamic> toJson() => {
@@ -95,5 +114,6 @@ class Stop {
         lineColorHexKey: lineColorHex,
         lineInitialsKey: lineInitials,
         directionDescriptionKey: directionDescription,
+        routeTypeKey: routeType.index
       };
 }
