@@ -1,6 +1,6 @@
 # meTro: MBTA Subway Tracker and Companion App
 
-![App Icon](assets/app_icons/app_icon.png | width=100)
+<img src="assets/app_icons/app_icon.png" width="200" height="200" />
 
 Making your Boston commute and travel easier by the day
 
@@ -38,8 +38,8 @@ All app icon design and creation efforts are contributed to Caroline Thibault.
 
 meTro is not affiliated with the MBTA.
 
-![Screenshot](screenshots/01-iphone_5_5.png)
-![Screenshot](screenshots/02-iphone_5_5.png)
-![Screenshot](screenshots/03-iphone_5_5.png)
-![Screenshot](screenshots/04-iphone_5_5.png)
-![Screenshot](screenshots/05-iphone_5_5.png)
+<img src="screenshots/01-iphone_5_5.png" width="200" height="auto" />
+<img src="screenshots/02-iphone_5_5.png" width="200" height="auto" />
+<img src="screenshots/03-iphone_5_5.png" width="200" height="auto" />
+<img src="screenshots/04-iphone_5_5.png" width="200" height="auto" />
+<img src="screenshots/05-iphone_5_5.png" width="200" height="auto" />
