@@ -20,6 +20,15 @@ class LocationService {
         stop.latitude, stop.longitude, loc.latitude, loc.longitude);
   }
 
+  static int compareStopDistances(Stop stop1, Stop stop2, LocationData loc) {
+    return getDistance(
+                stop1.latitude, stop1.longitude, loc.latitude, loc.longitude) >
+            getDistance(
+                stop2.latitude, stop2.longitude, loc.latitude, loc.longitude)
+        ? 1
+        : -1;
+  }
+
   static double _calculateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var c = cos;

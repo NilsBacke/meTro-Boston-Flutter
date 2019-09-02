@@ -45,13 +45,7 @@ class VariablePartTile extends StatelessWidget {
 
     for (var i = 0; i < otherInfo.length; i++) {
       final String str = otherInfo[i];
-      if (i == 0) {
-        widgets.add(Text(
-          str,
-          overflow: this.overflow,
-          style: Theme.of(context).textTheme.body2,
-        ));
-      } else if (i == 1) {
+      if (i == 0 || i == 1) {
         widgets.add(Text(
           str,
           overflow: this.overflow,

@@ -7,6 +7,7 @@ import 'package:mbta_companion/src/constants/amplitude_constants.dart';
 import 'package:mbta_companion/src/constants/string_constants.dart';
 import 'package:mbta_companion/src/models/stop.dart';
 import 'package:mbta_companion/src/screens/ExploreScreen/utils/filter_search_results.dart';
+import 'package:mbta_companion/src/services/location_service.dart';
 import 'package:mbta_companion/src/services/permission_service.dart';
 import 'package:mbta_companion/src/state/actions/allStopsActions.dart';
 import 'package:mbta_companion/src/state/operations/allStopsOperations.dart';
@@ -46,6 +47,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   TextEditingController searchBarController = TextEditingController();
   List<Stop> filteredStops;
   FilterType currentFilter = FilterType.Subway;
+  String searchText;
 
   void onInit(_ExploreViewModel viewModel) {
     AnalyticsWidget.of(context)
@@ -112,21 +114,38 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  void filter(_ExploreViewModel viewModel, String searchText) {
+  void filter(_ExploreViewModel viewModel) {
     this.filteredStops = viewModel.allStops;
 
-    if (this.currentFilter == FilterType.Subway) {
-      this.filteredStops = this.filteredStops.where((stop) =>
-          stop.routeType == RouteType.tram ||
-          stop.routeType == RouteType.subway);
-    } else if (this.currentFilter == FilterType.Bus) {
-      this.filteredStops =
-          this.filteredStops.where((stop) => stop.routeType == RouteType.bus);
+    if (this.filteredStops == null) {
+      return;
     }
 
-    this.filteredStops =
-        filterSearchResults(searchText, viewModel.allStops, this.mounted);
-    this.setState(() {});
+    if (this.currentFilter == FilterType.Subway) {
+      this.filteredStops = this
+          .filteredStops
+          .where((stop) =>
+              stop.routeType == RouteType.tram ||
+              stop.routeType == RouteType.subway)
+          .toList();
+    } else if (this.currentFilter == FilterType.Bus) {
+      this.filteredStops = this
+          .filteredStops
+          .where((stop) => stop.routeType == RouteType.bus)
+          .toList();
+    }
+
+    if (this.searchText != null) {
+      this.filteredStops =
+          filterSearchResults(this.searchText, this.filteredStops, mounted);
+    }
+
+    this.filteredStops.sort((stop1, stop2) =>
+        LocationService.compareStopDistances(stop1, stop2, viewModel.location));
+
+    if (this.mounted) {
+      this.setState(() {});
+    }
   }
 
   Widget searchBar(_ExploreViewModel viewModel) {
@@ -147,7 +166,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
               child: TextField(
                 controller: searchBarController,
                 onChanged: (searchText) {
-                  filter(viewModel, searchText);
+                  this.searchText = searchText;
+                  filter(viewModel);
                 },
                 decoration: InputDecoration(
                   border: InputBorder.none,
@@ -163,7 +183,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  Widget filterSelector() {
+  Widget filterSelector(_ExploreViewModel viewModel) {
     return Container(
       margin: EdgeInsets.only(left: 1.0, right: 1.0, bottom: 16.0, top: 2.0),
       child: SizedBox(
@@ -205,9 +225,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
             ),
           },
           onValueChanged: (FilterType newFilterType) {
-            setState(() {
-              this.currentFilter = newFilterType;
-            });
+            this.currentFilter = newFilterType;
+            this.filter(viewModel);
           },
           groupValue: this.currentFilter,
         ),
@@ -227,7 +246,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
           if (viewModel.allStops != null &&
               viewModel.allStops.length != 0 &&
               this.filteredStops == null) {
-            this.filteredStops = viewModel.allStops;
+            this.filteredStops = viewModel.allStops
+                .where((stop) =>
+                    stop.routeType == RouteType.tram ||
+                    stop.routeType == RouteType.subway)
+                .toList();
+            this.filteredStops.sort((stop1, stop2) =>
+                LocationService.compareStopDistances(
+                    stop1, stop2, viewModel.location));
           }
 
           final bodyWidget = getBodyWidget(viewModel);
@@ -245,7 +271,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       ),
                     ),
               searchBar(viewModel),
-              filterSelector(),
+              filterSelector(viewModel),
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {

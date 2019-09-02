@@ -46,7 +46,8 @@ class StopCard extends StatelessWidget {
 
   Widget stopCard(bool includeDistance, LocationData location) {
     final List<String> otherInfo = [];
-    if (!stop.directionDescription.startsWith("bound")) {
+    if (!stop.directionDescription.startsWith("bound") &&
+        stop.routeType != RouteType.bus) {
       // end of line stop
       otherInfo.add(stop.directionDescription);
     }
